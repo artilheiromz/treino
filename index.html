@@ -210,6 +210,7 @@ nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
+const VERSAO = "1.0.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -450,7 +451,7 @@ function renderInicio(){
       </button>
     </div>
     <div class="note">Próxima pesagem: ${DIAS[pd(proxPes).getDay()].toLowerCase()}, ${curto(proxPes)}, ao acordar. Manda o print ao Claude.</div>
-    <div class="muted sm" style="text-align:center">Dados actualizados a ${curto(DADOS.actualizado)} · <button class="linkbtn" id="bloq" style="padding:3px 10px">Bloquear</button></div>`;
+    <div class="muted sm" style="text-align:center">Versão ${VERSAO} · dados de ${curto(DADOS.actualizado)} · <button class="linkbtn" id="bloq" style="padding:3px 10px">Bloquear</button></div>`;
   const bq=el.querySelector("#bloq"); if(bq) bq.onclick=bloquear;
   el.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{
     if(b.dataset.dia) diaSel=b.dataset.dia;
