@@ -1,0 +1,27 @@
+# Cria automaticamente a tag e o Release no GitHub quando a versão da app (VERSAO em index.html) muda.
+# O texto do Release vem da secção correspondente do CHANGELOG.md.
+name: Versões
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Criar tag e Release da versão actual
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V=$(grep -oP 'const VERSAO = "\K[0-9.]+' index.html)
+          echo "Versão na app: $V"
+          if git rev-parse -q --verify "refs/tags/v$V" >/dev/null; then
+            echo "A tag v$V já existe. Nada a fazer."; exit 0
+          fi
+          awk -v v="## v$V" 'index($0,v)==1{f=1;next} /^## /{if(f)exit} f' CHANGELOG.md > notas.md
+          [ -s notas.md ] || echo "Ver CHANGELOG.md" > notas.md
+          gh release create "v$V" --title "v$V" --notes-file notas.md --target "$GITHUB_SHA"
