@@ -178,6 +178,14 @@ nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(
 .lemb input{width:18px;height:18px;accent-color:var(--accent)}
 #lockbtn{appearance:none;width:100%;border:0;border-radius:14px;padding:14px;background:var(--accent);color:#04222a;font:700 18px var(--body);cursor:pointer}
 #lockbtn:disabled{opacity:.6}
+.cartao{position:fixed;inset:0;z-index:20;background:#000;color:#fff;display:flex;flex-direction:column;padding:calc(30vh + env(safe-area-inset-top)) 22px calc(110px + env(safe-area-inset-bottom));overflow:auto}
+.cartao[hidden]{display:none}
+.cartao .ct{font:700 30px/1.1 var(--display)}
+.cartao .cs{color:var(--ink-2);font-size:16px;margin-top:4px}
+.cartao .clist{margin:20px 0 0;padding-left:30px;display:flex;flex-direction:column;gap:14px;font:600 23px/1.25 var(--body)}
+.cartao .clist li::marker{color:var(--accent);font-weight:700}
+.cartao .clist em{display:block;font-style:normal;color:var(--accent);font-size:17px;font-weight:700;margin-top:2px}
+.cartao .cfoot{margin-top:20px;color:var(--warm);font-size:15px;font-weight:700}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -193,6 +201,7 @@ nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(
     <div id="lockmsg" class="sm" role="status" style="min-height:20px;color:var(--warm)"></div>
   </form>
 </div>
+<div id="cartao" class="cartao" hidden role="dialog" aria-label="Cartão do treino"></div>
 <main hidden>
   <section id="v-inicio" class="view stack" aria-label="Início"></section>
   <section id="v-treinos" class="view stack" aria-label="Treinos"></section>
@@ -210,7 +219,7 @@ nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.0.0"; // ver CHANGELOG.md
+const VERSAO = "1.1.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -223,66 +232,66 @@ const PLANO = [
              B("Pernas","4 × 25 m pernas de costas","desc. 30 s","Leve",100),
              B("Retorno à calma","100 m variado","","Leve",100) ],
     nota:"O teste não é para ir a fundo: nada a um ritmo que conseguisses manter mais 5 minutos." },
-  { id:"s2", data:"2026-11-05", sem:1, nome:"Técnica + base", dur:"40 min", total:850,
-    blocos:[ B("Aquecimento","200 m variado","","Leve",200),
-             B("Técnica","6 × 25 m crawl: respirar a cada 3 braçadas, cabeça baixa, braçada longa","desc. 20 s","Leve",150),
-             B("Principal","6 × 50 m crawl","desc. 30 s","Moderado",300),
-             B("Pernas","4 × 25 m pernas em seta (braços à frente)","desc. 30 s","Moderado",100),
-             B("Retorno à calma","100 m costas ou bruços","","Leve",100) ] },
-  { id:"s3", data:"2026-11-07", sem:1, nome:"Resistência", dur:"45 min", total:1000,
-    blocos:[ B("Aquecimento","200 m variado","","Leve",200),
-             B("Principal","4 × 100 m crawl","desc. 45 s","Moderado",400),
-             B("Complemento","4 × 50 m bruços ou costas","desc. 20 s","Leve",200),
-             B("Pernas","4 × 25 m pernas de costas","desc. 20 s","Leve",100),
-             B("Retorno à calma","100 m variado","","Leve",100) ] },
-  { id:"s4", data:"2026-11-10", sem:2, nome:"Técnica + base", dur:"45 min", total:1150,
-    blocos:[ B("Aquecimento","200 m variado","","Leve",200),
-             B("Técnica","6 × 25 m crawl técnica","desc. 20 s","Leve",150),
-             B("Principal","8 × 75 m crawl","desc. 30 s","Moderado",600),
-             B("Pernas","4 × 25 m pernas em seta","desc. 30 s","Moderado",100),
-             B("Retorno à calma","100 m variado","","Leve",100) ] },
-  { id:"s5", data:"2026-11-12", sem:2, nome:"Intervalos", dur:"40 min", total:1000,
-    blocos:[ B("Aquecimento","200 m variado","","Leve",200),
-             B("Principal","10 × 50 m crawl: ímpares moderado, pares forte","desc. 30 s","Forte",500),
-             B("Pernas","4 × 25 m pernas de costas","desc. 30 s","Leve",100),
-             B("Retorno à calma","200 m costas ou bruços","","Leve",200) ] },
-  { id:"s6", data:"2026-11-14", sem:2, nome:"Resistência", dur:"45 min", total:1100,
-    blocos:[ B("Aquecimento","200 m variado","","Leve",200),
-             B("Principal","3 × 200 m crawl","desc. 60 s","Moderado",600),
-             B("Complemento","4 × 50 m variado","desc. 20 s","Leve",200),
-             B("Retorno à calma","100 m variado","","Leve",100) ] },
-  { id:"s7", data:"2026-11-17", sem:3, nome:"Técnica + base", dur:"50 min", total:1250,
-    blocos:[ B("Aquecimento","300 m variado","","Leve",300),
-             B("Técnica","6 × 25 m crawl técnica","desc. 20 s","Leve",150),
-             B("Principal","5 × 100 m crawl","desc. 30 s","Moderado",500),
-             B("Pernas","4 × 50 m pernas em seta","desc. 30 s","Moderado",200),
-             B("Retorno à calma","100 m variado","","Leve",100) ] },
-  { id:"s8", data:"2026-11-19", sem:3, nome:"Intervalos", dur:"45 min", total:1200,
-    blocos:[ B("Aquecimento","300 m variado","","Leve",300),
-             B("Principal","12 × 50 m crawl: 2 moderado + 1 forte","desc. 25 s","Forte",600),
-             B("Velocidade","4 × 25 m crawl forte","desc. 40 s","Forte",100),
-             B("Retorno à calma","200 m variado","","Leve",200) ] },
-  { id:"s9", data:"2026-11-21", sem:3, nome:"Resistência", dur:"50 min", total:1400,
-    blocos:[ B("Aquecimento","300 m variado","","Leve",300),
-             B("Principal","2 × 400 m crawl","desc. 90 s","Moderado",800),
-             B("Complemento","4 × 50 m bruços","desc. 20 s","Leve",200),
-             B("Retorno à calma","100 m variado","","Leve",100) ] },
-  { id:"s10", data:"2026-11-24", sem:4, nome:"Técnica + base", dur:"50 min", total:1400,
-    blocos:[ B("Aquecimento","300 m variado","","Leve",300),
-             B("Técnica","8 × 25 m crawl técnica","desc. 20 s","Leve",200),
-             B("Principal","6 × 100 m crawl","desc. 25 s","Moderado",600),
-             B("Pernas","4 × 50 m pernas em seta","desc. 30 s","Moderado",200),
-             B("Retorno à calma","100 m variado","","Leve",100) ] },
-  { id:"s11", data:"2026-11-26", sem:4, nome:"Intervalos", dur:"45 min", total:1300,
-    blocos:[ B("Aquecimento","300 m variado","","Leve",300),
-             B("Principal","8 × 100 m crawl: ímpares moderado, pares forte","desc. 30 s","Forte",800),
-             B("Retorno à calma","200 m variado","","Leve",200) ] },
-  { id:"s12", data:"2026-11-28", sem:4, nome:"Novo teste + resistência", dur:"50 min", total:1400, totalTxt:"≈ 1400",
-    blocos:[ B("Aquecimento","4 × 25 m variado + 200 m crawl","desc. 30 s","Leve",300),
-             B("Teste","10 min contínuos de crawl. Anota a distância e compara com 3 Nov","","Moderado","400–600"),
-             B("Principal","2 × 200 m crawl","desc. 60 s","Moderado",400),
-             B("Retorno à calma","200 m variado","","Leve",200) ],
-    nota:"Mesmo teste de 3 Nov: compara a distância nos 10 minutos." }
+  { id:"s2", data:"2026-11-05", sem:1, nome:"Técnica + base", dur:"40 min", total:800,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Crawl curto","4 × 2 piscinas crawl","desc. 30 s","Moderado",200),
+             B("Principal","4 × 4 piscinas: 2 crawl + 2 bruços","desc. 45 s","Moderado",400),
+             B("Retorno à calma","4 piscinas costas ou bruços","","Leve",100) ],
+    nota:"Nos blocos de crawl, respira a cada 2 braçadas. Se ficares ofegante, passa a bruços até ao fim da piscina, como no teste." },
+  { id:"s3", data:"2026-11-07", sem:1, nome:"Resistência", dur:"45 min", total:900,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Principal","3 × 8 piscinas: 4 crawl + 4 bruços","desc. 60 s","Moderado",600),
+             B("Pernas","4 piscinas pernas de costas","","Leve",100),
+             B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
+  { id:"s4", data:"2026-11-10", sem:2, nome:"Técnica + base", dur:"45 min", total:1000,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Crawl curto","6 × 2 piscinas crawl","desc. 30 s","Moderado",300),
+             B("Principal","4 × 4 piscinas: 2 crawl + 2 bruços","desc. 40 s","Moderado",400),
+             B("Pernas","4 piscinas pernas de costas","","Leve",100),
+             B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
+  { id:"s5", data:"2026-11-12", sem:2, nome:"Intervalos", dur:"40 min", total:900,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Principal","10 × 2 piscinas crawl: ímpares moderado, pares forte","desc. 30 s","Forte",500),
+             B("Velocidade","4 × 1 piscina crawl forte","desc. 45 s","Forte",100),
+             B("Bruços","4 piscinas bruços leve","","Leve",100),
+             B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
+  { id:"s6", data:"2026-11-14", sem:2, nome:"Resistência", dur:"45 min", total:1000,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Principal","3 × 8 piscinas: 6 crawl + 2 bruços","desc. 60 s","Moderado",600),
+             B("Complemento","4 × 2 piscinas bruços ou costas","desc. 20 s","Leve",200),
+             B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
+  { id:"s7", data:"2026-11-17", sem:3, nome:"Técnica + base", dur:"50 min", total:1100,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Técnica","6 × 2 piscinas crawl: braçada longa, cabeça baixa","desc. 20 s","Leve",300),
+             B("Principal","5 × 4 piscinas crawl","desc. 30 s","Moderado",500),
+             B("Pernas","4 piscinas pernas de costas","","Leve",100),
+             B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
+  { id:"s8", data:"2026-11-19", sem:3, nome:"Intervalos", dur:"45 min", total:1000,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Principal","12 × 2 piscinas crawl: 2 moderado + 1 forte","desc. 25 s","Forte",600),
+             B("Velocidade","4 × 1 piscina crawl forte","desc. 40 s","Forte",100),
+             B("Retorno à calma","8 piscinas variadas","","Leve",200) ] },
+  { id:"s9", data:"2026-11-21", sem:3, nome:"Resistência", dur:"50 min", total:1200,
+    blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
+             B("Principal","2 × 16 piscinas: crawl, bruços quando precisares","desc. 90 s","Moderado",800),
+             B("Complemento","4 × 2 piscinas bruços","desc. 20 s","Leve",200),
+             B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
+  { id:"s10", data:"2026-11-24", sem:4, nome:"Técnica + base", dur:"50 min", total:1300,
+    blocos:[ B("Aquecimento","8 piscinas variadas, devagar","","Leve",200),
+             B("Técnica","8 × 1 piscina crawl técnica","desc. 20 s","Leve",200),
+             B("Principal","6 × 4 piscinas crawl","desc. 25 s","Moderado",600),
+             B("Pernas","4 × 2 piscinas pernas","desc. 30 s","Moderado",200),
+             B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
+  { id:"s11", data:"2026-11-26", sem:4, nome:"Intervalos", dur:"45 min", total:1200,
+    blocos:[ B("Aquecimento","8 piscinas variadas, devagar","","Leve",200),
+             B("Principal","8 × 4 piscinas crawl: ímpares moderado, pares forte","desc. 30 s","Forte",800),
+             B("Retorno à calma","8 piscinas variadas","","Leve",200) ] },
+  { id:"s12", data:"2026-11-28", sem:4, nome:"Novo teste + resistência", dur:"50 min", total:1300, totalTxt:"≈ 1300",
+    blocos:[ B("Aquecimento","4 piscinas variadas + 8 crawl","","Leve",300),
+             B("Teste","10 min contínuos: conta as piscinas e compara com as 12 de 3 Nov","","Moderado","350–400"),
+             B("Principal","2 × 8 piscinas crawl","desc. 60 s","Moderado",400),
+             B("Retorno à calma","8 piscinas variadas","","Leve",200) ],
+    nota:"Mesmo teste de 3 Nov (12 piscinas = 300 m). Objectivo: 14 a 16 piscinas." }
 ];
 const PLANO_INI="2026-11-02", PLANO_FIM="2026-11-29";
 const SEMANAS = { 1:["2026-11-02","2026-11-08"], 2:["2026-11-09","2026-11-15"], 3:["2026-11-16","2026-11-22"], 4:["2026-11-23","2026-11-29"] };
@@ -466,17 +475,28 @@ let diaSel=HOJE;
 
 function resumoNat(t,s){
   const pct=s&&t.distancia?Math.round(t.distancia/s.total*100):null;
-  return `<div class="card result stack" style="gap:8px">
+  const f=(v,l)=>v||v===0?`<div><b>${v}</b><span>${l}</span></div>`:"";
+  const est=t.estilos?Object.entries(t.estilos).filter(([k,v])=>v).map(([k,v])=>`${{crawl:"Crawl",brucos:"Bruços",costas:"Costas"}[k]||k} ${v} m`).join(" · "):"";
+  const zonas=t.zonas?`<div class="stack" style="gap:6px"><div class="muted sm">Tempo por zona de FC</div>
+    ${[["z1","Zona 1","<140"],["z2","Zona 2","141–150"],["z3","Zona 3","151–160"],["z4","Zona 4","161–170"],["z5","Zona 5","171+"]].map(([k,n,r])=>{const sec=secs(t.zonas[k])||0,tot=Object.values(t.zonas).reduce((a,x)=>a+(secs(x)||0),0)||1;
+      return `<div class="spread sm"><span style="width:62px">${n}</span><span class="bar" style="flex:1;height:8px"><i style="width:${(sec/tot*100).toFixed(0)}%"></i></span><span class="num" style="width:44px;text-align:right">${t.zonas[k]}</span></div>`;}).join("")}</div>`:"";
+  return `<div class="card result stack" style="gap:10px">
     <div class="spread"><h2>Resumo do treino</h2>${pct?`<span class="pill done">${pct}% do plano</span>`:""}</div>
+    ${t.inicio?`<div class="muted sm" style="margin-top:-6px">${t.inicio}–${t.fim}${t.aguaTemp?` · água ${t.aguaTemp} °C`:""}</div>`:""}
     <div class="facts" style="margin-top:0">
-      <div><b>${t.distancia} m</b><span>distância${s?" · plano "+(s.totalTxt||s.total):""}</span></div>
-      ${t.duracao?`<div><b>${fmtMin(t.duracao)}</b><span>tempo</span></div>`:""}
-      ${t.ritmo?`<div><b>${esc(t.ritmo)}</b><span>ritmo /100 m</span></div>`:""}
-      ${t.fcMedia?`<div><b>${t.fcMedia}${t.fcMax?" / "+t.fcMax:""}</b><span>FC média${t.fcMax?" / máx.":""}</span></div>`:""}
-      ${t.kcal?`<div><b>${t.kcal}</b><span>kcal</span></div>`:""}
-      ${t.sensacao?`<div><b>${t.sensacao}/10</b><span>sensação</span></div>`:""}
-      ${t.teste10?`<div><b>${t.teste10} m</b><span>teste 10 min</span></div>`:""}
-    </div>${t.notas?`<div class="ink2">${esc(t.notas)}</div>`:""}</div>`;
+      <div><b>${t.distancia} m</b><span>${t.piscinas?t.piscinas+" piscinas":"distância"}${s?" · plano "+(s.totalTxt||s.total):""}</span></div>
+      ${f(t.duracao?fmtMin(t.duracao):null,"tempo total")}
+      ${f(t.nadar,"a nadar")}
+      ${f(t.ritmo,"ritmo /100 m a nadar")}
+      ${f(t.fcMedia?t.fcMedia+(t.fcMax?" / "+t.fcMax:""):null,"FC média"+(t.fcMax?" / máx.":""))}
+      ${f(t.kcal,"kcal activas")}
+      ${f(t.sensacao?t.sensacao+"/10":null,"esforço")}
+      ${f(t.swolf,"SWOLF crawl")}
+    </div>
+    ${t.teste10?`<div class="note" style="background:var(--surface-2)"><b>Teste de 10 min:</b> ${t.teste10} m${t.teste10Piscinas?` (${t.teste10Piscinas} piscinas)`:""}${t.teste10Detalhe?` · ${esc(t.teste10Detalhe)}`:""}</div>`:""}
+    ${est?`<div class="ink2 sm">${est}</div>`:""}
+    ${zonas}
+    ${t.notas?`<div class="ink2">${esc(t.notas)}</div>`:""}</div>`;
 }
 function resumoCam(t){
   return `<div class="card result walkr stack" style="gap:8px"><h2>Caminhada</h2>
@@ -535,6 +555,7 @@ function renderTreinos(){
       corpo+=`<h3>Antes de entrar</h3><div class="pre">${["Comi algo leve há 1–2 horas","Garrafa de água à beira da piscina","Apple Watch: Natação em piscina, 25 m"].map((p,i)=>`
         <label class="chk" for="pre${i}"><input type="checkbox" id="pre${i}" data-pre="${i}" ${pre.includes(i)?"checked":""}><span>${p}</span></label>`).join("")}</div>`;
     }
+    if(!t && !passado) corpo+=`<button class="mcard main" id="abrirCartao" style="grid-template-columns:1fr auto"><span class="k">Para a piscina</span><span class="go" aria-hidden="true">›</span><span class="t" style="font-size:20px">Cartão do treino em letra grande</span><span class="s">Tira um print e põe como fundo do ecrã bloqueado: vês o treino só de levantar o telemóvel</span></button>`;
     corpo+=`<div class="spread"><h3>${t?"Treino planeado":"Treino"}</h3>${t||passado?"":`<span class="muted sm">Toca num bloco quando o acabares</span>`}</div>
       <div class="blocks">${s.blocos.map((b,i)=>`
         <button class="blk ${checks.includes(i)?"ok":""}" data-b="${i}" aria-pressed="${checks.includes(i)}">
@@ -587,6 +608,18 @@ function renderTreinos(){
       c=cb.checked?c.concat(i):c.filter(x=>x!==i);store.set("nat-pre-"+d,c);});
   }
   el.querySelectorAll("[data-pes]").forEach(b=>b.onclick=()=>{progSub="corpo";pesSel=b.dataset.pes;go("progresso");});
+  const ac=el.querySelector("#abrirCartao"); if(ac) ac.onclick=()=>abrirCartao(ag.s);
+}
+const pisc=m=>typeof m==="number"?m/25:String(m).split("–").map(x=>Math.round(+x/25)).join("–");
+function abrirCartao(s){
+  const ov=document.getElementById("cartao");
+  const tot=s.blocos.reduce((a,b)=>a+(typeof b.m==="number"?b.m:0),0);
+  ov.innerHTML=`<button class="navbtn" id="fecharCartao" aria-label="Fechar cartão" style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px">✕</button>
+    <div class="ctop"><div class="eyebrow">${longo(s.data)}</div><div class="ct">${esc(s.nome)}</div><div class="cs">${s.totalTxt||s.total} m · ${pisc(s.total)} piscinas · ${s.dur}</div></div>
+    <ol class="clist">${s.blocos.map(b=>`<li><span>${esc(b.s)}</span>${b.d?`<em>${esc(b.d)}</em>`:""}</li>`).join("")}</ol>
+    <div class="cfoot">Crawl: respira a cada 2 braçadas · ofegante? passa a bruços</div>`;
+  ov.hidden=false; document.body.style.overflow="hidden";
+  ov.querySelector("#fecharCartao").onclick=()=>{ov.hidden=true;document.body.style.overflow="";};
 }
 
 /* ===== PROGRESSO ===== */
@@ -695,7 +728,7 @@ function treinosView(pb){
     <div class="card stack"><div class="spread"><h2>Ritmo por treino</h2><span class="muted sm">min /100 m · mais baixo é melhor</span></div>
       ${lineChart(ritmos,{c:"var(--accent)",fmt:v=>mmss(v),u:" /100 m",aria:"Ritmo médio por treino de natação",vazio:"Aparece depois de 2 treinos de natação registados."})}</div>
     <div class="card stack"><h2>Teste de 10 minutos</h2>
-      ${testes.length?`<div class="facts" style="margin-top:0">${testes.map(t=>`<div><b>${t.teste10} m</b><span>${curto(t.data)}</span></div>`).join("")}</div>`:`<div class="muted">Primeiro teste a 3 Nov, repetido a 28 Nov.</div>`}</div>
+      ${testes.length?`<div class="facts" style="margin-top:0">${testes.map(t=>`<div><b>${t.teste10} m</b><span>${curto(t.data)}${t.teste10Piscinas?" · "+t.teste10Piscinas+" piscinas":""}</span></div>`).join("")}</div>`:`<div class="muted">Primeiro teste a 3 Nov, repetido a 28 Nov.</div>`}</div>
     <div class="card stack"><h2>Actividades</h2>${lista.length?`<div class="tw"><table>
       <thead><tr><th>Data</th><th>Tipo</th><th>Distância</th><th>Tempo</th><th>Ritmo</th><th>FC</th></tr></thead>
       <tbody>${lista.map(x=>`<tr data-dia="${x.data}" style="cursor:pointer"><td>${curto(x.data)}</td><td>${x.tipo==="natacao"?"Natação":"Caminhada"}</td><td>${x.tipo==="natacao"?x.distancia+" m":f1(x.distancia)+" km"}</td><td>${x.duracao?fmtMin(x.duracao):""}</td><td>${esc(x.ritmo||"")}</td><td>${x.fcMedia||""}</td></tr>`).join("")}</tbody></table></div>

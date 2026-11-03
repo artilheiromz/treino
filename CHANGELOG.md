@@ -7,6 +7,13 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.1.0 — 3 Nov 2026
+Ajustes depois do primeiro treino (teste de nível de 3 Nov).
+- **Cartão para a piscina:** na página de cada treino por fazer há um botão que abre o treino em letra grande, com os blocos numerados. Pensado para tirar print e pôr como fundo do ecrã bloqueado, porque na piscina não dá para mexer no telemóvel com as mãos molhadas.
+- **Plano das sessões 2 a 12 reescrito em piscinas** (ex.: "4 × 4 piscinas: 2 crawl + 2 bruços"), com menos blocos por sessão para ser fácil de memorizar. Volume ajustado ao teste (12 piscinas em 10 min): semana 1 ≈ 2400 m, semana 2 ≈ 2900 m, semana 3 ≈ 3300 m, semana 4 ≈ 3800 m.
+- **Resumo do treino mais completo:** piscinas, tempo a nadar, ritmo a nadar, kcal activas, esforço, SWOLF, metros por estilo, tempo por zona de FC, hora e temperatura da água, e detalhe do teste de 10 min.
+- Progresso: o teste de 10 min mostra também o número de piscinas.
+
 ## v1.0.0 — 2 Nov 2026
 Primeira versão no GitHub Pages.
 - App instalável no iPhone em ecrã inteiro (sem a barra do Claude), com ícone e nome "Treino".
