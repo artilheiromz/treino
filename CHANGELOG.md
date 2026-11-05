@@ -7,6 +7,10 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.1.1 — 5 Nov 2026
+- Descansos explicados: nos blocos com repetições aparece "desc. 30 s **entre repetições**" (na página do treino e no cartão da piscina), e o cartão lembra "entre blocos: cerca de 1 min".
+- Resumo do treino mostra a frequência cardíaca pós-treino (no fim, 1 min e 2 min depois), para acompanhar a recuperação.
+
 ## v1.1.0 — 3 Nov 2026
 Ajustes depois do primeiro treino (teste de nível de 3 Nov).
 - **Cartão para a piscina:** na página de cada treino por fazer há um botão que abre o treino em letra grande, com os blocos numerados. Pensado para tirar print e pôr como fundo do ecrã bloqueado, porque na piscina não dá para mexer no telemóvel com as mãos molhadas.

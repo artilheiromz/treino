@@ -219,7 +219,7 @@ nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.1.0"; // ver CHANGELOG.md
+const VERSAO = "1.1.1"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -322,6 +322,7 @@ const sessaoDia=d=>PLANO.find(s=>s.data===d);
 const feito=id=>ACT().find(a=>a.sessao===id);
 const pesDia=d=>DADOS.pesagens.find(p=>p.data===d);
 const semanaDe=d=>{for(const w in SEMANAS){if(d>=SEMANAS[w][0]&&d<=SEMANAS[w][1])return +w;}return 0;};
+const dTxt=b=>b.d&&/×/.test(b.s)&&/^desc\./.test(b.d)?b.d+" entre repetições":b.d;
 const intCls=i=>i==="Forte"?"forte":i==="Moderado"?"mod":"leve";
 function delta(v,inv){const c=Math.abs(v)<0.05?"eq":((v<0)===inv?"dn":"up");return `<span class="dlt ${c}">${sg(v)}</span>`;}
 
@@ -492,6 +493,7 @@ function resumoNat(t,s){
       ${f(t.kcal,"kcal activas")}
       ${f(t.sensacao?t.sensacao+"/10":null,"esforço")}
       ${f(t.swolf,"SWOLF crawl")}
+      ${f(t.fcPos?t.fcPos.join(" → "):null,"FC pós-treino (0, 1, 2 min)")}
     </div>
     ${t.teste10?`<div class="note" style="background:var(--surface-2)"><b>Teste de 10 min:</b> ${t.teste10} m${t.teste10Piscinas?` (${t.teste10Piscinas} piscinas)`:""}${t.teste10Detalhe?` · ${esc(t.teste10Detalhe)}`:""}</div>`:""}
     ${est?`<div class="ink2 sm">${est}</div>`:""}
@@ -560,7 +562,7 @@ function renderTreinos(){
       <div class="blocks">${s.blocos.map((b,i)=>`
         <button class="blk ${checks.includes(i)?"ok":""}" data-b="${i}" aria-pressed="${checks.includes(i)}">
           <span class="tick" aria-hidden="true">✓</span>
-          <span><span class="lbl">${esc(b.b)}</span><span class="set">${esc(b.s)}</span>${b.d?`<span class="rest">${esc(b.d)}</span>`:""}<span class="int ${intCls(b.i)}">${b.i}</span></span>
+          <span><span class="lbl">${esc(b.b)}</span><span class="set">${esc(b.s)}</span>${b.d?`<span class="rest">${esc(dTxt(b))}</span>`:""}<span class="int ${intCls(b.i)}">${b.i}</span></span>
           <span class="m">${b.m}<small>m</small></span></button>`).join("")}</div>
       ${s.nota?`<div class="note">${esc(s.nota)}</div>`:""}`;
     if(!t && !passado) corpo+=`<div class="card ink2" style="font-size:15px">No fim, manda ao Claude o print do resumo do Apple Watch e diz-lhe como te sentiste, de 1 a 10.</div>`;
@@ -616,8 +618,8 @@ function abrirCartao(s){
   const tot=s.blocos.reduce((a,b)=>a+(typeof b.m==="number"?b.m:0),0);
   ov.innerHTML=`<button class="navbtn" id="fecharCartao" aria-label="Fechar cartão" style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px">✕</button>
     <div class="ctop"><div class="eyebrow">${longo(s.data)}</div><div class="ct">${esc(s.nome)}</div><div class="cs">${s.totalTxt||s.total} m · ${pisc(s.total)} piscinas · ${s.dur}</div></div>
-    <ol class="clist">${s.blocos.map(b=>`<li><span>${esc(b.s)}</span>${b.d?`<em>${esc(b.d)}</em>`:""}</li>`).join("")}</ol>
-    <div class="cfoot">Crawl: respira a cada 2 braçadas · ofegante? passa a bruços</div>`;
+    <ol class="clist">${s.blocos.map(b=>`<li><span>${esc(b.s)}</span>${b.d?`<em>${esc(dTxt(b))}</em>`:""}</li>`).join("")}</ol>
+    <div class="cfoot">Entre blocos: cerca de 1 min · crawl: respira a cada 2 braçadas · ofegante? passa a bruços</div>`;
   ov.hidden=false; document.body.style.overflow="hidden";
   ov.querySelector("#fecharCartao").onclick=()=>{ov.hidden=true;document.body.style.overflow="";};
 }
