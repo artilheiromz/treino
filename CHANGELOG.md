@@ -7,6 +7,10 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.2.1 — 6 Nov 2026
+- Novo ícone da app em vidro (proposta A): fundo de água azul com um painel de vidro e a linha de ritmo cardíaco a branco. Substitui o ícone anterior no ecrã principal, no ecrã do código e no separador do browser.
+- Para o iPhone mostrar o ícone novo é preciso apagar o atalho e voltar a adicioná-lo ao ecrã principal.
+
 ## v1.2.0 — 6 Nov 2026
 Novo visual em vidro, inspirado no estilo do iOS 26 (aprovado a partir do mockup de 6 Nov).
 - Fundo de água azul com reflexos de luz e superfícies translúcidas desfocadas em todos os cartões, linhas do plano, blocos do treino, botões e selectores.
