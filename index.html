@@ -299,6 +299,12 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
 nav{padding:6px}
 .tab{font-size:11px;padding:6px 2px;gap:2px;border-radius:27px}
 .tab svg{width:22px;height:22px}
+
+/* v1.4.0: cartão de progresso no Início */
+.agora{display:flex;flex-direction:column;align-items:flex-end}.agora b{font-size:20px}.agora span{font-size:12px;color:rgba(255,255,255,.88)}
+.spark{display:flex;flex-direction:column;gap:4px;padding:10px 12px 8px;border-radius:16px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2)}
+.mtile .ring{display:block;margin-bottom:2px}
+.bignum small{font-size:16px}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -333,7 +339,7 @@ nav{padding:6px}
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.3.0"; // ver CHANGELOG.md
+const VERSAO = "1.4.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -533,6 +539,24 @@ function statsCam(lista){
 function semanaAtual(){ return semanaDe(HOJE)||(HOJE<PLANO_INI?1:4); }
 
 /* ===== INÍCIO ===== */
+function sparkPeso(P){
+  const W=300,H=58,ys=P.map(p=>p.peso),y0=Math.min(...ys)-0.6,y1=Math.max(...ys)+0.6;
+  const xs=P.map(p=>pd(p.data).getTime()),x0=Math.min(...xs),x1=Math.max(...xs);
+  const pt=P.map((p,i)=>[6+(x1===x0?0.5:(xs[i]-x0)/(x1-x0))*(W-12),4+(1-(p.peso-y0)/(y1-y0))*(H-8)]);
+  const d=pt.map((q,i)=>(i?"L":"M")+q[0].toFixed(1)+" "+q[1].toFixed(1)).join(" ");
+  const L=pt[pt.length-1];
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Peso desde ${curto(P[0].data)}: de ${f1(P[0].peso)} para ${f1(P[P.length-1].peso)} kg" style="width:100%;height:auto;display:block">
+    <defs><linearGradient id="spk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8f6ff" stop-opacity=".45"/><stop offset="1" stop-color="#b8f6ff" stop-opacity="0"/></linearGradient></defs>
+    <path d="${d} L${L[0].toFixed(1)} ${H} L${pt[0][0].toFixed(1)} ${H} Z" fill="url(#spk)"/>
+    <path d="${d}" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pt.slice(0,-1).map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="2.8" fill="#0b4d70" stroke="#fff" stroke-width="1.6"/>`).join("")}
+    <circle cx="${L[0]}" cy="${L[1]}" r="5" fill="#b8f6ff" stroke="#fff" stroke-width="2"/></svg>`;
+}
+function anel(p){
+  const r=13,c=2*Math.PI*r;
+  return `<svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="${r}" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
+    <circle cx="17" cy="17" r="${r}" fill="none" stroke="#9ff3ff" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(c*p/100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 17 17)"/></svg>`;
+}
 function renderInicio(){
   const el=document.getElementById("v-inicio");
   const P=DADOS.pesagens,a=P[0],z=P[P.length-1];
@@ -549,6 +573,9 @@ function renderInicio(){
   const proxPes=(()=>{let x=HOJE;for(let i=0;i<7;i++){if(pd(x).getDay()===6)return x;x=addD(x,1);}return HOJE;})();
   const quando=proxPes===HOJE?"hoje":proxPes===addD(HOJE,1)?"amanhã, sábado":`${DIAS[pd(proxPes).getDay()].toLowerCase()}, ${curto(proxPes)}`;
   const pesHoje=pesDia(HOJE);
+  const metaPct=Math.max(0,Math.min(100,(a.peso-z.peso)/(a.peso-DADOS.metas.peso)*100));
+  let semDesc=0; for(let k=P.length-1;k>0;k--){ if(P[k].peso<P[k-1].peso) semDesc++; else break; }
+  const semanas=Math.max(1,(pd(z.data)-pd(a.data))/864e5/7), kgSem=(a.peso-z.peso)/semanas;
   el.innerHTML=`
     <div class="stack" style="gap:4px">
       <div class="eyebrow">${DIAS[d.getDay()]}, ${d.getDate()} ${MES[d.getMonth()]}</div>
@@ -561,12 +588,13 @@ function renderInicio(){
         <span class="s">${feitosHoje.length?"Feito hoje: "+feitosHoje.map(x=>x.tipo==="natacao"?x.distancia+" m de natação":f1(x.distancia)+" km de caminhada").join(" · "):esc(hojeS)}</span>
       </button>
       <button class="gcard" data-go="progresso" data-sub="corpo">
-        <span class="row"><span class="k">O meu corpo</span><span class="pill done">${sg(z.peso-a.peso)} kg desde ${curto(a.data)}</span></span>
-        <span class="bignum">${f1(z.peso)}<small>kg</small></span>
+        <span class="row"><span class="k">O meu progresso</span><span class="pill done">desde ${curto(a.data)}</span></span>
+        <span class="row" style="align-items:flex-end"><span class="bignum">${f1(a.peso-z.peso)}<small>kg perdidos</small></span><span class="agora"><b>${f1(z.peso)} kg</b><span>agora</span></span></span>
+        <span class="spark">${sparkPeso(P)}<span class="row sm" style="color:rgba(255,255,255,.85)"><span>${curto(a.data)} · ${f1(a.peso)} kg</span><span>${curto(z.data)} · ${f1(z.peso)} kg</span></span></span>
         <span class="mt3">
-          <span class="mtile"><b>${f1(a.mGorda-z.mGorda)} kg</b><span>gordura perdida</span></span>
-          <span class="mtile"><b>${f1(z.gordura)}%</b><span>gordura</span></span>
-          <span class="mtile"><b>${z.visceral}</b><span>visceral</span></span>
+          <span class="mtile"><span class="ring" aria-hidden="true">${anel(metaPct)}</span><b>${Math.round(metaPct)}%</b><span>da meta de ${DADOS.metas.peso} kg</span></span>
+          <span class="mtile"><b>${semDesc} ${semDesc===1?"semana":"semanas"}</b><span>seguidas a descer</span></span>
+          <span class="mtile"><b>${f1(kgSem)} kg</b><span>por semana, em média</span></span>
         </span>
       </button>
       <button class="gcard" data-go="progresso" data-sub="treinos">

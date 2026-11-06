@@ -7,6 +7,12 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.4.0 — 6 Nov 2026
+Cartão do corpo no Início pensado para motivar.
+- Passa a chamar-se **"O meu progresso"** e mostra em destaque os **kg perdidos no total** desde a primeira pesagem (10 Out), com o peso actual ao lado.
+- **Mini-gráfico do peso** desde 10 Out, com o ponto de partida e a última pesagem.
+- Três mini-cartões novos: **% da meta** (com anel de progresso até aos 100 kg), **semanas seguidas a descer** e **kg perdidos por semana, em média**. Substituem a gordura perdida, a % de gordura e a gordura visceral, que continuam no separador Progresso.
+
 ## v1.3.0 — 6 Nov 2026
 Disposição dos ecrãs igual ao mockup em vidro (a v1.2.0 só tinha mudado cores e efeitos).
 - **Início:** sem a faixa de quadradinhos no topo; cartão do corpo com o peso em destaque, etiqueta da variação desde 10 Out e três mini-cartões (gordura perdida, % gordura, visceral); cartão da semana com barra de sessões feitas e piscinas, tempo e caminhadas; aviso da pesagem em cápsula. O cartão "Plano" sai do Início (continua no separador Plano).
