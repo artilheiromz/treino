@@ -7,6 +7,14 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.2.0 — 6 Nov 2026
+Novo visual em vidro, inspirado no estilo do iOS 26 (aprovado a partir do mockup de 6 Nov).
+- Fundo de água azul com reflexos de luz e superfícies translúcidas desfocadas em todos os cartões, linhas do plano, blocos do treino, botões e selectores.
+- Barra de separadores flutuante em cápsula de vidro, com o separador activo destacado.
+- Dia seleccionado, selector Corpo/Treinos e etiqueta "Hoje" em branco sólido; "Feito" em verde-menta; caminhadas em lilás.
+- Tipografia do sistema do iPhone (SF Pro); ecrã do código e botão "Entrar" no mesmo estilo.
+- O cartão da piscina mantém o fundo preto, para ler bem no ecrã bloqueado.
+
 ## v1.1.1 — 5 Nov 2026
 - Descansos explicados: nos blocos com repetições aparece "desc. 30 s **entre repetições**" (na página do treino e no cartão da piscina), e o cartão lembra "entre blocos: cerca de 1 min".
 - Resumo do treino mostra a frequência cardíaca pós-treino (no fim, 1 min e 2 min depois), para acompanhar a recuperação.
