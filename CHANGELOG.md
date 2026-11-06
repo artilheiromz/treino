@@ -7,6 +7,13 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.3.0 — 6 Nov 2026
+Disposição dos ecrãs igual ao mockup em vidro (a v1.2.0 só tinha mudado cores e efeitos).
+- **Início:** sem a faixa de quadradinhos no topo; cartão do corpo com o peso em destaque, etiqueta da variação desde 10 Out e três mini-cartões (gordura perdida, % gordura, visceral); cartão da semana com barra de sessões feitas e piscinas, tempo e caminhadas; aviso da pesagem em cápsula. O cartão "Plano" sai do Início (continua no separador Plano).
+- **Treinos:** faixa da semana numa única cápsula de vidro; cartão da sessão com o número de piscinas em destaque; botão compacto "Cartão para a piscina"; blocos do treino com número (passa a ✓ quando feito), intensidade no título e piscinas à direita; caixas de verificação redondas no estilo da app.
+- **Plano:** o próximo treino aparece como "Próximo".
+- Barra de separadores mais fina e etiqueta "Feito" mais verde.
+
 ## v1.2.2 — 6 Nov 2026
 - Correcção: o iPhone continuava a mostrar o ícone antigo guardado em cache. Os endereços do ícone e do manifest passam a levar a versão (`?v=122`), para obrigar o Safari a ir buscar o ícone novo.
 

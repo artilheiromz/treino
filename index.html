@@ -249,6 +249,56 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
 #lockbtn{background:#fff;color:#06324d;border-radius:18px}
 .lockcard input#pin{border-radius:18px}
 .lemb{color:rgba(255,255,255,.9)}
+
+/* ===== v1.3.0: disposição igual ao mockup ===== */
+.hi{font-size:34px}
+.menu{gap:14px}
+.mcard.main .t{font-size:28px}
+.gcard{appearance:none;text-align:left;width:100%;cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:28px;font:inherit;
+  background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);color:#fff}
+.gcard .k,.hero .k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.9)}
+.gcard .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bignum{font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.bignum small{font-size:18px;font-weight:600;margin-left:6px;color:rgba(255,255,255,.9)}
+.mt3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mtile{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2)}
+.mtile b{font-size:19px}.mtile span{font-size:12px;color:rgba(255,255,255,.88)}
+.t2{font-size:23px;font-weight:700}
+.segs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.segs i{height:8px;border-radius:4px;background:rgba(255,255,255,.22)}.segs i.on{background:#9ff3ff}
+.stats{display:flex;gap:22px}.stats>span{display:flex;flex-direction:column}.stats b{font-size:19px}.stats>span>span{font-size:12px;color:rgba(255,255,255,.88)}
+.gpill{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:22px;font-size:15px;color:#fff;
+  background:rgba(255,255,255,.10);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.24)}
+.gpill .ico{width:38px;height:38px;flex:none;border-radius:19px;display:grid;place-items:center;background:rgba(255,255,255,.18)}
+.gbtn{appearance:none;width:100%;text-align:left;cursor:pointer;font:inherit}
+.gbtn .col{display:flex;flex-direction:column;gap:2px;flex:1}.gbtn .col b{font-size:16px}.gbtn .col span{font-size:13px;color:rgba(255,255,255,.88)}
+.gbtn .go{width:34px;height:34px;border-radius:17px;display:grid;place-items:center;background:rgba(255,255,255,.2);font-size:20px}
+.hero h1{font-size:32px}
+.hfacts{display:flex;gap:22px;align-items:flex-end;margin-top:10px}
+.hfacts div{display:flex;flex-direction:column}.hfacts b{font-size:22px;font-weight:700}.hfacts span{font-size:13px;color:rgba(255,255,255,.9)}
+.hfacts b.big{font-size:44px;line-height:1;letter-spacing:-.02em;color:#b8f6ff}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding:6px;border-radius:26px;
+  background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow)}
+.wd{background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:20px;padding:7px 0}
+.wd.sel{background:#fff;box-shadow:0 6px 16px rgba(2,16,30,.25)}
+.blocks{gap:8px}
+.blk{grid-template-columns:32px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-radius:22px}
+.blk .nb{width:32px;height:32px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.2);font-size:15px;font-weight:700}
+.blk.ok{opacity:.6}.blk.ok .nb{background:#9dffc4;color:#06324d}
+.blk .col{display:flex;flex-direction:column;gap:2px}
+.blk .lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.88)}
+.blk .lbl.mod{color:#b8f6ff}.blk .lbl.forte{color:#ffd27a}
+.blk .set{font-size:16px;margin-top:0}.blk .rest{font-size:13px;margin-top:0;color:rgba(255,255,255,.88)}
+.blk .pc{display:flex;flex-direction:column;align-items:flex-end}.blk .pc b{font-size:20px}.blk .pc small{font-size:11px;color:rgba(255,255,255,.85)}
+.pre{gap:6px}
+.chk{align-items:center;padding:10px 14px;border-radius:18px;font-size:15px}
+.chk input{-webkit-appearance:none;appearance:none;width:22px;height:22px;margin:0;border-radius:7px;border:1.5px solid rgba(255,255,255,.7);background:rgba(255,255,255,.1);display:grid;place-items:center;flex:none}
+.chk input:checked{background:#fff;border-color:#fff}
+.chk input:checked::after{content:"";width:5px;height:10px;border:solid #06324d;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.pill.done{background:rgba(120,255,190,.32);color:#e2fff0;border-color:rgba(160,255,205,.55)}
+nav{padding:6px}
+.tab{font-size:11px;padding:6px 2px;gap:2px;border-radius:27px}
+.tab svg{width:22px;height:22px}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -283,7 +333,7 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.2.2"; // ver CHANGELOG.md
+const VERSAO = "1.3.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -403,6 +453,7 @@ function estadoSessao(s){
   if(feito(s.id)) return {c:"done",t:"Feito"};
   if(s.data===HOJE) return {c:"today",t:"Hoje"};
   if(s.data<HOJE) return {c:"miss",t:"Sem registo"};
+  if(PLANO.find(x=>x.data>HOJE)===s) return {c:"today",t:"Próximo"};
   return {c:"",t:DC[pd(s.data).getDay()]};
 }
 
@@ -496,11 +547,12 @@ function renderInicio(){
   const ss=PLANO.filter(s=>s.sem===w), feitasW=ss.filter(s=>feito(s.id)).length;
   const natW=statsNat(swims().filter(x=>x.data>=i0&&x.data<=i1)), camW=statsCam(walks().filter(x=>x.data>=i0&&x.data<=i1));
   const proxPes=(()=>{let x=HOJE;for(let i=0;i<7;i++){if(pd(x).getDay()===6)return x;x=addD(x,1);}return HOJE;})();
+  const quando=proxPes===HOJE?"hoje":proxPes===addD(HOJE,1)?"amanhã, sábado":`${DIAS[pd(proxPes).getDay()].toLowerCase()}, ${curto(proxPes)}`;
+  const pesHoje=pesDia(HOJE);
   el.innerHTML=`
-    <div class="stack" style="gap:6px">
+    <div class="stack" style="gap:4px">
       <div class="eyebrow">${DIAS[d.getDay()]}, ${d.getDate()} ${MES[d.getMonth()]}</div>
-      <h1>Olá, Bruno</h1>
-      <div class="lane" aria-hidden="true"></div>
+      <h1 class="hi">Olá, Bruno</h1>
     </div>
     <div class="menu">
       <button class="mcard main" data-go="treinos" data-dia="${HOJE}">
@@ -508,23 +560,28 @@ function renderInicio(){
         <span class="t">${esc(hojeT)}</span>
         <span class="s">${feitosHoje.length?"Feito hoje: "+feitosHoje.map(x=>x.tipo==="natacao"?x.distancia+" m de natação":f1(x.distancia)+" km de caminhada").join(" · "):esc(hojeS)}</span>
       </button>
-      <button class="mcard" data-go="progresso" data-sub="corpo">
-        <span class="k">O meu corpo</span><span class="go" aria-hidden="true">›</span>
-        <span class="t">${f1(z.peso)} kg · ${f1(a.peso-z.peso)} kg a menos</span>
-        <span class="mini"><span><b>${f1(a.mGorda-z.mGorda)} kg</b>gordura perdida</span><span><b>${f1(z.gordura)}%</b>gordura</span><span><b>${z.visceral}</b>visceral</span></span>
+      <button class="gcard" data-go="progresso" data-sub="corpo">
+        <span class="row"><span class="k">O meu corpo</span><span class="pill done">${sg(z.peso-a.peso)} kg desde ${curto(a.data)}</span></span>
+        <span class="bignum">${f1(z.peso)}<small>kg</small></span>
+        <span class="mt3">
+          <span class="mtile"><b>${f1(a.mGorda-z.mGorda)} kg</b><span>gordura perdida</span></span>
+          <span class="mtile"><b>${f1(z.gordura)}%</b><span>gordura</span></span>
+          <span class="mtile"><b>${z.visceral}</b><span>visceral</span></span>
+        </span>
       </button>
-      <button class="mcard" data-go="progresso" data-sub="treinos">
-        <span class="k">Os meus treinos · semana ${w}</span><span class="go" aria-hidden="true">›</span>
-        <span class="t">${feitasW} de ${ss.length} sessões de natação</span>
-        <span class="mini"><span><b>${natW.m} m</b>nadados</span><span><b>${camW.n}</b>caminhadas</span><span><b>${fmtMin(natW.min+camW.min)}</b>de treino</span></span>
+      <button class="gcard" data-go="progresso" data-sub="treinos">
+        <span class="k">Os meus treinos · semana ${w}</span>
+        <span class="t2">${feitasW} de ${ss.length} sessões feitas</span>
+        <span class="segs" aria-hidden="true">${ss.map(x=>`<i class="${feito(x.id)?"on":""}"></i>`).join("")}</span>
+        <span class="stats">
+          <span><b>${natW.m} m</b><span>${Math.round(natW.m/25)} piscinas</span></span>
+          <span><b>${fmtMin(natW.min+camW.min)}</b><span>de treino</span></span>
+          <span><b>${camW.n}</b><span>caminhadas</span></span>
+        </span>
       </button>
-      <button class="mcard" data-go="plano">
-        <span class="k">Plano</span><span class="go" aria-hidden="true">›</span>
-        <span class="t">4 semanas · Novembro</span>
-        <span class="s">Natação ter, qui e sáb · caminhadas opcionais qua e dom</span>
-      </button>
+      <div class="gpill"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M8 9a4 4 0 0 1 8 0"/><path d="M12 9l1.5-1.5"/></svg></span>
+        <span>${pesHoje?"Pesagem de hoje registada":`Pesagem ${quando}, ao acordar`}</span></div>
     </div>
-    <div class="note">Próxima pesagem: ${DIAS[pd(proxPes).getDay()].toLowerCase()}, ${curto(proxPes)}, ao acordar. Manda o print ao Claude.</div>
     <div class="muted sm" style="text-align:center">Versão ${VERSAO} · dados de ${curto(DADOS.actualizado)} · <button class="linkbtn" id="bloq" style="padding:3px 10px">Bloquear</button></div>`;
   const bq=el.querySelector("#bloq"); if(bq) bq.onclick=bloquear;
   el.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{
@@ -611,9 +668,9 @@ function renderTreinos(){
     const s=ag.s, st=estadoSessao(s), t=feito(s.id);
     const checks=store.get("nat-"+s.id)||[], pre=store.get("nat-pre-"+d)||[];
     corpo+=`<div class="hero">
-      <div class="spread"><h1>${esc(s.nome)}</h1><span class="pill ${st.c}">${st.t}</span></div>
-      <div class="facts"><div><b class="big num">${s.totalTxt||s.total}</b><span>metros</span></div><div><b>${s.dur}</b><span>duração</span></div><div><b>25 m</b><span>piscina</span></div></div>
-      <div class="muted sm" style="margin-top:8px">Natação · semana ${s.sem} · sessão ${PLANO.indexOf(s)+1} de ${PLANO.length}</div></div>`;
+      <div class="spread"><span class="k">Natação · sessão ${PLANO.indexOf(s)+1} de ${PLANO.length}</span><span class="pill ${st.c}">${st.t}</span></div>
+      <h1 style="margin-top:6px">${esc(s.nome)}</h1>
+      <div class="hfacts"><div><b class="big">${pisc(s.total)}</b><span>piscinas</span></div><div><b>${s.totalTxt||s.total} m</b><span>distância</span></div><div><b>${s.dur}</b><span>duração</span></div></div></div>`;
     if(t) corpo+=resumoNat(t,s);
     else if(passado) corpo+=`<div class="note warm">Ainda sem registo deste treino. Se o fizeste, manda o print do Apple Watch ao Claude.</div>`;
     if(dow===4 && !t) corpo+=`<div class="note warm">Dia de injecção: se te sentires enjoado ou sem energia, faz a sessão toda em ritmo leve ou passa-a para amanhã.</div>`;
@@ -621,13 +678,13 @@ function renderTreinos(){
       corpo+=`<h3>Antes de entrar</h3><div class="pre">${["Comi algo leve há 1–2 horas","Garrafa de água à beira da piscina","Apple Watch: Natação em piscina, 25 m"].map((p,i)=>`
         <label class="chk" for="pre${i}"><input type="checkbox" id="pre${i}" data-pre="${i}" ${pre.includes(i)?"checked":""}><span>${p}</span></label>`).join("")}</div>`;
     }
-    if(!t && !passado) corpo+=`<button class="mcard main" id="abrirCartao" style="grid-template-columns:1fr auto"><span class="k">Para a piscina</span><span class="go" aria-hidden="true">›</span><span class="t" style="font-size:20px">Cartão do treino em letra grande</span><span class="s">Tira um print e põe como fundo do ecrã bloqueado: vês o treino só de levantar o telemóvel</span></button>`;
+    if(!t && !passado) corpo+=`<button class="gpill gbtn" id="abrirCartao"><span class="ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 7h4M10 11h4M10 15h2"/></svg></span><span class="col"><b>Cartão para a piscina</b><span>Print para o ecrã bloqueado</span></span><span class="go" aria-hidden="true">›</span></button>`;
     corpo+=`<div class="spread"><h3>${t?"Treino planeado":"Treino"}</h3>${t||passado?"":`<span class="muted sm">Toca num bloco quando o acabares</span>`}</div>
       <div class="blocks">${s.blocos.map((b,i)=>`
         <button class="blk ${checks.includes(i)?"ok":""}" data-b="${i}" aria-pressed="${checks.includes(i)}">
-          <span class="tick" aria-hidden="true">✓</span>
-          <span><span class="lbl">${esc(b.b)}</span><span class="set">${esc(b.s)}</span>${b.d?`<span class="rest">${esc(dTxt(b))}</span>`:""}<span class="int ${intCls(b.i)}">${b.i}</span></span>
-          <span class="m">${b.m}<small>m</small></span></button>`).join("")}</div>
+          <span class="nb" aria-hidden="true">${checks.includes(i)?"✓":i+1}</span>
+          <span class="col"><span class="lbl ${intCls(b.i)}">${esc(b.b)} · ${b.i}</span><span class="set">${esc(b.s)}</span>${b.d?`<span class="rest">${esc(dTxt(b))}</span>`:""}</span>
+          <span class="pc"><b>${pisc(b.m)}</b><small>pisc.</small></span></button>`).join("")}</div>
       ${s.nota?`<div class="note">${esc(s.nota)}</div>`:""}`;
     if(!t && !passado) corpo+=`<div class="card ink2" style="font-size:15px">No fim, manda ao Claude o print do resumo do Apple Watch e diz-lhe como te sentiste, de 1 a 10.</div>`;
   } else if(ag.tipo==="caminhada"){
