@@ -7,6 +7,9 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.2.2 — 6 Nov 2026
+- Correcção: o iPhone continuava a mostrar o ícone antigo guardado em cache. Os endereços do ícone e do manifest passam a levar a versão (`?v=122`), para obrigar o Safari a ir buscar o ícone novo.
+
 ## v1.2.1 — 6 Nov 2026
 - Novo ícone da app em vidro (proposta A): fundo de água azul com um painel de vidro e a linha de ritmo cardíaco a branco. Substitui o ícone anterior no ecrã principal, no ecrã do código e no separador do browser.
 - Para o iPhone mostrar o ícone novo é preciso apagar o atalho e voltar a adicioná-lo ao ecrã principal.
