@@ -7,6 +7,18 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.6.0 — 9 Nov 2026
+Novo segmento **Evolução** no separador Progresso, ao lado de Corpo e Treinos.
+- **Conquistas** ao estilo das medalhas do Apple Watch, em 4 grupos: Natação, Consistência, Coração e Peso (29 ao todo). As conquistadas aparecem a cores com a data; as que faltam aparecem a cinzento com o que falta (ex.: "Faltam 125 m"). São calculadas automaticamente a partir dos treinos e pesagens.
+- Tocar numa medalha abre-a em grande, com a descrição, a data e o botão **Partilhar esta conquista**.
+- **Recordes pessoais**: mais piscinas num treino, treino mais longo, mais tempo a nadar, maior bloco sem parar, piscina de crawl mais rápida, menos tempo parado, teste de 10 minutos, mais calorias, frequência cardíaca média mais baixa, semana com mais metros e maior perda de peso numa semana.
+- **Treino a treino**: tabela dos últimos 4 treinos lado a lado, com o melhor de cada linha a negrito.
+- Gráficos de tendência: tempo parado, frequência cardíaca média e piscinas por treino.
+- Botão **Partilhar a minha evolução**: cria uma imagem (1080×1350) com os números principais, as últimas conquistas e os recordes, e abre a folha de partilha do iPhone (guardar nas Fotos, WhatsApp, etc.).
+- Novos campos nos treinos: tempo parado, maior bloco sem parar e piscina de crawl mais rápida.
+- "FC" passa a aparecer por extenso como **frequência cardíaca** em toda a app.
+- Correcção: o texto do teste de 10 minutos dizia 28 Nov; passa a 30 Nov.
+
 ## v1.5.0 — 9 Nov 2026
 Novos dias de treino a pedido do Bruno: natação à **segunda, quarta e sexta** a partir de 9 Nov.
 - A sessão 3 (Resistência), que ficou por fazer no sábado 7 Nov, passa para segunda 9 Nov; as sessões seguintes seguem em segunda/quarta/sexta até ao novo teste, que passa para **segunda 30 Nov**.

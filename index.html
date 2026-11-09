@@ -305,6 +305,26 @@ nav{padding:6px}
 .spark{display:flex;flex-direction:column;gap:4px;padding:10px 12px 8px;border-radius:16px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2)}
 .mtile .ring{display:block;margin-bottom:2px}
 .bignum small{font-size:16px}
+/* v1.6.0 — Evolução: conquistas, recordes, comparação */
+.btnp{appearance:none;display:block;width:100%;border:0;border-radius:999px;padding:14px 18px;background:#fff;color:#06324d;font:700 16px/1.2 var(--body);cursor:pointer;box-shadow:0 6px 18px rgba(2,16,30,.25)}
+.btnp:active{transform:scale(.98)}
+.evohero{gap:14px}.evbig{font:800 44px/1 var(--display);margin-top:4px}.evbig small{font-size:18px;font-weight:600;opacity:.8}
+.medrow{display:flex}.medrow .med+.med{margin-left:-12px}.medrow .med{filter:drop-shadow(0 4px 10px rgba(0,0,0,.3))}
+.medgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 8px}
+.medbtn{appearance:none;border:0;background:transparent;color:#fff;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 2px;cursor:pointer;text-align:center;font:inherit}
+.medbtn b{font-size:13px;line-height:1.2;font-weight:700}.medbtn span{font-size:12px;color:rgba(255,255,255,.72);line-height:1.2}
+.med{display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.28))}.med.medlk{opacity:.42;filter:none}
+.medbtn:active .med{transform:scale(.95)}
+.reclist{display:flex;flex-direction:column}
+.rec{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.16)}
+.rec:first-child{border-top:0;padding-top:2px}
+.rico{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.16);color:#fff}
+.rt{display:flex;flex-direction:column;gap:2px;min-width:0}.rt b{font-size:15px}.rv{font-weight:800;font-size:17px;white-space:nowrap}
+table.cmp th,table.cmp td{text-align:right;white-space:nowrap}table.cmp th:first-child,table.cmp td:first-child{text-align:left;color:rgba(255,255,255,.85)}
+table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radius:10px 10px 0 0}
+.cartao.medov{padding:calc(14vh + env(safe-area-inset-top)) 22px calc(60px + env(safe-area-inset-bottom));align-items:stretch}
+.medbig{display:flex;justify-content:center}.medbig .med{filter:drop-shadow(0 18px 40px rgba(0,0,0,.6))}
+.medd{text-align:center;margin-top:16px;font-weight:700;font-size:16px}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -339,7 +359,7 @@ nav{padding:6px}
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.5.0"; // ver CHANGELOG.md
+const VERSAO = "1.6.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -629,7 +649,7 @@ function resumoNat(t,s){
   const pct=s&&t.distancia?Math.round(t.distancia/s.total*100):null;
   const f=(v,l)=>v||v===0?`<div><b>${v}</b><span>${l}</span></div>`:"";
   const est=t.estilos?Object.entries(t.estilos).filter(([k,v])=>v).map(([k,v])=>`${{crawl:"Crawl",brucos:"Bruços",costas:"Costas"}[k]||k} ${v} m`).join(" · "):"";
-  const zonas=t.zonas?`<div class="stack" style="gap:6px"><div class="muted sm">Tempo por zona de FC</div>
+  const zonas=t.zonas?`<div class="stack" style="gap:6px"><div class="muted sm">Tempo por zona de frequência cardíaca</div>
     ${[["z1","Zona 1","<140"],["z2","Zona 2","141–150"],["z3","Zona 3","151–160"],["z4","Zona 4","161–170"],["z5","Zona 5","171+"]].map(([k,n,r])=>{const sec=secs(t.zonas[k])||0,tot=Object.values(t.zonas).reduce((a,x)=>a+(secs(x)||0),0)||1;
       return `<div class="spread sm"><span style="width:62px">${n}</span><span class="bar" style="flex:1;height:8px"><i style="width:${(sec/tot*100).toFixed(0)}%"></i></span><span class="num" style="width:44px;text-align:right">${t.zonas[k]}</span></div>`;}).join("")}</div>`:"";
   return `<div class="card result stack" style="gap:10px">
@@ -640,11 +660,11 @@ function resumoNat(t,s){
       ${f(t.duracao?fmtMin(t.duracao):null,"tempo total")}
       ${f(t.nadar,"a nadar")}
       ${f(t.ritmo,"ritmo /100 m a nadar")}
-      ${f(t.fcMedia?t.fcMedia+(t.fcMax?" / "+t.fcMax:""):null,"FC média"+(t.fcMax?" / máx.":""))}
+      ${f(t.fcMedia?t.fcMedia+(t.fcMax?" / "+t.fcMax:""):null,"Frequência cardíaca média"+(t.fcMax?" / máxima":""))}
       ${f(t.kcal,"kcal activas")}
       ${f(t.sensacao?t.sensacao+"/10":null,"esforço")}
       ${f(t.swolf,"SWOLF crawl")}
-      ${f(t.fcPos?t.fcPos.join(" → "):null,"FC pós-treino (0, 1, 2 min)")}
+      ${f(t.fcPos?t.fcPos.join(" → "):null,"Frequência cardíaca depois do treino (0, 1 e 2 min)")}
     </div>
     ${t.teste10?`<div class="note" style="background:var(--surface-2)"><b>Teste de 10 min:</b> ${t.teste10} m${t.teste10Piscinas?` (${t.teste10Piscinas} piscinas)`:""}${t.teste10Detalhe?` · ${esc(t.teste10Detalhe)}`:""}</div>`:""}
     ${est?`<div class="ink2 sm">${est}</div>`:""}
@@ -657,7 +677,7 @@ function resumoCam(t){
       <div><b>${f1(t.distancia)} km</b><span>distância</span></div>
       ${t.duracao?`<div><b>${fmtMin(t.duracao)}</b><span>tempo</span></div>`:""}
       ${t.ritmo?`<div><b>${esc(t.ritmo)}</b><span>ritmo /km</span></div>`:""}
-      ${t.fcMedia?`<div><b>${t.fcMedia}</b><span>FC média</span></div>`:""}
+      ${t.fcMedia?`<div><b>${t.fcMedia}</b><span>freq. cardíaca média</span></div>`:""}
       ${t.kcal?`<div><b>${t.kcal}</b><span>kcal</span></div>`:""}
     </div>${t.notas?`<div class="ink2">${esc(t.notas)}</div>`:""}</div>`;
 }
@@ -780,15 +800,16 @@ let progSub="corpo", pesSel="geral", periodoSel="geral";
 function renderProgresso(){
   const el=document.getElementById("v-progresso");
   el.innerHTML=`
-    <div class="stack" style="gap:6px"><div class="eyebrow">Progresso · desde 10 Out</div><h1>${progSub==="corpo"?"O meu corpo":"Os meus treinos"}</h1></div>
+    <div class="stack" style="gap:6px"><div class="eyebrow">Progresso · desde 10 Out</div><h1>${progSub==="corpo"?"O meu corpo":progSub==="treinos"?"Os meus treinos":"A minha evolução"}</h1></div>
     <div class="seg" role="group" aria-label="Tipo de progresso">
       <button data-sub="corpo" aria-pressed="${progSub==="corpo"}">Corpo</button>
       <button data-sub="treinos" aria-pressed="${progSub==="treinos"}">Treinos</button>
+      <button data-sub="evolucao" aria-pressed="${progSub==="evolucao"}">Evolução</button>
     </div>
     <div id="pbody" class="stack"></div>`;
   el.querySelectorAll("[data-sub]").forEach(b=>b.onclick=()=>{progSub=b.dataset.sub;renderProgresso();});
   const pb=el.querySelector("#pbody");
-  if(progSub==="corpo") corpoView(pb); else treinosView(pb);
+  if(progSub==="corpo") corpoView(pb); else if(progSub==="treinos") treinosView(pb); else evolucaoView(pb);
   wireTips(el);
 }
 function corpoView(pb){
@@ -881,13 +902,285 @@ function treinosView(pb){
     <div class="card stack"><div class="spread"><h2>Ritmo por treino</h2><span class="muted sm">min /100 m · mais baixo é melhor</span></div>
       ${lineChart(ritmos,{c:"var(--accent)",fmt:v=>mmss(v),u:" /100 m",aria:"Ritmo médio por treino de natação",vazio:"Aparece depois de 2 treinos de natação registados."})}</div>
     <div class="card stack"><h2>Teste de 10 minutos</h2>
-      ${testes.length?`<div class="facts" style="margin-top:0">${testes.map(t=>`<div><b>${t.teste10} m</b><span>${curto(t.data)}${t.teste10Piscinas?" · "+t.teste10Piscinas+" piscinas":""}</span></div>`).join("")}</div>`:`<div class="muted">Primeiro teste a 3 Nov, repetido a 28 Nov.</div>`}</div>
+      ${testes.length?`<div class="facts" style="margin-top:0">${testes.map(t=>`<div><b>${t.teste10} m</b><span>${curto(t.data)}${t.teste10Piscinas?" · "+t.teste10Piscinas+" piscinas":""}</span></div>`).join("")}</div>`:`<div class="muted">Primeiro teste a 3 Nov, repetido a 30 Nov.</div>`}</div>
     <div class="card stack"><h2>Actividades</h2>${lista.length?`<div class="tw"><table>
-      <thead><tr><th>Data</th><th>Tipo</th><th>Distância</th><th>Tempo</th><th>Ritmo</th><th>FC</th></tr></thead>
+      <thead><tr><th>Data</th><th>Tipo</th><th>Distância</th><th>Tempo</th><th>Ritmo</th><th>Freq. cardíaca</th></tr></thead>
       <tbody>${lista.map(x=>`<tr data-dia="${x.data}" style="cursor:pointer"><td>${curto(x.data)}</td><td>${x.tipo==="natacao"?"Natação":"Caminhada"}</td><td>${x.tipo==="natacao"?x.distancia+" m":f1(x.distancia)+" km"}</td><td>${x.duracao?fmtMin(x.duracao):""}</td><td>${esc(x.ritmo||"")}</td><td>${x.fcMedia||""}</td></tr>`).join("")}</tbody></table></div>
       <div class="muted sm">Toca numa linha para abrir o dia.</div>`:`<div class="muted">Ainda sem actividades. A primeira aparece depois de mandares o resumo de 3 Nov ao Claude.</div>`}</div>`;
   pb.querySelectorAll("[data-per]").forEach(b=>b.onclick=()=>{periodoSel=b.dataset.per;renderProgresso();});
   pb.querySelectorAll("[data-dia]").forEach(b=>b.onclick=()=>{diaSel=b.dataset.dia;go("treinos");});
+}
+
+/* ===== EVOLUÇÃO (v1.6.0): conquistas, recordes, comparação, tendências, partilha ===== */
+const MED_COR={swim:["#5ff0ff","#2a7fff"],cons:["#d2b8ff","#7b5cff"],heart:["#ffb09f","#ff4f6d"],peso:["#a8ffcb","#14b377"]};
+const MED_CAT={swim:"Natação",cons:"Consistência",heart:"Coração",peso:"Peso"};
+const ICO={
+  flag:"M6 21V4M6 4h11l-2.5 4L17 12H6",
+  timer:"M12 6a8 8 0 1 1 0 16a8 8 0 1 1 0-16M12 10v4.5l3 1.8M9.5 2.5h5",
+  check:"M5 12.5l4.5 4.5L19 7",
+  cal:"M4 6h16v14H4zM4 10.5h16M8.5 3v4M15.5 3v4",
+  bolt:"M13.5 2.5L5 13.5h6.5L10.5 21.5 19 10.5h-6.5z",
+  walk:"M13 5.5a1.6 1.6 0 1 0 0-.01M9 21l2.5-6 3 2.5V21M8 12.5l2.5-4.5 3.5 1 2 3.5M10.5 8l-1.5 5",
+  heart:"M12 20s-7.5-4.6-7.5-10.3A4.2 4.2 0 0 1 12 7.2a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z",
+  flame:"M12 21.5c3.6 0 6-2.6 6-6 0-4.2-3.4-6.3-4.2-10-1.4 1.7-2 3.6-2.6 4.6-.8-1.2-1.6-2.3-2.4-2.8-.5 3.4-2.8 4.9-2.8 8.2 0 3.4 2.4 6 6 6z",
+  down:"M12 3.5v16M5.5 13l6.5 6.5 6.5-6.5",
+  wave:"M2.5 9.5c2.4-2.4 4.8-2.4 7.2 0s4.8 2.4 7.2 0 3.2-1.8 4.6-.8M2.5 15.5c2.4-2.4 4.8-2.4 7.2 0s4.8 2.4 7.2 0 3.2-1.8 4.6-.8",
+  star:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",
+  trophy:"M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5M12 14v4M8 21h8M9.5 18h5"
+};
+const kgF=n=>f1(n).replace(",0","");
+function porData(a){return a.slice().sort((x,y)=>x.data<y.data?-1:1);}
+
+function conquistas(){
+  const S=porData(swims()), W=porData(walks()), P=DADOS.pesagens, a0=P[0], z=P[P.length-1];
+  const prim=(arr,f)=>{const x=arr.find(f);return x?x.data:null;};
+  const totM=S.reduce((a,x)=>a+(x.distancia||0),0);
+  const acum=lim=>{let t=0;for(const x of S){t+=x.distancia||0;if(t>=lim)return x.data;}return null;};
+  const maxBloco=Math.max(0,...S.map(x=>x.blocoMax||0));
+  const bloco=n=>prim(S,x=>(x.blocoMax||0)>=n);
+  const perdeu=kg=>prim(P,p=>a0.peso-p.peso>=kg-1e-9);
+  const perdido=a0.peso-z.peso;
+  let desce=null,seq=0; for(let i=1;i<P.length;i++){seq=P[i].peso<P[i-1].peso?seq+1:0; if(seq>=4&&!desce)desce=P[i].data;}
+  const semCompleta=(()=>{for(const w of NSEM){const ss=PLANO.filter(s=>s.sem===w);if(ss.length&&ss.every(s=>feito(s.id)))return ss[ss.length-1].data;}return null;})();
+  const t1=S.find(x=>x.teste10), t2=t1?S.find(x=>x.teste10&&x.data>t1.data&&x.teste10>t1.teste10):null;
+  const todos=PLANO.every(s=>feito(s.id))?PLANO[PLANO.length-1].data:null;
+  const faltaM=m=>`Faltam ${Math.max(0,m)} m`, faltaKg=k=>`Faltam ${kgF(Math.max(0,k))} kg`;
+  const faltaB=n=>`Melhor até agora: ${maxBloco} seguidas`;
+  const L=[
+    {id:"inicio",cat:"swim",ic:"flag",t:"Primeira braçada",d:"Primeiro treino de natação registado.",data:S[0]?.data,falta:"Regista o primeiro treino"},
+    {id:"teste",cat:"swim",ic:"timer",t:"Ponto de partida",d:"Fizeste o primeiro teste de 10 minutos.",data:t1?.data,falta:"Teste no primeiro treino"},
+    {id:"plano",cat:"swim",ic:"check",t:"Plano cumprido",d:"Nadaste toda a distância planeada de uma sessão.",data:prim(S,x=>{const s=PLANO.find(p=>p.id===x.sessao);return s&&x.distancia>=s.total;}),falta:"Completa uma sessão inteira"},
+    {id:"b8",cat:"swim",txt:"8",t:"Primeiro bloco sem parar",d:"8 piscinas seguidas (200 m) sem parar.",data:bloco(8),falta:faltaB(8)},
+    {id:"b16",cat:"swim",txt:"16",t:"16 sem parar",d:"16 piscinas seguidas (400 m) sem parar.",data:bloco(16),falta:faltaB(16)},
+    {id:"b24",cat:"swim",txt:"24",t:"24 sem parar",d:"24 piscinas seguidas (600 m) sem parar.",data:bloco(24),falta:faltaB(24)},
+    {id:"b40",cat:"swim",txt:"1K",t:"1 km sem parar",d:"40 piscinas seguidas sem parar.",data:bloco(40),falta:faltaB(40)},
+    {id:"descanso",cat:"swim",ic:"timer",t:"Descanso curto",d:"Menos de 10 minutos parado num treino.",data:prim(S,x=>secs(x.parado)&&secs(x.parado)<600),falta:"Menos de 10 min parado"},
+    {id:"km",cat:"swim",ic:"star",t:"1 km num treino",d:"1000 m (40 piscinas) num só treino.",data:prim(S,x=>(x.distancia||0)>=1000),falta:faltaM(1000-Math.max(0,...S.map(x=>x.distancia||0)))},
+    {id:"teste2",cat:"swim",ic:"trophy",t:"Teste batido",d:"Mais metros no teste de 10 minutos do que na primeira vez.",data:t2?.data,falta:"Novo teste a 30 Nov"},
+    {id:"t5",cat:"swim",txt:"5K",t:"5 km nadados",d:"5 km nadados no total.",data:acum(5000),falta:faltaM(5000-totM)},
+    {id:"t10",cat:"swim",txt:"10K",t:"10 km nadados",d:"10 km nadados no total.",data:acum(10000),falta:faltaM(10000-totM)},
+    {id:"t25",cat:"swim",txt:"25K",t:"25 km nadados",d:"25 km nadados no total.",data:acum(25000),falta:faltaM(25000-totM)},
+    {id:"semana",cat:"cons",ic:"cal",t:"Semana completa",d:"Todas as sessões de natação de uma semana feitas.",data:semCompleta,falta:"Faz todas as sessões da semana"},
+    {id:"injecao",cat:"cons",ic:"bolt",t:"Sem desculpas",d:"Treinaste num dia de injecção.",data:prim(S,x=>{const d=pd(x.data).getDay();return d===1||d===4;}),falta:"Treina num dia de injecção"},
+    {id:"camin",cat:"cons",ic:"walk",t:"Primeira caminhada",d:"Primeira caminhada registada.",data:W[0]?.data,falta:"Caminhada à terça ou sábado"},
+    {id:"plano5",cat:"cons",ic:"trophy",t:"Plano de 5 semanas",d:"Todas as sessões do plano feitas.",data:todos,falta:`${PLANO.filter(s=>feito(s.id)).length} de ${PLANO.length} sessões`},
+    {id:"recup",cat:"heart",ic:"heart",t:"Recuperação rápida",d:"A frequência cardíaca desceu 15 ou mais batidas no primeiro minuto depois do treino.",data:prim(S,x=>x.fcPos&&x.fcPos[0]-x.fcPos[1]>=15),falta:"Descer 15 batidas em 1 min"},
+    {id:"kcal",cat:"heart",ic:"flame",t:"500 calorias",d:"Mais de 500 kcal activas num treino.",data:prim(S,x=>(x.kcal||0)>=500),falta:"500 kcal num treino"},
+    {id:"p5",cat:"peso",txt:"−5",t:"Menos 5 kg",d:"5 kg perdidos desde 10 Out.",data:perdeu(5),falta:faltaKg(5-perdido)},
+    {id:"p8",cat:"peso",txt:"−8",t:"Menos 8 kg",d:"8 kg perdidos desde 10 Out.",data:perdeu(8),falta:faltaKg(8-perdido)},
+    {id:"p10",cat:"peso",txt:"−10",t:"Menos 10 kg",d:"10 kg perdidos desde 10 Out.",data:perdeu(10),falta:faltaKg(10-perdido)},
+    {id:"p15",cat:"peso",txt:"−15",t:"Menos 15 kg",d:"15 kg perdidos desde 10 Out.",data:perdeu(15),falta:faltaKg(15-perdido)},
+    {id:"p20",cat:"peso",txt:"−20",t:"Menos 20 kg",d:"20 kg perdidos desde 10 Out.",data:perdeu(20),falta:faltaKg(20-perdido)},
+    {id:"p140",cat:"peso",ic:"down",t:"Abaixo dos 140",d:"Pesagem abaixo dos 140 kg.",data:prim(P,p=>p.peso<140),falta:faltaKg(z.peso-139.9)},
+    {id:"gord43",cat:"peso",txt:"43%",t:"Gordura abaixo de 43%",d:"Gordura corporal abaixo de 43%.",data:prim(P,p=>p.gordura<43),falta:`Agora ${f1(z.gordura)}%`},
+    {id:"visc",cat:"peso",txt:"<20",t:"Visceral a descer",d:"Gordura visceral abaixo de 20.",data:prim(P,p=>p.visceral<20),falta:`Agora ${z.visceral}`},
+    {id:"desce4",cat:"peso",ic:"wave",t:"4 semanas a descer",d:"Quatro pesagens seguidas a descer.",data:desce,falta:`${seq} seguidas agora`},
+    {id:"meta",cat:"peso",ic:"trophy",t:"Meta: 100 kg",d:"Chegaste à meta de peso.",data:prim(P,p=>p.peso<=DADOS.metas.peso),falta:faltaKg(z.peso-DADOS.metas.peso)}
+  ];
+  L.forEach(c=>{c.data=c.data||null;});
+  return L;
+}
+
+function recordes(){
+  const S=porData(swims()), P=DADOS.pesagens, out=[];
+  const best=(f,menor)=>{let b=null;for(const x of S){const v=f(x);if(v==null||isNaN(v)||v===0)continue;if(!b||(menor?v<b.v:v>b.v))b={v,x};}return b;};
+  let r;
+  if(r=best(x=>x.piscinas||(x.distancia?x.distancia/25:null))) out.push({ic:"wave",t:"Mais piscinas num treino",v:r.v+" piscinas",s:r.x.distancia+" m",data:r.x.data});
+  if(r=best(x=>x.duracao)) out.push({ic:"timer",t:"Treino mais longo",v:fmtMin(r.v),s:"tempo total na piscina",data:r.x.data});
+  if(r=best(x=>secs(x.nadar))) out.push({ic:"wave",t:"Mais tempo a nadar",v:mmss(r.v),s:"sem contar paragens",data:r.x.data});
+  if(r=best(x=>x.blocoMax)) out.push({ic:"star",t:"Maior bloco sem parar",v:r.v+" piscinas",s:(r.v*25)+" m seguidos",data:r.x.data});
+  if(r=best(x=>x.crawl25,true)) out.push({ic:"bolt",t:"Piscina de crawl mais rápida",v:r.v+" s",s:"25 m",data:r.x.data});
+  if(r=best(x=>secs(x.parado),true)) out.push({ic:"timer",t:"Menos tempo parado",v:mmss(r.v),s:"num treino",data:r.x.data});
+  if(r=best(x=>x.teste10)) out.push({ic:"flag",t:"Teste de 10 minutos",v:r.v+" m",s:(r.v/25)+" piscinas",data:r.x.data});
+  if(r=best(x=>x.kcal)) out.push({ic:"flame",t:"Mais calorias num treino",v:r.v+" kcal",s:"calorias activas",data:r.x.data});
+  if(r=best(x=>x.fcMedia,true)) out.push({ic:"heart",t:"Frequência cardíaca média mais baixa",v:r.v+" bpm",s:"batidas por minuto",data:r.x.data});
+  const sem=NSEM.map(w=>({w,m:S.filter(x=>x.data>=SEMANAS[w][0]&&x.data<=SEMANAS[w][1]).reduce((a,x)=>a+(x.distancia||0),0)})).sort((a,b)=>b.m-a.m)[0];
+  if(sem&&sem.m) out.push({ic:"cal",t:"Semana com mais metros",v:sem.m+" m",s:"semana "+sem.w,data:SEMANAS[sem.w][1]<HOJE?SEMANAS[sem.w][1]:null,txt:curto(SEMANAS[sem.w][0])+" a "+curto(SEMANAS[sem.w][1])});
+  let pb=null; for(let i=1;i<P.length;i++){const d=P[i-1].peso-P[i].peso;if(!pb||d>pb.d)pb={d,a:P[i-1],b:P[i]};}
+  if(pb&&pb.d>0) out.push({ic:"down",t:"Maior perda numa semana",v:kgF(pb.d)+" kg",s:"peso",data:pb.b.data,txt:curto(pb.a.data)+" → "+curto(pb.b.data)});
+  return out;
+}
+
+let medN=0;
+function medalha(c,px,lock){
+  const [a,b]=lock?["#c9d3dc","#6f7d8b"]:MED_COR[c.cat]; const g="mg"+(++medN);
+  const fs=c.txt&&c.txt.length>=3?24:c.txt&&c.txt.length===2?30:34;
+  const glyph=c.txt?`<text x="50" y="50" dy=".35em" text-anchor="middle" font-family="-apple-system,system-ui,sans-serif" font-weight="800" font-size="${fs}" fill="url(#${g})" letter-spacing="-1">${esc(c.txt)}</text>`
+    :`<path d="${ICO[c.ic]}" transform="translate(26 26) scale(2)" fill="none" stroke="url(#${g})" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return `<svg class="med${lock?" medlk":""}" width="${px}" height="${px}" viewBox="0 0 100 100" aria-hidden="true">
+    <defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>
+    <circle cx="50" cy="50" r="48" fill="url(#${g})"/>
+    <radialGradient id="${g}i" cx=".5" cy=".18" r=".9"><stop offset="0" stop-color="#1d3a55"/><stop offset=".6" stop-color="#0a1c2e"/></radialGradient>
+    <circle cx="50" cy="50" r="39" fill="url(#${g}i)"/>
+    <circle cx="50" cy="50" r="39" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1.2"/>
+    ${glyph}
+    <path d="M14 38a38 38 0 0 1 72 0" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+}
+
+function evolucaoView(pb){
+  const C=conquistas(), R=recordes(), S=porData(swims()), P=DADOS.pesagens;
+  const ok=C.filter(c=>c.data).sort((x,y)=>x.data<y.data?1:-1);
+  const perdido=P[0].peso-P[P.length-1].peso;
+  const f0=S[0], fz=S[S.length-1];
+  const pisc0=f0?(f0.piscinas||f0.distancia/25):0, piscZ=fz?(fz.piscinas||fz.distancia/25):0;
+  const maxB=Math.max(0,...S.map(x=>x.blocoMax||0));
+  const grupos=Object.keys(MED_CAT).map(cat=>{
+    const cs=C.filter(c=>c.cat===cat);
+    return `<div class="stack" style="gap:10px"><div class="spread"><h3 style="margin:0">${MED_CAT[cat]}</h3><span class="muted sm">${cs.filter(c=>c.data).length} de ${cs.length}</span></div>
+      <div class="medgrid">${cs.map(c=>`<button class="medbtn" data-med="${c.id}" aria-label="${esc(c.t)}${c.data?", conquistada a "+curto(c.data):", por conquistar"}">
+        ${medalha(c,78,!c.data)}<b>${esc(c.t)}</b><span>${c.data?curto(c.data):esc(c.falta)}</span></button>`).join("")}</div></div>`;}).join("");
+  const ult=S.slice(-4);
+  const linhasCmp=[
+    ["Piscinas",x=>x.piscinas||(x.distancia/25),v=>v,false],
+    ["Distância",x=>x.distancia,v=>v+" m",false],
+    ["Tempo a nadar",x=>secs(x.nadar),v=>mmss(v),false],
+    ["Tempo parado",x=>secs(x.parado),v=>mmss(v),true],
+    ["Maior bloco",x=>x.blocoMax,v=>v+" pisc.",false],
+    ["Freq. cardíaca média",x=>x.fcMedia,v=>v+" bpm",true],
+    ["Calorias",x=>x.kcal,v=>v,false]
+  ];
+  const cmp=ult.length>=2?`<div class="card stack"><div class="spread"><h2>Treino a treino</h2><span class="muted sm">últimos ${ult.length}</span></div>
+    <div class="tw"><table class="cmp"><thead><tr><th></th>${ult.map((x,i)=>`<th class="${i===ult.length-1?"now":""}">${curto(x.data)}</th>`).join("")}</tr></thead>
+    <tbody>${linhasCmp.map(([n,g,f,menor])=>{const vs=ult.map(g);const val=vs.filter(v=>v);const best=val.length?(menor?Math.min(...val):Math.max(...val)):null;
+      return `<tr><td>${n}</td>${vs.map((v,i)=>`<td class="${i===ult.length-1?"now":""}">${v?(v===best?"<b>"+f(v)+"</b>":f(v)):"—"}</td>`).join("")}</tr>`;}).join("")}</tbody></table></div>
+    <div class="muted sm">A negrito: o melhor de cada linha. Tempo parado e frequência cardíaca: quanto mais baixo, melhor.</div></div>`:"";
+  const par=S.filter(x=>secs(x.parado)).map(x=>({x:x.data,y:secs(x.parado)}));
+  const fc=S.filter(x=>x.fcMedia).map(x=>({x:x.data,y:x.fcMedia}));
+  const pc=S.map(x=>({x:x.data,y:x.piscinas||x.distancia/25}));
+  pb.innerHTML=`
+    <div class="hero stack evohero">
+      <div class="spread"><div><div class="eyebrow">Conquistas</div><div class="evbig num">${ok.length}<small> de ${C.length}</small></div></div>
+        <div class="medrow">${ok.slice(0,3).map(c=>medalha(c,52,false)).join("")}</div></div>
+      <div class="ink2 sm">${ok[0]?`Mais recente: <b>${esc(ok[0].t)}</b> · ${curto(ok[0].data)}`:"A primeira conquista aparece depois do primeiro treino."}</div>
+      <button class="btnp" id="partEvo">Partilhar a minha evolução</button>
+    </div>
+    <div class="tiles">
+      <div class="tile"><div class="k">Peso perdido</div><div class="v">${kgF(perdido)}<small> kg</small></div><span class="muted sm">desde 10 Out</span></div>
+      <div class="tile"><div class="k">Piscinas por treino</div><div class="v">${piscZ}<small> ${piscZ>pisc0?"+"+(piscZ-pisc0):""}</small></div><span class="muted sm">eram ${pisc0} no 1.º treino</span></div>
+      <div class="tile"><div class="k">Maior bloco</div><div class="v">${maxB}<small> piscinas</small></div><span class="muted sm">seguidas sem parar</span></div>
+      <div class="tile"><div class="k">Total nadado</div><div class="v">${(S.reduce((a,x)=>a+(x.distancia||0),0)/1000).toFixed(2).replace(".",",")}<small> km</small></div><span class="muted sm">${S.length} treinos</span></div>
+    </div>
+    <div class="card stack" style="gap:18px"><div class="spread"><h2>Conquistas</h2><span class="muted sm">toca para ver</span></div>${grupos}</div>
+    <div class="card stack"><h2>Recordes pessoais</h2><div class="reclist">${R.map(r=>`<div class="rec">
+      <span class="rico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="${ICO[r.ic]}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="rt"><b>${esc(r.t)}</b><span class="muted sm">${esc(r.s)} · ${r.txt||curto(r.data)}</span></span><span class="rv num">${esc(r.v)}</span></div>`).join("")}</div></div>
+    ${cmp}
+    <div class="card stack"><div class="spread"><h2>Tempo parado</h2><span class="muted sm">min:seg · mais baixo é melhor</span></div>
+      ${lineChart(par,{c:"var(--good)",fmt:v=>mmss(v),u:"",aria:"Tempo parado por treino",vazio:"Aparece depois de 2 treinos."})}</div>
+    <div class="card stack"><div class="spread"><h2>Frequência cardíaca média</h2><span class="muted sm">batidas por minuto</span></div>
+      ${lineChart(fc,{c:"var(--warm)",u:" bpm",fmt:v=>Math.round(v),aria:"Frequência cardíaca média por treino",vazio:"Aparece depois de 2 treinos."})}
+      <div class="muted sm">Para o mesmo esforço, um coração mais em forma bate menos.</div></div>
+    <div class="card stack"><div class="spread"><h2>Piscinas por treino</h2><span class="muted sm">piscinas de 25 m</span></div>
+      ${lineChart(pc,{c:"var(--accent)",u:"",fmt:v=>Math.round(v),aria:"Piscinas por treino",vazio:"Aparece depois de 2 treinos."})}</div>`;
+  pb.querySelectorAll("[data-med]").forEach(b=>b.onclick=()=>abrirMedalha(C.find(c=>c.id===b.dataset.med)));
+  pb.querySelector("#partEvo").onclick=()=>partilharImg(imgEvolucao(C,R),"evolucao-natacao.png","A minha evolução na natação");
+}
+
+function abrirMedalha(c){
+  const ov=document.getElementById("cartao");
+  ov.classList.add("medov");
+  ov.innerHTML=`<button class="navbtn" id="fecharCartao" aria-label="Fechar" style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px">✕</button>
+    <div class="medbig">${medalha(c,190,!c.data)}</div>
+    <div class="eyebrow" style="text-align:center;margin-top:22px">${MED_CAT[c.cat]}</div>
+    <div class="ct" style="text-align:center">${esc(c.t)}</div>
+    <div class="cs" style="text-align:center;max-width:320px;margin:8px auto 0">${esc(c.d)}</div>
+    <div class="medd">${c.data?"Conquistada a "+longo(c.data):"Por conquistar · "+esc(c.falta)}</div>
+    ${c.data?`<button class="btnp" id="partMed" style="margin:26px auto 0;max-width:320px">Partilhar esta conquista</button>`:""}`;
+  ov.hidden=false; document.body.style.overflow="hidden";
+  const fechar=()=>{ov.hidden=true;ov.classList.remove("medov");document.body.style.overflow="";};
+  ov.querySelector("#fecharCartao").onclick=fechar;
+  const pm=ov.querySelector("#partMed"); if(pm) pm.onclick=()=>partilharImg(imgMedalha(c),"conquista-"+c.id+".png",c.t);
+}
+
+/* --- Imagens para partilhar (desenhadas em canvas) --- */
+const CFONT="-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif";
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function fundoAgua(ctx,W,H){
+  ctx.fillStyle="#052b45";ctx.fillRect(0,0,W,H);
+  [[.1,0,W*1.1,"34,184,220"],[1,.4,W*.9,"47,98,255"],[0,1,W,"16,201,168"]].forEach(([fx,fy,r,c])=>{
+    const g=ctx.createRadialGradient(W*fx,H*fy,0,W*fx,H*fy,r);g.addColorStop(0,`rgba(${c},.95)`);g.addColorStop(1,`rgba(${c},0)`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);});
+}
+function vidro(ctx,x,y,w,h,r){
+  rr(ctx,x,y,w,h,r);ctx.fillStyle="rgba(255,255,255,.14)";ctx.fill();ctx.strokeStyle="rgba(255,255,255,.32)";ctx.lineWidth=2;ctx.stroke();
+}
+function medalhaCanvas(ctx,c,cx,cy,r,lock){
+  const [a,b]=lock?["#c9d3dc","#6f7d8b"]:MED_COR[c.cat];
+  const g=ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);g.addColorStop(0,a);g.addColorStop(1,b);
+  ctx.save();
+  ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.fillStyle=g;ctx.fill();
+  {const gi=ctx.createRadialGradient(cx,cy-r*.65,0,cx,cy-r*.65,r*1.5);gi.addColorStop(0,"#1d3a55");gi.addColorStop(.6,"#0a1c2e");ctx.beginPath();ctx.arc(cx,cy,r*.8125,0,7);ctx.fillStyle=gi;ctx.fill();}
+  const k=r/48;
+  if(c.txt){const fs=(c.txt.length>=3?24:c.txt.length===2?30:34)*k;ctx.font=`800 ${fs}px ${CFONT}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle=g;ctx.fillText(c.txt,cx,cy+fs*.04);}
+  else{ctx.translate(cx-24*k,cy-24*k);ctx.scale(2*k,2*k);ctx.strokeStyle=g;ctx.lineWidth=2.1;ctx.lineCap="round";ctx.lineJoin="round";
+    // o gradiente foi criado em coordenadas do ecrã: recria-o no espaço local
+    const gl=ctx.createLinearGradient(0,0,24,24);gl.addColorStop(0,a);gl.addColorStop(1,b);ctx.strokeStyle=gl;ctx.stroke(new Path2D(ICO[c.ic]));}
+  ctx.restore();
+  ctx.save();ctx.beginPath();ctx.arc(cx,cy,r*.91,Math.PI*1.17,Math.PI*1.83);ctx.strokeStyle="rgba(255,255,255,.35)";ctx.lineWidth=r*.05;ctx.lineCap="round";ctx.stroke();ctx.restore();
+}
+function txt(ctx,s,x,y,font,cor,al){ctx.font=font;ctx.fillStyle=cor||"#fff";ctx.textAlign=al||"left";ctx.textBaseline="alphabetic";ctx.fillText(s,x,y);}
+function cortar(ctx,s,max){if(ctx.measureText(s).width<=max)return s;while(s.length>1&&ctx.measureText(s+"…").width>max)s=s.slice(0,-1);return s+"…";}
+
+function imgEvolucao(C,R){
+  const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const ctx=cv.getContext("2d");
+  fundoAgua(ctx,W,H);
+  const S=porData(swims()),P=DADOS.pesagens,perd=P[0].peso-P[P.length-1].peso;
+  const ok=C.filter(c=>c.data).sort((x,y)=>x.data<y.data?1:-1);
+  const fz=S[S.length-1],f0=S[0],maxB=Math.max(0,...S.map(x=>x.blocoMax||0));
+  txt(ctx,"NATAÇÃO · DESDE 10 OUT",72,118,`700 30px ${CFONT}`,"rgba(255,255,255,.8)");
+  txt(ctx,"A minha evolução",72,196,`800 76px ${CFONT}`);
+  txt(ctx,"Actualizado a "+curto(HOJE),72,246,`500 32px ${CFONT}`,"rgba(255,255,255,.78)");
+  const st=[[kgF(perd),"kg","peso perdido"],[String(fz?(fz.piscinas||fz.distancia/25):0),"pisc.","no último treino"],[String(maxB),"pisc.","seguidas sem parar"]];
+  const bw=(W-144-40)/3;
+  st.forEach(([v,u,l],i)=>{const x=72+i*(bw+20),y=290;vidro(ctx,x,y,bw,190,36);
+    ctx.font=`800 72px ${CFONT}`;const vw=ctx.measureText(v).width;txt(ctx,v,x+30,y+102,`800 72px ${CFONT}`);txt(ctx,u,x+38+vw,y+102,`600 30px ${CFONT}`,"rgba(255,255,255,.8)");
+    ctx.font=`500 25px ${CFONT}`;txt(ctx,cortar(ctx,l,bw-56),x+30,y+150,`500 25px ${CFONT}`,"rgba(255,255,255,.82)");});
+  // conquistas
+  vidro(ctx,72,512,W-144,470,40);
+  txt(ctx,"Conquistas",112,576,`700 40px ${CFONT}`);
+  txt(ctx,ok.length+" de "+C.length,W-112,576,`600 32px ${CFONT}`,"rgba(255,255,255,.8)","right");
+  const mostra=ok.slice(0,8), cols=4, cw=(W-224)/cols;
+  mostra.forEach((c,i)=>{const cx=112+cw*(i%cols)+cw/2, cy=656+Math.floor(i/cols)*180;
+    medalhaCanvas(ctx,c,cx,cy,52,false);ctx.font=`600 22px ${CFONT}`;
+    let l1="",l2="";for(const w of c.t.split(" ")){if(!l2&&ctx.measureText((l1?l1+" ":"")+w).width<=cw-12)l1=(l1?l1+" ":"")+w;else l2=(l2?l2+" ":"")+w;}
+    txt(ctx,l1,cx,cy+86,`600 22px ${CFONT}`,"#fff","center");if(l2){ctx.font=`600 22px ${CFONT}`;txt(ctx,cortar(ctx,l2,cw-12),cx,cy+112,`600 22px ${CFONT}`,"#fff","center");}});
+  if(!mostra.length) txt(ctx,"A primeira aparece depois do primeiro treino.",112,660,`500 30px ${CFONT}`,"rgba(255,255,255,.8)");
+  // recordes
+  const rs=R.slice(0,4);
+  vidro(ctx,72,1010,W-144,84+rs.length*48,40);
+  txt(ctx,"Recordes pessoais",112,1070,`700 40px ${CFONT}`);
+  rs.forEach((r,i)=>{const y=1122+i*48;ctx.font=`500 30px ${CFONT}`;txt(ctx,cortar(ctx,r.t,600),112,y,`500 30px ${CFONT}`,"rgba(255,255,255,.88)");txt(ctx,r.v,W-112,y,`700 32px ${CFONT}`,"#fff","right");});
+  txt(ctx,"Treino Bruno · Clube Marítimo, Maputo",W/2,H-22,`600 26px ${CFONT}`,"rgba(255,255,255,.75)","center");
+  return cv;
+}
+function imgMedalha(c){
+  const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const ctx=cv.getContext("2d");
+  ctx.fillStyle="#000";ctx.fillRect(0,0,W,H);
+  const [a]=MED_COR[c.cat];const g=ctx.createRadialGradient(W/2,520,0,W/2,520,520);g.addColorStop(0,a+"44");g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  medalhaCanvas(ctx,c,W/2,520,250,false);
+  txt(ctx,MED_CAT[c.cat].toUpperCase(),W/2,890,`700 30px ${CFONT}`,a,"center");
+  ctx.font=`800 68px ${CFONT}`;txt(ctx,cortar(ctx,c.t,W-120),W/2,975,`800 68px ${CFONT}`,"#fff","center");
+  // descrição em até 2 linhas
+  ctx.font=`500 36px ${CFONT}`;const pal=c.d.split(" ");let l1="",l2="";for(const p of pal){if(!l2&&ctx.measureText(l1+" "+p).width<W-200)l1=(l1?l1+" ":"")+p;else l2=(l2?l2+" ":"")+p;}
+  txt(ctx,l1,W/2,1045,`500 36px ${CFONT}`,"rgba(255,255,255,.75)","center");if(l2)txt(ctx,cortar(ctx,l2,W-200),W/2,1095,`500 36px ${CFONT}`,"rgba(255,255,255,.75)","center");
+  txt(ctx,longo(c.data),W/2,1180,`600 34px ${CFONT}`,"#fff","center");
+  txt(ctx,"Treino Bruno",W/2,H-56,`600 26px ${CFONT}`,"rgba(255,255,255,.55)","center");
+  return cv;
+}
+function partilharImg(cv,nome,titulo){
+  cv.toBlob(async blob=>{
+    if(!blob) return;
+    const file=new File([blob],nome,{type:"image/png"});
+    try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:titulo}); return; } }
+    catch(e){ if(e&&e.name==="AbortError") return; }
+    const ov=document.getElementById("cartao"), url=URL.createObjectURL(blob);
+    ov.classList.add("medov");
+    ov.innerHTML=`<button class="navbtn" id="fecharCartao" aria-label="Fechar" style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px">✕</button>
+      <img src="${url}" alt="${esc(titulo)}" style="width:100%;max-width:420px;margin:0 auto;border-radius:22px;display:block">
+      <div class="cs" style="text-align:center;margin-top:16px">Toca sem soltar na imagem e escolhe <b>Guardar</b> ou <b>Partilhar</b>.</div>
+      <a class="btnp" href="${url}" download="${nome}" style="margin:18px auto 0;max-width:320px;text-align:center;text-decoration:none">Descarregar imagem</a>`;
+    ov.hidden=false; document.body.style.overflow="hidden";
+    ov.querySelector("#fecharCartao").onclick=()=>{ov.hidden=true;ov.classList.remove("medov");document.body.style.overflow="";URL.revokeObjectURL(url);};
+  },"image/png");
 }
 
 /* ===== PLANO ===== */
