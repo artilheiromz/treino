@@ -39,5 +39,22 @@ Ficam para generalizar quando entrar o próximo tipo de exercício:
 - `swims()` e `walks()`, mais ternários `tipo === "natacao" ? … : …` no Início, nos Treinos e na tabela de actividades.
 - `agenda(d)` tem os dias de caminhada fixos (terça e sábado). O plano semanal deve passar a ser uma lista de dias por tipo.
 - `PLANO` e o separador Plano são só de natação. Devem passar a ter um plano por tipo (ou sessões com `tipo`).
-- `recordes()` e `conquistas()` (Evolução) são calculados só a partir dos treinos de natação e das pesagens. As categorias das medalhas (`MED_CAT`) já são extensíveis: acrescentar "Corrida", "Força" ou "Padel" é acrescentar uma cor e uma entrada.
+- `recordes()` e `conquistas()` (Evolução) são calculados só a partir dos treinos de natação e das pesagens.
+
+## Cores das conquistas (v1.7.0)
+
+As categorias estão no registo `CATS`, com uma cor por tipo de exercício e uma para as gerais:
+
+| Categoria | Cor |
+|---|---|
+| Gerais (início, consistência, n.º de treinos) | dourado |
+| Natação | azul |
+| Caminhada e corrida | verde-lima |
+| Musculação | laranja |
+| Crossfit | magenta |
+| Padel | violeta |
+| Coração (qualquer exercício) | vermelho-coral |
+| Corpo e peso | verde-água |
+
+Um tipo novo usa a sua entrada em `CATS`. As conquistas com `cat` igual a esse tipo aparecem sozinhas, com a legenda. Uma conquista que vale para qualquer exercício vai para `geral` ou `coracao`.
 - Os gráficos e tiles de Treinos estão divididos em "Natação" e "Caminhadas". Devem ser gerados a partir de `TIPOS`.

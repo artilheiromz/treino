@@ -7,6 +7,15 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.7.0 — 9 Nov 2026
+Cores das conquistas por tipo de exercício e imagem de evolução geral (a pedido do Bruno).
+- **Uma cor por categoria**, para se perceber logo de que tipo é cada conquista. Dourado: Gerais (início, consistência, número de treinos). Azul: Natação. Verde-lima: Caminhada e corrida. Laranja: Musculação. Magenta: Crossfit. Violeta: Padel. Vermelho-coral: Coração (em qualquer exercício). Verde-água: Corpo e peso.
+- Legenda das cores no topo das Conquistas e uma bolinha com a cor ao lado do nome de cada grupo. Só aparecem as categorias que já têm conquistas; Musculação, Crossfit e Padel aparecem sozinhas quando entrarem esses treinos.
+- As categorias passam a viver num registo único (`CATS`): para um exercício novo basta acrescentar uma entrada, sem mexer nos ecrãs.
+- Conquistas reorganizadas: Semana completa e Sem desculpas passam a Gerais; Primeira caminhada passa a Caminhada e corrida; o plano de 5 semanas passa a Natação ("Plano de natação completo").
+- Novas conquistas gerais: **Início da jornada** (primeiro treino de qualquer tipo), **10, 25 e 50 treinos**.
+- Imagem "Partilhar a minha evolução": o título passa a **Treino e exercício · desde 10 Out** (já não é só natação); a 2.ª caixa mostra o **total nadado** em vez das piscinas do último treino; "Actualizado a" passa a ser a data do último registo (treino ou pesagem) e não o dia em que se carrega no botão.
+
 ## v1.6.0 — 9 Nov 2026
 Novo segmento **Evolução** no separador Progresso, ao lado de Corpo e Treinos.
 - **Conquistas** ao estilo das medalhas do Apple Watch, em 4 grupos: Natação, Consistência, Coração e Peso (29 ao todo). As conquistadas aparecem a cores com a data; as que faltam aparecem a cinzento com o que falta (ex.: "Faltam 125 m"). São calculadas automaticamente a partir dos treinos e pesagens.
