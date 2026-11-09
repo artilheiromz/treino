@@ -7,6 +7,13 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.5.0 — 9 Nov 2026
+Novos dias de treino a pedido do Bruno: natação à **segunda, quarta e sexta** a partir de 9 Nov.
+- A sessão 3 (Resistência), que ficou por fazer no sábado 7 Nov, passa para segunda 9 Nov; as sessões seguintes seguem em segunda/quarta/sexta até ao novo teste, que passa para **segunda 30 Nov**.
+- Caminhadas opcionais passam para **terça e sábado** (até 8 Nov continuam a aparecer à quarta e ao domingo, como estavam).
+- Aviso de dia de injecção também à segunda (antes só à quinta).
+- Plano e gráficos de semanas passam a ter 5 semanas (a 5.ª é só a do novo teste); título do separador Plano passa a "Plano de natação".
+
 ## v1.4.0 — 6 Nov 2026
 Cartão do corpo no Início pensado para motivar.
 - Passa a chamar-se **"O meu progresso"** e mostra em destaque os **kg perdidos no total** desde a primeira pesagem (10 Out), com o peso actual ao lado.

@@ -339,7 +339,7 @@ nav{padding:6px}
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.4.0"; // ver CHANGELOG.md
+const VERSAO = "1.5.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -358,63 +358,64 @@ const PLANO = [
              B("Principal","4 × 4 piscinas: 2 crawl + 2 bruços","desc. 45 s","Moderado",400),
              B("Retorno à calma","4 piscinas costas ou bruços","","Leve",100) ],
     nota:"Nos blocos de crawl, respira a cada 2 braçadas. Se ficares ofegante, passa a bruços até ao fim da piscina, como no teste." },
-  { id:"s3", data:"2026-11-07", sem:1, nome:"Resistência", dur:"45 min", total:900,
+  { id:"s3", data:"2026-11-09", sem:2, nome:"Resistência", dur:"45 min", total:900,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Principal","3 × 8 piscinas: 4 crawl + 4 bruços","desc. 60 s","Moderado",600),
              B("Pernas","4 piscinas pernas de costas","","Leve",100),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
-  { id:"s4", data:"2026-11-10", sem:2, nome:"Técnica + base", dur:"45 min", total:1000,
+  { id:"s4", data:"2026-11-11", sem:2, nome:"Técnica + base", dur:"45 min", total:1000,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Crawl curto","6 × 2 piscinas crawl","desc. 30 s","Moderado",300),
              B("Principal","4 × 4 piscinas: 2 crawl + 2 bruços","desc. 40 s","Moderado",400),
              B("Pernas","4 piscinas pernas de costas","","Leve",100),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
-  { id:"s5", data:"2026-11-12", sem:2, nome:"Intervalos", dur:"40 min", total:900,
+  { id:"s5", data:"2026-11-13", sem:2, nome:"Intervalos", dur:"40 min", total:900,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Principal","10 × 2 piscinas crawl: ímpares moderado, pares forte","desc. 30 s","Forte",500),
              B("Velocidade","4 × 1 piscina crawl forte","desc. 45 s","Forte",100),
              B("Bruços","4 piscinas bruços leve","","Leve",100),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
-  { id:"s6", data:"2026-11-14", sem:2, nome:"Resistência", dur:"45 min", total:1000,
+  { id:"s6", data:"2026-11-16", sem:3, nome:"Resistência", dur:"45 min", total:1000,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Principal","3 × 8 piscinas: 6 crawl + 2 bruços","desc. 60 s","Moderado",600),
              B("Complemento","4 × 2 piscinas bruços ou costas","desc. 20 s","Leve",200),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
-  { id:"s7", data:"2026-11-17", sem:3, nome:"Técnica + base", dur:"50 min", total:1100,
+  { id:"s7", data:"2026-11-18", sem:3, nome:"Técnica + base", dur:"50 min", total:1100,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Técnica","6 × 2 piscinas crawl: braçada longa, cabeça baixa","desc. 20 s","Leve",300),
              B("Principal","5 × 4 piscinas crawl","desc. 30 s","Moderado",500),
              B("Pernas","4 piscinas pernas de costas","","Leve",100),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
-  { id:"s8", data:"2026-11-19", sem:3, nome:"Intervalos", dur:"45 min", total:1000,
+  { id:"s8", data:"2026-11-20", sem:3, nome:"Intervalos", dur:"45 min", total:1000,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Principal","12 × 2 piscinas crawl: 2 moderado + 1 forte","desc. 25 s","Forte",600),
              B("Velocidade","4 × 1 piscina crawl forte","desc. 40 s","Forte",100),
              B("Retorno à calma","8 piscinas variadas","","Leve",200) ] },
-  { id:"s9", data:"2026-11-21", sem:3, nome:"Resistência", dur:"50 min", total:1200,
+  { id:"s9", data:"2026-11-23", sem:4, nome:"Resistência", dur:"50 min", total:1200,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Principal","2 × 16 piscinas: crawl, bruços quando precisares","desc. 90 s","Moderado",800),
              B("Complemento","4 × 2 piscinas bruços","desc. 20 s","Leve",200),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
-  { id:"s10", data:"2026-11-24", sem:4, nome:"Técnica + base", dur:"50 min", total:1300,
+  { id:"s10", data:"2026-11-25", sem:4, nome:"Técnica + base", dur:"50 min", total:1300,
     blocos:[ B("Aquecimento","8 piscinas variadas, devagar","","Leve",200),
              B("Técnica","8 × 1 piscina crawl técnica","desc. 20 s","Leve",200),
              B("Principal","6 × 4 piscinas crawl","desc. 25 s","Moderado",600),
              B("Pernas","4 × 2 piscinas pernas","desc. 30 s","Moderado",200),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
-  { id:"s11", data:"2026-11-26", sem:4, nome:"Intervalos", dur:"45 min", total:1200,
+  { id:"s11", data:"2026-11-27", sem:4, nome:"Intervalos", dur:"45 min", total:1200,
     blocos:[ B("Aquecimento","8 piscinas variadas, devagar","","Leve",200),
              B("Principal","8 × 4 piscinas crawl: ímpares moderado, pares forte","desc. 30 s","Forte",800),
              B("Retorno à calma","8 piscinas variadas","","Leve",200) ] },
-  { id:"s12", data:"2026-11-28", sem:4, nome:"Novo teste + resistência", dur:"50 min", total:1300, totalTxt:"≈ 1300",
+  { id:"s12", data:"2026-11-30", sem:5, nome:"Novo teste + resistência", dur:"50 min", total:1300, totalTxt:"≈ 1300",
     blocos:[ B("Aquecimento","4 piscinas variadas + 8 crawl","","Leve",300),
              B("Teste","10 min contínuos: conta as piscinas e compara com as 12 de 3 Nov","","Moderado","350–400"),
              B("Principal","2 × 8 piscinas crawl","desc. 60 s","Moderado",400),
              B("Retorno à calma","8 piscinas variadas","","Leve",200) ],
     nota:"Mesmo teste de 3 Nov (12 piscinas = 300 m). Objectivo: 14 a 16 piscinas." }
 ];
-const PLANO_INI="2026-11-02", PLANO_FIM="2026-11-29";
-const SEMANAS = { 1:["2026-11-02","2026-11-08"], 2:["2026-11-09","2026-11-15"], 3:["2026-11-16","2026-11-22"], 4:["2026-11-23","2026-11-29"] };
+const PLANO_INI="2026-11-02", PLANO_FIM="2026-12-06", MUDANCA_DIAS="2026-11-09";
+const SEMANAS = { 1:["2026-11-02","2026-11-08"], 2:["2026-11-09","2026-11-15"], 3:["2026-11-16","2026-11-22"], 4:["2026-11-23","2026-11-29"], 5:["2026-11-30","2026-12-06"] };
+const NSEM=Object.keys(SEMANAS).map(Number);
 const CAMINHADA = { nome:"Caminhada", alvo:"30–45 min", obj:60,
   passos:["Ritmo em que consigas falar, mas sintas a respiração mais activa","Primeiros 5 min devagar para aquecer","Apple Watch: Caminhada ao ar livre","Sapatilhas confortáveis e água"] };
 
@@ -452,8 +453,9 @@ function agenda(d){
   if(s) return {tipo:"natacao", s};
   if(d<PLANO_INI) return {tipo:"antes"};
   if(d>PLANO_FIM) return {tipo:"depois"};
-  if(dow===3||dow===0) return {tipo:"caminhada"};
-  return {tipo:"descanso", sexta:dow===5};
+  if(d<MUDANCA_DIAS){ if(dow===3||dow===0) return {tipo:"caminhada"}; return {tipo:"descanso", sexta:dow===5}; }
+  if(dow===2||dow===6) return {tipo:"caminhada"};
+  return {tipo:"descanso"};
 }
 function estadoSessao(s){
   if(feito(s.id)) return {c:"done",t:"Feito"};
@@ -536,7 +538,7 @@ function statsCam(lista){
   const km=lista.reduce((a,x)=>a+(x.distancia||0),0), min=lista.reduce((a,x)=>a+(x.duracao||0),0);
   return {n:lista.length,km,min,ritmo:km?mmss(min*60/km):"—"};
 }
-function semanaAtual(){ return semanaDe(HOJE)||(HOJE<PLANO_INI?1:4); }
+function semanaAtual(){ return semanaDe(HOJE)||(HOJE<PLANO_INI?1:NSEM[NSEM.length-1]); }
 
 /* ===== INÍCIO ===== */
 function sparkPeso(P){
@@ -701,7 +703,7 @@ function renderTreinos(){
       <div class="hfacts"><div><b class="big">${pisc(s.total)}</b><span>piscinas</span></div><div><b>${s.totalTxt||s.total} m</b><span>distância</span></div><div><b>${s.dur}</b><span>duração</span></div></div></div>`;
     if(t) corpo+=resumoNat(t,s);
     else if(passado) corpo+=`<div class="note warm">Ainda sem registo deste treino. Se o fizeste, manda o print do Apple Watch ao Claude.</div>`;
-    if(dow===4 && !t) corpo+=`<div class="note warm">Dia de injecção: se te sentires enjoado ou sem energia, faz a sessão toda em ritmo leve ou passa-a para amanhã.</div>`;
+    if((dow===4||dow===1) && !t) corpo+=`<div class="note warm">Dia de injecção: se te sentires enjoado ou sem energia, faz a sessão toda em ritmo leve ou passa-a para amanhã.</div>`;
     if(!t && !passado){
       corpo+=`<h3>Antes de entrar</h3><div class="pre">${["Comi algo leve há 1–2 horas","Garrafa de água à beira da piscina","Apple Watch: Natação em piscina, 25 m"].map((p,i)=>`
         <label class="chk" for="pre${i}"><input type="checkbox" id="pre${i}" data-pre="${i}" ${pre.includes(i)?"checked":""}><span>${p}</span></label>`).join("")}</div>`;
@@ -848,10 +850,10 @@ function treinosView(pb){
   const sessPlan = per==="geral" ? PLANO.filter(s=>s.data<=HOJE).length : PLANO.filter(s=>s.sem===+per).length;
   const chips=`<div class="chips" role="group" aria-label="Escolher período">
     <button data-per="geral" aria-pressed="${per==="geral"}">Geral</button>
-    ${[1,2,3,4].map(w=>`<button data-per="${w}" aria-pressed="${per===String(w)}">Semana ${w}</button>`).join("")}</div>`;
-  const rowsM=[1,2,3,4].map(w=>({lbl:"Sem. "+w,plan:PLANO.filter(s=>s.sem===w).reduce((a,s)=>a+s.total,0),
+    ${NSEM.map(w=>`<button data-per="${w}" aria-pressed="${per===String(w)}">Semana ${w}</button>`).join("")}</div>`;
+  const rowsM=NSEM.map(w=>({lbl:"Sem. "+w,plan:PLANO.filter(s=>s.sem===w).reduce((a,s)=>a+s.total,0),
     done:swims().filter(x=>x.data>=SEMANAS[w][0]&&x.data<=SEMANAS[w][1]).reduce((a,x)=>a+(x.distancia||0),0)}));
-  const rowsC=[1,2,3,4].map(w=>({lbl:"Sem. "+w,plan:CAMINHADA.obj,
+  const rowsC=NSEM.map(w=>({lbl:"Sem. "+w,plan:CAMINHADA.obj,
     done:walks().filter(x=>x.data>=SEMANAS[w][0]&&x.data<=SEMANAS[w][1]).reduce((a,x)=>a+(x.duracao||0),0)}));
   const ritmos=swims().filter(x=>ritmoSeg(x)).map(x=>({x:x.data,y:ritmoSeg(x)}));
   const testes=swims().filter(x=>x.teste10);
@@ -875,7 +877,7 @@ function treinosView(pb){
     <div class="card stack"><div class="spread"><h2>Minutos a caminhar</h2>
       <div class="legend"><span><i style="border:1.5px dashed var(--muted)"></i>Objectivo</span><span><i style="background:var(--walk)"></i>Feito</span></div></div>
       ${barChart(rowsC,{c:"var(--walk)",u:"min",aria:"Minutos de caminhada por semana"})}
-      <div class="muted sm">Objectivo: 2 caminhadas de 30 min por semana (quarta e domingo).</div></div>
+      <div class="muted sm">Objectivo: 2 caminhadas de 30 min por semana (terça e sábado).</div></div>
     <div class="card stack"><div class="spread"><h2>Ritmo por treino</h2><span class="muted sm">min /100 m · mais baixo é melhor</span></div>
       ${lineChart(ritmos,{c:"var(--accent)",fmt:v=>mmss(v),u:" /100 m",aria:"Ritmo médio por treino de natação",vazio:"Aparece depois de 2 treinos de natação registados."})}</div>
     <div class="card stack"><h2>Teste de 10 minutos</h2>
@@ -891,9 +893,9 @@ function treinosView(pb){
 /* ===== PLANO ===== */
 function renderPlano(){
   const el=document.getElementById("v-plano");
-  let h=`<div class="stack" style="gap:6px"><div class="eyebrow">Novembro 2026</div><h1>Plano de 4 semanas</h1>
-    <div class="ink2">Natação à terça, quinta e sábado (sábado pode passar para sexta). Caminhadas opcionais à quarta e ao domingo.</div></div>`;
-  [1,2,3,4].forEach(w=>{
+  let h=`<div class="stack" style="gap:6px"><div class="eyebrow">Novembro 2026</div><h1>Plano de natação</h1>
+    <div class="ink2">Desde 9 Nov: natação à segunda, quarta e sexta. Caminhadas opcionais à terça e ao sábado.</div></div>`;
+  NSEM.forEach(w=>{
     const [i0,i1]=SEMANAS[w];
     const ss=PLANO.filter(s=>s.sem===w), tot=ss.reduce((a,s)=>a+s.total,0);
     const fx=swims().filter(x=>x.data>=i0&&x.data<=i1).reduce((a,x)=>a+(x.distancia||0),0);
@@ -910,7 +912,7 @@ function renderPlano(){
     h+=`<div class="week"><div class="spread"><h2>Semana ${w} <span class="muted" style="font-size:15px;font-weight:500">${curto(i0)}–${curto(i1)}</span></h2>
       <span class="num ink2">${fx?fx+" / ":""}≈ ${tot} m</span></div>${rows}</div>`;
   });
-  h+=`<div class="note">A partir da semana 5 entram 2 sessões curtas de força (cerca de 20 min) para proteger a massa muscular.</div>`;
+  h+=`<div class="note">Depois do novo teste (30 Nov) entram 2 sessões curtas de força (cerca de 20 min) para proteger a massa muscular.</div>`;
   el.innerHTML=h;
   el.querySelectorAll(".srow").forEach(b=>b.onclick=()=>{diaSel=b.dataset.d;go("treinos");});
 }
