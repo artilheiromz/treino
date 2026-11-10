@@ -7,6 +7,10 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.7.1 — 10 Nov 2026
+Privacidade, a pedido do Bruno.
+- Removida a conquista "Sem desculpas" e todas as referências a dias de medicação na app (avisos no Início e nos Treinos), para não aparecerem em imagens partilhadas nem em capturas de ecrã.
+
 ## v1.7.0 — 9 Nov 2026
 Cores das conquistas por tipo de exercício e imagem de evolução geral (a pedido do Bruno).
 - **Uma cor por categoria**, para se perceber logo de que tipo é cada conquista. Dourado: Gerais (início, consistência, número de treinos). Azul: Natação. Verde-lima: Caminhada e corrida. Laranja: Musculação. Magenta: Crossfit. Violeta: Padel. Vermelho-coral: Coração (em qualquer exercício). Verde-água: Corpo e peso.
@@ -32,7 +36,6 @@ Novo segmento **Evolução** no separador Progresso, ao lado de Corpo e Treinos.
 Novos dias de treino a pedido do Bruno: natação à **segunda, quarta e sexta** a partir de 9 Nov.
 - A sessão 3 (Resistência), que ficou por fazer no sábado 7 Nov, passa para segunda 9 Nov; as sessões seguintes seguem em segunda/quarta/sexta até ao novo teste, que passa para **segunda 30 Nov**.
 - Caminhadas opcionais passam para **terça e sábado** (até 8 Nov continuam a aparecer à quarta e ao domingo, como estavam).
-- Aviso de dia de injecção também à segunda (antes só à quinta).
 - Plano e gráficos de semanas passam a ter 5 semanas (a 5.ª é só a do novo teste); título do separador Plano passa a "Plano de natação".
 
 ## v1.4.0 — 6 Nov 2026

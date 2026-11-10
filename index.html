@@ -360,7 +360,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.7.0"; // ver CHANGELOG.md
+const VERSAO = "1.7.1"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -724,7 +724,6 @@ function renderTreinos(){
       <div class="hfacts"><div><b class="big">${pisc(s.total)}</b><span>piscinas</span></div><div><b>${s.totalTxt||s.total} m</b><span>distância</span></div><div><b>${s.dur}</b><span>duração</span></div></div></div>`;
     if(t) corpo+=resumoNat(t,s);
     else if(passado) corpo+=`<div class="note warm">Ainda sem registo deste treino. Se o fizeste, manda o print do Apple Watch ao Claude.</div>`;
-    if((dow===4||dow===1) && !t) corpo+=`<div class="note warm">Dia de injecção: se te sentires enjoado ou sem energia, faz a sessão toda em ritmo leve ou passa-a para amanhã.</div>`;
     if(!t && !passado){
       corpo+=`<h3>Antes de entrar</h3><div class="pre">${["Comi algo leve há 1–2 horas","Garrafa de água à beira da piscina","Apple Watch: Natação em piscina, 25 m"].map((p,i)=>`
         <label class="chk" for="pre${i}"><input type="checkbox" id="pre${i}" data-pre="${i}" ${pre.includes(i)?"checked":""}><span>${p}</span></label>`).join("")}</div>`;
@@ -746,7 +745,7 @@ function renderTreinos(){
     if(!c && passado) corpo+=`<div class="muted">Sem caminhada registada neste dia.</div>`;
   } else if(ag.tipo==="descanso"){
     const n=PLANO.find(s=>s.data>d);
-    corpo+=`<div class="hero"><h1>Descanso</h1><div class="ink2" style="margin-top:8px">${dow===1?"Dia de injecção (2,5 mg). ":""}${ag.sexta?"Se não puderes nadar no sábado, a sessão de sábado pode passar para hoje. ":""}Recuperar também faz parte do plano.</div>
+    corpo+=`<div class="hero"><h1>Descanso</h1><div class="ink2" style="margin-top:8px">${ag.sexta?"Se não puderes nadar no sábado, a sessão de sábado pode passar para hoje. ":""}Recuperar também faz parte do plano.</div>
       ${n?`<div class="muted sm" style="margin-top:10px">Próximo treino: ${longo(n.data)} · ${esc(n.nome)}</div>`:""}</div>`;
   } else if(ag.tipo==="antes"){
     corpo+=`<div class="hero"><h1>Antes do plano</h1><div class="ink2" style="margin-top:8px">O plano de natação começa a 3 Nov. Aqui ficam as pesagens e actividades registadas.</div></div>`;
@@ -979,7 +978,6 @@ function conquistas(){
     {id:"tr25",cat:"geral",txt:"25",t:"25 treinos",d:"25 treinos registados, de qualquer tipo.",data:porData(ACT())[24]?.data||null,falta:`${ACT().length} de 25`},
     {id:"tr50",cat:"geral",txt:"50",t:"50 treinos",d:"50 treinos registados, de qualquer tipo.",data:porData(ACT())[49]?.data||null,falta:`${ACT().length} de 50`},
     {id:"semana",cat:"geral",ic:"cal",t:"Semana completa",d:"Todas as sessões de natação de uma semana feitas.",data:semCompleta,falta:"Faz todas as sessões da semana"},
-    {id:"injecao",cat:"geral",ic:"bolt",t:"Sem desculpas",d:"Treinaste num dia de injecção.",data:prim(S,x=>{const d=pd(x.data).getDay();return d===1||d===4;}),falta:"Treina num dia de injecção"},
     {id:"camin",cat:"corrida",ic:"walk",t:"Primeira caminhada",d:"Primeira caminhada registada.",data:W[0]?.data,falta:"Caminhada à terça ou sábado"},
     {id:"plano5",cat:"natacao",ic:"trophy",t:"Plano de natação completo",d:"Todas as sessões do plano de 5 semanas feitas.",data:todos,falta:`${PLANO.filter(s=>feito(s.id)).length} de ${PLANO.length} sessões`},
     {id:"recup",cat:"coracao",ic:"heart",t:"Recuperação rápida",d:"A frequência cardíaca desceu 15 ou mais batidas no primeiro minuto depois do treino.",data:prim(S,x=>x.fcPos&&x.fcPos[0]-x.fcPos[1]>=15),falta:"Descer 15 batidas em 1 min"},
