@@ -360,7 +360,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.7.1"; // ver CHANGELOG.md
+const VERSAO = "1.8.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -944,56 +944,164 @@ const ICO={
 const kgF=n=>f1(n).replace(",0","");
 function porData(a){return a.slice().sort((x,y)=>x.data<y.data?-1:1);}
 
+/* Conquistas. Cada uma: {id, cat, ic|txt, t, d, data, falta}. As que se repetem têm também
+   niveis:[bronze,prata,ouro] e conta (n.º de vezes). Funções de apoio genéricas (semanas, meses,
+   marcos manuais) servem para qualquer tipo de exercício. */
+const FERIADOS_MZ=["01-01","02-03","04-07","05-01","06-25","09-07","09-25","10-04","12-25"];
+const NIVEL_NOME=["","Bronze","Prata","Ouro"];
+const NIVEL_COR=[null,["#f3c29a","#a0602e"],["#f4f7fa","#8d99a6"],["#ffeaa0","#d4930e"]];
+function nivelDe(c){if(!c.niveis)return 0;let n=0;c.niveis.forEach((v,i)=>{if(c.conta>=v)n=i+1;});return n;}
+const addDias=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return iso(d);};
+const segDe=s=>{const d=pd(s);const w=(d.getDay()+6)%7;d.setDate(d.getDate()-w);return iso(d);};
+const marcos=id=>(DADOS.marcos||[]).filter(m=>m.id===id).map(m=>m.data).sort();
+
 function conquistas(){
-  const S=porData(swims()), W=porData(walks()), P=DADOS.pesagens, a0=P[0], z=P[P.length-1];
+  const A=porData(ACT()), S=porData(swims()), W=porData(walks()), R=porData(ACT().filter(a=>a.tipo==="corrida"));
+  const P=DADOS.pesagens, a0=P[0], z=P[P.length-1], alt=DADOS.perfil.altura||1.75;
   const prim=(arr,f)=>{const x=arr.find(f);return x?x.data:null;};
+  const piscinasDe=x=>x.piscinas||((x.distancia||0)/25);
   const totM=S.reduce((a,x)=>a+(x.distancia||0),0);
-  const acum=lim=>{let t=0;for(const x of S){t+=x.distancia||0;if(t>=lim)return x.data;}return null;};
+  const acum=(arr,lim,f)=>{let t=0;for(const x of arr){t+=f(x)||0;if(t>=lim)return x.data;}return null;};
   const maxBloco=Math.max(0,...S.map(x=>x.blocoMax||0));
   const bloco=n=>prim(S,x=>(x.blocoMax||0)>=n);
   const perdeu=kg=>prim(P,p=>a0.peso-p.peso>=kg-1e-9);
   const perdido=a0.peso-z.peso;
-  let desce=null,seq=0; for(let i=1;i<P.length;i++){seq=P[i].peso<P[i-1].peso?seq+1:0; if(seq>=4&&!desce)desce=P[i].data;}
-  const semCompleta=(()=>{for(const w of NSEM){const ss=PLANO.filter(s=>s.sem===w);if(ss.length&&ss.every(s=>feito(s.id)))return ss[ss.length-1].data;}return null;})();
+  const imc=p=>p.imc||p.peso/(alt*alt);
+  const faltaM=m=>`Faltam ${Math.max(0,Math.round(m))} m`, faltaKg=k=>`Faltam ${kgF(Math.max(0,k))} kg`;
+  const faltaB=()=>`Melhor até agora: ${maxBloco} seguidas`;
+  const conta=(datas,niveis)=>({conta:datas.length,data:datas[niveis[0]-1]||null,datas,niveis});
+
+  /* semanas (segunda a domingo) desde a 1.ª actividade até hoje */
+  const semanas=[]; if(A.length){for(let s=segDe(A[0].data);s<=HOJE;s=addDias(s,7))semanas.push(s);}
+  const actsEntre=(a,b)=>A.filter(x=>x.data>=a&&x.data<=b);
+  const semanaCumprida=s=>{const fim=addDias(s,6);if(fim>=HOJE)return false; // só semanas já fechadas
+    const pl=PLANO.filter(p=>p.data>=s&&p.data<=fim); if(pl.length) return pl.every(p=>feito(p.id));
+    return actsEntre(s,fim).length>=3;};
+  let seq=0,seqMax=0; const seqData={};
+  semanas.forEach(s=>{if(addDias(s,6)>=HOJE)return; if(semanaCumprida(s)){seq++;seqMax=Math.max(seqMax,seq);if(!seqData[seq])seqData[seq]=addDias(s,6);}else seq=0;});
+  const seqAgora=seq;
+  /* meses perfeitos: mês já fechado, com todas as sessões do plano feitas (ou 12+ treinos sem plano) */
+  const meses=[...new Set(A.map(x=>x.data.slice(0,7)))].filter(m=>{const fim=addDias(iso(new Date(+m.slice(0,4),+m.slice(5,7),1)),-1);if(fim>=HOJE)return false;
+    const pl=PLANO.filter(p=>p.data.slice(0,7)===m); return pl.length?pl.every(p=>feito(p.id)):A.filter(x=>x.data.slice(0,7)===m).length>=12;})
+    .map(m=>addDias(iso(new Date(+m.slice(0,4),+m.slice(5,7),1)),-1));
+  /* volta por cima: sessão do plano falhada e a sessão seguinte feita */
+  const volta=[]; PLANO.forEach((p,i)=>{const n=PLANO[i+1];if(n&&p.data<HOJE&&!feito(p.id)&&feito(n.id))volta.push(feito(n.id).data);});
+  /* regresso: 7 ou mais dias sem treinar */
+  const regresso=[]; for(let i=1;i<A.length;i++){if((pd(A[i].data)-pd(A[i-1].data))/864e5>=8)regresso.push(A[i].data);}
+  /* fins-de-semana activos */
+  const fds=[...new Set(A.filter(x=>pd(x.data).getDay()===6).map(x=>x.data))].filter(s=>A.some(x=>x.data===addDias(s,1))).map(s=>addDias(s,1));
+  const sextas=[...new Set(A.filter(x=>pd(x.data).getDay()===5).map(x=>x.data))];
+  const cedo=[...new Set(A.filter(x=>x.inicio&&x.inicio<"08:00").map(x=>x.data))];
+  const feriados=[...new Set(A.filter(x=>FERIADOS_MZ.includes(x.data.slice(5))).map(x=>x.data))];
+  const aniv=DADOS.perfil.aniversario; const anivD=aniv?[...new Set(A.filter(x=>x.data.slice(5)===aniv).map(x=>x.data))]:[];
+  /* recordes batidos por treino (natação) */
+  const metr=[[x=>piscinasDe(x)],[x=>x.duracao],[x=>secs(x.nadar)],[x=>x.blocoMax],[x=>x.crawl25,1],[x=>secs(x.parado),1],[x=>x.kcal],[x=>x.teste10]];
+  const recPorTreino=S.map((x,i)=>{if(!i)return{x,n:0};const ant=S.slice(0,i);let n=0;
+    metr.forEach(([f,menor])=>{const v=f(x);if(!v)return;const vs=ant.map(f).filter(Boolean);if(!vs.length)return;if(menor?v<Math.min(...vs):v>Math.max(...vs))n++;});return{x,n};});
+  const superacao=recPorTreino.filter(r=>r.n>=1).map(r=>r.x.data), hat=recPorTreino.find(r=>r.n>=3);
+  const maisPlano=S.filter(x=>{const s=PLANO.find(p=>p.id===x.sessao);return s&&x.distancia>=s.total*1.1;}).map(x=>x.data);
   const t1=S.find(x=>x.teste10), t2=t1?S.find(x=>x.teste10&&x.data>t1.data&&x.teste10>t1.teste10):null;
+  const melhorTeste=Math.max(0,...S.map(x=>x.teste10||0));
   const todos=PLANO.every(s=>feito(s.id))?PLANO[PLANO.length-1].data:null;
-  const faltaM=m=>`Faltam ${Math.max(0,m)} m`, faltaKg=k=>`Faltam ${kgF(Math.max(0,k))} kg`;
-  const faltaB=n=>`Melhor até agora: ${maxBloco} seguidas`;
+  const mesesNat={}; S.forEach(x=>{const m=x.data.slice(0,7);mesesNat[m]=(mesesNat[m]||0)+(x.distancia||0);});
+  let mesAq=null,acM={}; for(const x of S){const m=x.data.slice(0,7);acM[m]=(acM[m]||0)+(x.distancia||0);if(acM[m]>=10000&&!mesAq)mesAq=x.data;}
+  const melhorMes=Math.max(0,...Object.values(mesesNat));
+  const kcalSem={}; let semFogo=null; for(const x of A){const s=segDe(x.data);kcalSem[s]=(kcalSem[s]||0)+(x.kcal||0);if(kcalSem[s]>=2000&&!semFogo)semFogo=x.data;}
+  const melhorSemK=Math.max(0,...Object.values(kcalSem)), totK=A.reduce((a,x)=>a+(x.kcal||0),0);
+  const f0=S[0], fcAlvo=f0&&f0.fcMedia?f0.fcMedia-10:null;
+  const fcMelhor=f0?Math.min(...S.filter(x=>x.fcMedia&&x.distancia>=f0.distancia).map(x=>x.fcMedia)):null;
+  const z2=x=>secs(x.zonas&&x.zonas.z2), melhorZ2=Math.max(0,...A.map(z2));
+  const pesFiel=(()=>{let n=1,d={};for(let i=1;i<P.length;i++){const g=(pd(P[i].data)-pd(P[i-1].data))/864e5;n=(g>=6&&g<=8)?n+1:1;if(!d[n])d[n]=P[i].data;}return{d,n};})();
+  const musc=(()=>{const p=P.find(p=>a0.peso-p.peso>=10&&a0.mMuscular&&p.mMuscular&&(a0.mMuscular-p.mMuscular)<=(a0.peso-p.peso)*0.25);return p?p.data:null;})();
+  const corridaMax=Math.max(0,...R.map(x=>x.corridaSeguida||0));
+  const corr=n=>prim(R,x=>(x.corridaSeguida||0)>=n);
+  const kmPe=W.concat(R).sort((a,b)=>a.data<b.data?-1:1), totKmPe=kmPe.reduce((a,x)=>a+(x.distancia||0),0);
+  const crawlMax=Math.max(0,...S.map(x=>x.crawlBloco||0));
   const L=[
-    {id:"arranque",cat:"geral",ic:"flag",t:"Início da jornada",d:"Primeiro treino registado, de qualquer tipo.",data:porData(ACT())[0]?.data||null,falta:"Regista o primeiro treino"},
+    /* ---- Gerais ---- */
+    {id:"arranque",cat:"geral",ic:"flag",t:"Início da jornada",d:"Primeiro treino registado, de qualquer tipo.",data:A[0]?.data,falta:"Regista o primeiro treino"},
+    {id:"sexta",cat:"geral",ic:"star",t:"Sexta-feira de campeão",d:"Treinaste numa sexta-feira, o dia dos copos com os amigos.",...conta(sextas,[1,5,10]),falta:"Treina numa sexta"},
+    {id:"semcopos",cat:"geral",ic:"check",t:"Sexta sem copos",d:"Uma sexta à noite sem álcool.",...conta(marcos("sexta_sem_copos"),[1,5,10]),falta:"Diz-me quando acontecer"},
+    {id:"fds",cat:"geral",ic:"cal",t:"Fim-de-semana activo",d:"Treino ou caminhada ao sábado e ao domingo.",...conta(fds,[1,5,10]),falta:"Treina sábado e domingo"},
+    {id:"seq2",cat:"geral",txt:"2",t:"2 semanas seguidas",d:"Duas semanas seguidas sem falhar nenhuma sessão.",data:seqData[2],falta:`Sequência actual: ${seqAgora}`},
+    {id:"seq4",cat:"geral",txt:"4",t:"4 semanas seguidas",d:"Quatro semanas seguidas sem falhar nenhuma sessão.",data:seqData[4],falta:`Melhor sequência: ${seqMax}`},
+    {id:"seq8",cat:"geral",txt:"8",t:"8 semanas seguidas",d:"Oito semanas seguidas sem falhar nenhuma sessão.",data:seqData[8],falta:`Melhor sequência: ${seqMax}`},
+    {id:"seq12",cat:"geral",txt:"12",t:"12 semanas seguidas",d:"Doze semanas seguidas sem falhar nenhuma sessão.",data:seqData[12],falta:`Melhor sequência: ${seqMax}`},
+    {id:"semana",cat:"geral",ic:"cal",t:"Semana completa",d:"Todas as sessões de uma semana feitas.",data:seqData[1]||(()=>{for(const w of NSEM){const ss=PLANO.filter(s=>s.sem===w);if(ss.length&&ss.every(s=>feito(s.id)))return ss[ss.length-1].data;}return null;})(),falta:"Faz todas as sessões da semana"},
+    {id:"mes",cat:"geral",ic:"trophy",t:"Mês perfeito",d:"Todas as sessões de um mês feitas.",...conta(meses,[1,3,6]),falta:"Fecha um mês sem falhar"},
+    {id:"volta",cat:"geral",ic:"bolt",t:"Volta por cima",d:"Falhaste uma sessão e voltaste logo na seguinte.",...conta(volta,[1,5,10]),falta:"Se falhares, volta na seguinte"},
+    {id:"regresso",cat:"geral",ic:"flag",t:"Regresso",d:"Voltaste a treinar depois de 7 ou mais dias parado.",...conta(regresso,[1,3,5]),falta:"Para quando precisares"},
+    {id:"cedo",cat:"geral",ic:"timer",t:"Madrugador",d:"Treinaste antes das 8h da manhã.",...conta(cedo,[1,5,10]),falta:"Treina antes das 8h"},
+    {id:"feriado",cat:"geral",ic:"cal",t:"Feriado no ginásio",d:"Treinaste num feriado (inclui Dia da Família, 25 Dez, e 1 Jan).",...conta(feriados,[1,3,5]),falta:"Próximo: 25 Dez"},
+    {id:"aniv",cat:"geral",ic:"star",t:"Aniversário activo",d:"Treinaste no dia dos teus anos.",data:anivD[0]||null,falta:aniv?"No teu próximo aniversário":"Falta saber a data"},
+    {id:"tr10",cat:"geral",txt:"10",t:"10 treinos",d:"10 treinos registados, de qualquer tipo.",data:A[9]?.data,falta:`${A.length} de 10`},
+    {id:"tr25",cat:"geral",txt:"25",t:"25 treinos",d:"25 treinos registados, de qualquer tipo.",data:A[24]?.data,falta:`${A.length} de 25`},
+    {id:"tr50",cat:"geral",txt:"50",t:"50 treinos",d:"50 treinos registados, de qualquer tipo.",data:A[49]?.data,falta:`${A.length} de 50`},
+    ...[30,100,180,365].map(n=>{const d=addDias(DADOS.perfil.inicio,n);return {id:"dias"+n,cat:"geral",txt:String(n),t:`${n} dias de jornada`,d:`${n} dias desde o início, a ${curto(DADOS.perfil.inicio)}.`,data:d<=HOJE?d:null,falta:`A ${curto(d)}`};}),
+    {id:"superacao",cat:"geral",ic:"trophy",t:"Superação",d:"Bateste pelo menos um recorde pessoal num treino.",...conta(superacao,[1,5,10]),falta:"Bate um recorde"},
+    {id:"hattrick",cat:"geral",txt:"×3",t:"Hat-trick",d:"Três ou mais recordes pessoais no mesmo treino.",data:hat?hat.x.data:null,falta:"3 recordes num treino"},
+    {id:"maisplano",cat:"geral",ic:"bolt",t:"Mais do que o plano",d:"Pelo menos 10% acima da distância planeada.",...conta(maisPlano,[1,3,5]),falta:"10% acima do plano"},
+    /* ---- Natação ---- */
     {id:"inicio",cat:"natacao",ic:"wave",t:"Primeira braçada",d:"Primeiro treino de natação registado.",data:S[0]?.data,falta:"Regista o primeiro treino"},
     {id:"teste",cat:"natacao",ic:"timer",t:"Ponto de partida",d:"Fizeste o primeiro teste de 10 minutos.",data:t1?.data,falta:"Teste no primeiro treino"},
     {id:"plano",cat:"natacao",ic:"check",t:"Plano cumprido",d:"Nadaste toda a distância planeada de uma sessão.",data:prim(S,x=>{const s=PLANO.find(p=>p.id===x.sessao);return s&&x.distancia>=s.total;}),falta:"Completa uma sessão inteira"},
-    {id:"b8",cat:"natacao",txt:"8",t:"Primeiro bloco sem parar",d:"8 piscinas seguidas (200 m) sem parar.",data:bloco(8),falta:faltaB(8)},
-    {id:"b16",cat:"natacao",txt:"16",t:"16 sem parar",d:"16 piscinas seguidas (400 m) sem parar.",data:bloco(16),falta:faltaB(16)},
-    {id:"b24",cat:"natacao",txt:"24",t:"24 sem parar",d:"24 piscinas seguidas (600 m) sem parar.",data:bloco(24),falta:faltaB(24)},
-    {id:"b40",cat:"natacao",txt:"1K",t:"1 km sem parar",d:"40 piscinas seguidas sem parar.",data:bloco(40),falta:faltaB(40)},
+    {id:"b8",cat:"natacao",txt:"8",t:"Primeiro bloco sem parar",d:"8 piscinas seguidas (200 m) sem parar.",data:bloco(8),falta:faltaB()},
+    {id:"b16",cat:"natacao",txt:"16",t:"16 sem parar",d:"16 piscinas seguidas (400 m) sem parar.",data:bloco(16),falta:faltaB()},
+    {id:"b24",cat:"natacao",txt:"24",t:"24 sem parar",d:"24 piscinas seguidas (600 m) sem parar.",data:bloco(24),falta:faltaB()},
+    {id:"b40",cat:"natacao",txt:"1K",t:"1 km sem parar",d:"40 piscinas seguidas sem parar.",data:bloco(40),falta:faltaB()},
+    {id:"b60",cat:"natacao",txt:"1,5K",t:"1,5 km sem parar",d:"60 piscinas seguidas sem parar.",data:bloco(60),falta:faltaB()},
+    {id:"b30min",cat:"natacao",txt:"30′",t:"30 minutos sem parar",d:"Meia hora a nadar sem parar.",data:prim(S,x=>secs(x.blocoTempo)>=1800),falta:"Meia hora contínua"},
+    {id:"crawl4",cat:"natacao",txt:"4",t:"Só crawl: 4",d:"4 piscinas seguidas só em crawl.",data:prim(S,x=>(x.crawlBloco||0)>=4),falta:crawlMax?`Melhor: ${crawlMax}`:"Diz-me quantas fizeste"},
+    {id:"crawl8",cat:"natacao",txt:"8",t:"Só crawl: 8",d:"8 piscinas seguidas só em crawl.",data:prim(S,x=>(x.crawlBloco||0)>=8),falta:crawlMax?`Melhor: ${crawlMax}`:"Diz-me quantas fizeste"},
+    {id:"crawl16",cat:"natacao",txt:"16",t:"Só crawl: 16",d:"16 piscinas seguidas só em crawl.",data:prim(S,x=>(x.crawlBloco||0)>=16),falta:crawlMax?`Melhor: ${crawlMax}`:"Diz-me quantas fizeste"},
     {id:"descanso",cat:"natacao",ic:"timer",t:"Descanso curto",d:"Menos de 10 minutos parado num treino.",data:prim(S,x=>secs(x.parado)&&secs(x.parado)<600),falta:"Menos de 10 min parado"},
+    {id:"descanso5",cat:"natacao",ic:"timer",t:"Descanso de atleta",d:"Menos de 5 minutos parado num treino inteiro.",data:prim(S,x=>secs(x.parado)&&secs(x.parado)<300),falta:"Menos de 5 min parado"},
     {id:"km",cat:"natacao",ic:"star",t:"1 km num treino",d:"1000 m (40 piscinas) num só treino.",data:prim(S,x=>(x.distancia||0)>=1000),falta:faltaM(1000-Math.max(0,...S.map(x=>x.distancia||0)))},
+    {id:"km15",cat:"natacao",txt:"1,5",t:"1,5 km num treino",d:"1500 m (60 piscinas) num só treino.",data:prim(S,x=>(x.distancia||0)>=1500),falta:faltaM(1500-Math.max(0,...S.map(x=>x.distancia||0)))},
+    {id:"km2",cat:"natacao",txt:"2K",t:"2 km num treino",d:"2000 m (80 piscinas) num só treino.",data:prim(S,x=>(x.distancia||0)>=2000),falta:faltaM(2000-Math.max(0,...S.map(x=>x.distancia||0)))},
     {id:"teste2",cat:"natacao",ic:"trophy",t:"Teste batido",d:"Mais metros no teste de 10 minutos do que na primeira vez.",data:t2?.data,falta:"Novo teste a 30 Nov"},
-    {id:"t5",cat:"natacao",txt:"5K",t:"5 km nadados",d:"5 km nadados no total.",data:acum(5000),falta:faltaM(5000-totM)},
-    {id:"t10",cat:"natacao",txt:"10K",t:"10 km nadados",d:"10 km nadados no total.",data:acum(10000),falta:faltaM(10000-totM)},
-    {id:"t25",cat:"natacao",txt:"25K",t:"25 km nadados",d:"25 km nadados no total.",data:acum(25000),falta:faltaM(25000-totM)},
-    {id:"tr10",cat:"geral",txt:"10",t:"10 treinos",d:"10 treinos registados, de qualquer tipo.",data:porData(ACT())[9]?.data||null,falta:`${ACT().length} de 10`},
-    {id:"tr25",cat:"geral",txt:"25",t:"25 treinos",d:"25 treinos registados, de qualquer tipo.",data:porData(ACT())[24]?.data||null,falta:`${ACT().length} de 25`},
-    {id:"tr50",cat:"geral",txt:"50",t:"50 treinos",d:"50 treinos registados, de qualquer tipo.",data:porData(ACT())[49]?.data||null,falta:`${ACT().length} de 50`},
-    {id:"semana",cat:"geral",ic:"cal",t:"Semana completa",d:"Todas as sessões de natação de uma semana feitas.",data:semCompleta,falta:"Faz todas as sessões da semana"},
-    {id:"camin",cat:"corrida",ic:"walk",t:"Primeira caminhada",d:"Primeira caminhada registada.",data:W[0]?.data,falta:"Caminhada à terça ou sábado"},
+    ...[350,400,500].map(m=>({id:"teste"+m,cat:"natacao",txt:String(m),t:`Teste: ${m} m`,d:`${m} m (${m/25} piscinas) no teste de 10 minutos.`,data:prim(S,x=>(x.teste10||0)>=m),falta:`Melhor: ${melhorTeste} m`})),
+    {id:"ritmo3",cat:"natacao",txt:"3:00",t:"Ritmo abaixo de 3:00",d:"Ritmo médio abaixo de 3:00 por 100 m num treino.",data:prim(S,x=>ritmoSeg(x)&&ritmoSeg(x)<180),falta:`Melhor: ${mmss(Math.min(...S.map(ritmoSeg).filter(Boolean)))}`},
+    {id:"ritmo25",cat:"natacao",txt:"2:30",t:"Ritmo abaixo de 2:30",d:"Ritmo médio abaixo de 2:30 por 100 m num treino.",data:prim(S,x=>ritmoSeg(x)&&ritmoSeg(x)<150),falta:`Melhor: ${mmss(Math.min(...S.map(ritmoSeg).filter(Boolean)))}`},
+    {id:"rap30",cat:"natacao",txt:"30s",t:"Piscina rápida",d:"25 m de crawl em menos de 30 segundos.",data:prim(S,x=>x.crawl25&&x.crawl25<30),falta:`Melhor: ${Math.min(...S.map(x=>x.crawl25||99))} s`},
+    {id:"rap25",cat:"natacao",txt:"25s",t:"Piscina relâmpago",d:"25 m de crawl em menos de 25 segundos.",data:prim(S,x=>x.crawl25&&x.crawl25<25),falta:`Melhor: ${Math.min(...S.map(x=>x.crawl25||99))} s`},
+    {id:"fria",cat:"natacao",ic:"wave",t:"Água fria",d:"Nadaste com a água a 20 °C ou menos.",data:prim(S,x=>x.aguaTemp&&x.aguaTemp<=20),falta:`Mais fria até agora: ${Math.min(...S.map(x=>x.aguaTemp||99))} °C`},
+    {id:"mesaq",cat:"natacao",ic:"cal",t:"Mês aquático",d:"10 km nadados num mês.",data:mesAq,falta:faltaM(10000-melhorMes)},
+    {id:"t5",cat:"natacao",txt:"5K",t:"5 km nadados",d:"5 km nadados no total.",data:acum(S,5000,x=>x.distancia),falta:faltaM(5000-totM)},
+    {id:"t10",cat:"natacao",txt:"10K",t:"10 km nadados",d:"10 km nadados no total.",data:acum(S,10000,x=>x.distancia),falta:faltaM(10000-totM)},
+    {id:"t25",cat:"natacao",txt:"25K",t:"25 km nadados",d:"25 km nadados no total.",data:acum(S,25000,x=>x.distancia),falta:faltaM(25000-totM)},
     {id:"plano5",cat:"natacao",ic:"trophy",t:"Plano de natação completo",d:"Todas as sessões do plano de 5 semanas feitas.",data:todos,falta:`${PLANO.filter(s=>feito(s.id)).length} de ${PLANO.length} sessões`},
+    /* ---- Caminhada e corrida ---- */
+    {id:"camin",cat:"corrida",ic:"walk",t:"Primeira caminhada",d:"Primeira caminhada registada.",data:W[0]?.data,falta:"Caminhada à terça ou sábado"},
+    {id:"camin5",cat:"corrida",txt:"5K",t:"5 km a caminhar",d:"5 km numa só caminhada.",data:prim(W,x=>(x.distancia||0)>=5),falta:"5 km numa saída"},
+    ...[[1,"Primeiro minuto a correr"],[5,"5 minutos a correr"],[10,"10 minutos a correr"],[20,"20 minutos a correr"]].map(([n,t])=>({id:"corre"+n,cat:"corrida",txt:n+"′",t,d:`${n} ${n===1?"minuto":"minutos"} seguidos a correr.`,data:corr(n),falta:corridaMax?`Melhor: ${corridaMax} min`:"Quando começares a correr"})),
+    {id:"corr5",cat:"corrida",txt:"5K",t:"5 km a correr",d:"5 km a correr numa saída.",data:prim(R,x=>(x.distancia||0)>=5),falta:"Quando começares a correr"},
+    {id:"corr10",cat:"corrida",txt:"10K",t:"10 km a correr",d:"10 km a correr numa saída.",data:prim(R,x=>(x.distancia||0)>=10),falta:"Quando começares a correr"},
+    {id:"marat",cat:"corrida",txt:"42",t:"Maratona acumulada",d:"42 km somados entre caminhadas e corridas.",data:acum(kmPe,42.2,x=>x.distancia),falta:`Faltam ${f1(Math.max(0,42.2-totKmPe))} km`},
+    /* ---- Coração ---- */
     {id:"recup",cat:"coracao",ic:"heart",t:"Recuperação rápida",d:"A frequência cardíaca desceu 15 ou mais batidas no primeiro minuto depois do treino.",data:prim(S,x=>x.fcPos&&x.fcPos[0]-x.fcPos[1]>=15),falta:"Descer 15 batidas em 1 min"},
-    {id:"kcal",cat:"coracao",ic:"flame",t:"500 calorias",d:"Mais de 500 kcal activas num treino.",data:prim(S,x=>(x.kcal||0)>=500),falta:"500 kcal num treino"},
-    {id:"p5",cat:"corpo",txt:"−5",t:"Menos 5 kg",d:"5 kg perdidos desde 10 Out.",data:perdeu(5),falta:faltaKg(5-perdido)},
-    {id:"p8",cat:"corpo",txt:"−8",t:"Menos 8 kg",d:"8 kg perdidos desde 10 Out.",data:perdeu(8),falta:faltaKg(8-perdido)},
-    {id:"p10",cat:"corpo",txt:"−10",t:"Menos 10 kg",d:"10 kg perdidos desde 10 Out.",data:perdeu(10),falta:faltaKg(10-perdido)},
-    {id:"p15",cat:"corpo",txt:"−15",t:"Menos 15 kg",d:"15 kg perdidos desde 10 Out.",data:perdeu(15),falta:faltaKg(15-perdido)},
-    {id:"p20",cat:"corpo",txt:"−20",t:"Menos 20 kg",d:"20 kg perdidos desde 10 Out.",data:perdeu(20),falta:faltaKg(20-perdido)},
-    {id:"p140",cat:"corpo",ic:"down",t:"Abaixo dos 140",d:"Pesagem abaixo dos 140 kg.",data:prim(P,p=>p.peso<140),falta:faltaKg(z.peso-139.9)},
-    {id:"gord43",cat:"corpo",txt:"43%",t:"Gordura abaixo de 43%",d:"Gordura corporal abaixo de 43%.",data:prim(P,p=>p.gordura<43),falta:`Agora ${f1(z.gordura)}%`},
+    {id:"forte",cat:"coracao",ic:"heart",t:"Coração mais forte",d:"Frequência cardíaca média 10 batidas abaixo da do 1.º treino, para a mesma distância ou mais.",data:fcAlvo?prim(S,x=>x.fcMedia&&x.distancia>=f0.distancia&&x.fcMedia<=fcAlvo):null,falta:fcMelhor&&f0?`Melhor: ${f0.fcMedia-fcMelhor} abaixo`:"Precisa de 2 treinos"},
+    {id:"kcal",cat:"coracao",ic:"flame",t:"500 calorias",d:"Mais de 500 kcal activas num treino.",data:prim(A,x=>(x.kcal||0)>=500),falta:"500 kcal num treino"},
+    {id:"fogo",cat:"coracao",ic:"flame",t:"Semana de fogo",d:"2000 kcal activas numa semana.",data:semFogo,falta:`Melhor semana: ${melhorSemK} kcal`},
+    {id:"fornalha",cat:"coracao",txt:"10K",t:"Fornalha",d:"10 000 kcal activas no total.",data:acum(A,10000,x=>x.kcal),falta:`Faltam ${Math.max(0,10000-totK)} kcal`},
+    {id:"z2",cat:"coracao",txt:"Z2",t:"Zona de queima",d:"20 minutos na zona 2 da frequência cardíaca num treino.",data:prim(A,x=>z2(x)>=1200),falta:`Melhor: ${mmss(melhorZ2)}`},
+    /* ---- Corpo e peso ---- */
+    ...[5,8,10,15,20,25,30,40].map(k=>({id:"p"+k,cat:"corpo",txt:"−"+k,t:`Menos ${k} kg`,d:`${k} kg perdidos desde ${curto(a0.data)}.`,data:perdeu(k),falta:faltaKg(k-perdido)})),
+    ...[140,130,120,110].map(k=>({id:"abaixo"+k,cat:"corpo",ic:"down",t:`Abaixo dos ${k}`,d:`Pesagem abaixo dos ${k} kg.`,data:prim(P,p=>p.peso<k),falta:faltaKg(z.peso-(k-0.1))})),
+    ...[45,40,35].map(v=>({id:"imc"+v,cat:"corpo",txt:String(v),t:`IMC abaixo de ${v}`,d:`Índice de massa corporal abaixo de ${v}.`,data:prim(P,p=>imc(p)<v),falta:`Agora ${f1(imc(z))}`})),
+    ...[43,40,35,30].map(v=>({id:"gord"+v,cat:"corpo",txt:v+"%",t:`Gordura abaixo de ${v}%`,d:`Gordura corporal abaixo de ${v}%.`,data:prim(P,p=>p.gordura<v),falta:`Agora ${f1(z.gordura)}%`})),
+    ...[10,20].map(k=>({id:"mg"+k,cat:"corpo",ic:"flame",t:`Menos ${k} kg de gordura`,d:`${k} kg de massa gorda perdidos desde ${curto(a0.data)}.`,data:prim(P,p=>a0.mGorda-p.mGorda>=k),falta:faltaKg(k-(a0.mGorda-z.mGorda))})),
     {id:"visc",cat:"corpo",txt:"<20",t:"Visceral a descer",d:"Gordura visceral abaixo de 20.",data:prim(P,p=>p.visceral<20),falta:`Agora ${z.visceral}`},
-    {id:"desce4",cat:"corpo",ic:"down2",t:"4 semanas a descer",d:"Quatro pesagens seguidas a descer.",data:desce,falta:`${seq} seguidas agora`},
+    {id:"visc15",cat:"corpo",txt:"<15",t:"Visceral abaixo de 15",d:"Gordura visceral abaixo de 15.",data:prim(P,p=>p.visceral<15),falta:`Agora ${z.visceral}`},
+    {id:"visc12",cat:"corpo",txt:"<12",t:"Visceral abaixo de 12",d:"Gordura visceral abaixo de 12.",data:prim(P,p=>p.visceral<12),falta:`Agora ${z.visceral}`},
+    {id:"visc9",cat:"corpo",ic:"heart",t:"Visceral saudável",d:"Gordura visceral na zona saudável da balança (até 9).",data:prim(P,p=>p.visceral<=9),falta:`Agora ${z.visceral}`},
+    {id:"musc",cat:"corpo",ic:"bolt",t:"Músculo protegido",d:"10 kg perdidos com a massa muscular a descer no máximo um quarto disso. É sinal de que o que sai é sobretudo gordura.",data:musc,falta:perdido<10?faltaKg(10-perdido):"Músculo a descer demais"},
+    ...[4,8,12].map(n=>({id:"pes"+n,cat:"corpo",txt:String(n),t:`Pesagem fiel: ${n}`,d:`${n} pesagens semanais seguidas, sem falhar.`,data:pesFiel.d[n]||null,falta:`Sequência actual: ${pesFiel.n}`})),
+    {id:"roupa",cat:"corpo",ic:"star",t:"Um número abaixo",d:"Um tamanho de roupa abaixo, ou o cinto um furo acima.",...conta(marcos("roupa"),[1,3,5]),falta:"Diz-me quando acontecer"},
+    {id:"desce4",cat:"corpo",ic:"down2",t:"4 semanas a descer",d:"Quatro pesagens seguidas a descer.",data:(()=>{let s=0;for(let i=1;i<P.length;i++){s=P[i].peso<P[i-1].peso?s+1:0;if(s>=4)return P[i].data;}return null;})(),falta:"4 descidas seguidas"},
     {id:"meta",cat:"corpo",ic:"trophy",t:"Meta: 100 kg",d:"Chegaste à meta de peso.",data:prim(P,p=>p.peso<=DADOS.metas.peso),falta:faltaKg(z.peso-DADOS.metas.peso)}
   ];
-  L.forEach(c=>{c.data=c.data||null;});
+  L.forEach(c=>{c.data=c.data||null;if(c.niveis){c.nivel=nivelDe(c);const prox=c.niveis.find(v=>v>c.conta);if(c.data)c.falta=prox?`${c.conta}× · faltam ${prox-c.conta} para ${NIVEL_NOME[c.niveis.indexOf(prox)+1].toLowerCase()}`:`${c.conta}× · nível máximo`;}});
   return L;
 }
 
@@ -1030,7 +1138,9 @@ function medalha(c,px,lock){
     <circle cx="50" cy="50" r="39" fill="url(#${g}i)"/>
     <circle cx="50" cy="50" r="39" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1.2"/>
     ${glyph}
-    <path d="M14 38a38 38 0 0 1 72 0" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+    <path d="M14 38a38 38 0 0 1 72 0" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2.5" stroke-linecap="round"/>
+    ${!lock&&c.nivel?`<defs><linearGradient id="${g}n" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${NIVEL_COR[c.nivel][0]}"/><stop offset="1" stop-color="${NIVEL_COR[c.nivel][1]}"/></linearGradient></defs>
+    <circle cx="78" cy="80" r="17" fill="url(#${g}n)" stroke="#0a1c2e" stroke-width="3"/><text x="78" y="80" dy=".36em" text-anchor="middle" font-family="-apple-system,system-ui,sans-serif" font-weight="800" font-size="${c.conta>=10?13:15}" fill="#1b1206">${c.conta}×</text>`:""}</svg>`;
 }
 
 function evolucaoView(pb){
@@ -1043,10 +1153,10 @@ function evolucaoView(pb){
   const catsUsadas=Object.keys(CATS).filter(k=>C.some(c=>c.cat===k));
   const legenda=`<div class="medleg" aria-label="Cores das conquistas">${catsUsadas.map(k=>`<span><i style="background:linear-gradient(135deg,${CATS[k].cor[0]},${CATS[k].cor[1]})"></i>${CATS[k].nome}</span>`).join("")}</div>`;
   const grupos=catsUsadas.map(cat=>{
-    const cs=C.filter(c=>c.cat===cat), cc=CATS[cat].cor;
+    const cs=C.filter(c=>c.cat===cat).map((c,i)=>({c,i})).sort((x,y)=>(x.c.data?0:1)-(y.c.data?0:1)||x.i-y.i).map(o=>o.c), cc=CATS[cat].cor;
     return `<div class="stack" style="gap:10px"><div class="spread"><h3 style="margin:0;display:flex;align-items:center;gap:8px"><i class="catdot" style="background:linear-gradient(135deg,${cc[0]},${cc[1]})"></i>${CATS[cat].nome}</h3><span class="muted sm">${cs.filter(c=>c.data).length} de ${cs.length}</span></div>
       <div class="medgrid">${cs.map(c=>`<button class="medbtn" data-med="${c.id}" aria-label="${esc(c.t)}${c.data?", conquistada a "+curto(c.data):", por conquistar"}">
-        ${medalha(c,78,!c.data)}<b>${esc(c.t)}</b><span>${c.data?curto(c.data):esc(c.falta)}</span></button>`).join("")}</div></div>`;}).join("");
+        ${medalha(c,78,!c.data)}<b>${esc(c.t)}</b><span>${c.data?(c.nivel?NIVEL_NOME[c.nivel]+" · "+c.conta+"×":curto(c.data)):esc(c.falta)}</span></button>`).join("")}</div></div>`;}).join("");
   const ult=S.slice(-4);
   const linhasCmp=[
     ["Piscinas",x=>x.piscinas||(x.distancia/25),v=>v,false],
@@ -1102,7 +1212,8 @@ function abrirMedalha(c){
     <div class="eyebrow" style="text-align:center;margin-top:22px">${nomeCat(c.cat)}</div>
     <div class="ct" style="text-align:center">${esc(c.t)}</div>
     <div class="cs" style="text-align:center;max-width:320px;margin:8px auto 0">${esc(c.d)}</div>
-    <div class="medd">${c.data?"Conquistada a "+longo(c.data):"Por conquistar · "+esc(c.falta)}</div>
+    <div class="medd">${c.data?(c.nivel?`${NIVEL_NOME[c.nivel]} · ${c.conta} ${c.conta===1?"vez":"vezes"}`:"Conquistada a "+longo(c.data)):"Por conquistar · "+esc(c.falta)}</div>
+    ${c.niveis?`<div class="cs" style="text-align:center;margin-top:6px">Bronze ${c.niveis[0]}× · Prata ${c.niveis[1]}× · Ouro ${c.niveis[2]}×${c.data?"<br>Primeira vez a "+longo(c.data):""}</div>`:""}
     ${c.data?`<button class="btnp" id="partMed" style="margin:26px auto 0;max-width:320px">Partilhar esta conquista</button>`:""}`;
   ov.hidden=false; document.body.style.overflow="hidden";
   const fechar=()=>{ov.hidden=true;ov.classList.remove("medov");document.body.style.overflow="";};
@@ -1134,6 +1245,9 @@ function medalhaCanvas(ctx,c,cx,cy,r,lock){
     const gl=ctx.createLinearGradient(0,0,24,24);gl.addColorStop(0,a);gl.addColorStop(1,b);ctx.strokeStyle=gl;ctx.stroke(new Path2D(ICO[c.ic]));}
   ctx.restore();
   ctx.save();ctx.beginPath();ctx.arc(cx,cy,r*.91,Math.PI*1.17,Math.PI*1.83);ctx.strokeStyle="rgba(255,255,255,.35)";ctx.lineWidth=r*.05;ctx.lineCap="round";ctx.stroke();ctx.restore();
+  if(!lock&&c.nivel){const k2=r/50,bx=cx+r*.56,by=cy+r*.6,br=17*k2;const gn=ctx.createLinearGradient(bx-br,by-br,bx+br,by+br);gn.addColorStop(0,NIVEL_COR[c.nivel][0]);gn.addColorStop(1,NIVEL_COR[c.nivel][1]);
+    ctx.beginPath();ctx.arc(bx,by,br,0,7);ctx.fillStyle=gn;ctx.fill();ctx.lineWidth=3*k2;ctx.strokeStyle="#0a1c2e";ctx.stroke();
+    ctx.font=`800 ${(c.conta>=10?13:15)*k2}px ${CFONT}`;ctx.fillStyle="#1b1206";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(c.conta+"×",bx,by+1);}
 }
 function txt(ctx,s,x,y,font,cor,al){ctx.font=font;ctx.fillStyle=cor||"#fff";ctx.textAlign=al||"left";ctx.textBaseline="alphabetic";ctx.fillText(s,x,y);}
 function cortar(ctx,s,max){if(ctx.measureText(s).width<=max)return s;while(s.length>1&&ctx.measureText(s+"…").width>max)s=s.slice(0,-1);return s+"…";}

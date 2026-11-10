@@ -7,6 +7,18 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.8.0 — 10 Nov 2026
+Novas conquistas aprovadas pelo Bruno (inquérito de 10 Nov) e níveis bronze/prata/ouro.
+- **Níveis**: as conquistas que se repetem contam as vezes e ganham uma insígnia de bronze, prata ou ouro (ex.: Sexta-feira de campeão 1×/5×/10×).
+- **Gerais**: Sexta-feira de campeão, Sexta sem copos, Fim-de-semana activo, 2/4/8/12 semanas seguidas, Mês perfeito, Volta por cima, Regresso, Madrugador, Feriado no ginásio (feriados de Moçambique), Aniversário activo, 30/100/180/365 dias de jornada, Superação, Hat-trick (3 recordes no mesmo treino) e Mais do que o plano.
+- **Natação**: 1,5 km e 30 minutos sem parar, Só crawl 4/8/16, Descanso de atleta, 1,5 km e 2 km num treino, Teste 350/400/500 m, Ritmo abaixo de 3:00 e 2:30, Piscina rápida (30 s) e relâmpago (25 s), Água fria e Mês aquático.
+- **Caminhada e corrida**: 5 km a caminhar, 1/5/10/20 minutos a correr, 5 e 10 km a correr, Maratona acumulada.
+- **Coração**: Coração mais forte, Semana de fogo, Fornalha e Zona de queima.
+- **Corpo e peso**: −25/−30/−40 kg, abaixo de 130/120/110 kg, IMC abaixo de 45/40/35, gordura abaixo de 40/35/30%, −10 e −20 kg de massa gorda, visceral abaixo de 15/12 e zona saudável, Músculo protegido, Pesagem fiel 4/8/12 e Um número abaixo.
+- Dentro de cada grupo, as conquistas já ganhas aparecem primeiro.
+- Novos campos opcionais nos dados: `marcos` (registos que o Bruno conta no chat, como sexta sem copos ou roupa um número abaixo), `perfil.aniversario`, `crawlBloco`, `blocoTempo` e `corridaSeguida`.
+- A conquista "Abaixo dos 140" passou a ter outro identificador interno, sem efeito para o Bruno.
+
 ## v1.7.1 — 10 Nov 2026
 Privacidade, a pedido do Bruno.
 - Removida a conquista "Sem desculpas" e todas as referências a dias de medicação na app (avisos no Início e nos Treinos), para não aparecerem em imagens partilhadas nem em capturas de ecrã.

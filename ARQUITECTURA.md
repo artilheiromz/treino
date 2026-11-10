@@ -58,3 +58,14 @@ As categorias estão no registo `CATS`, com uma cor por tipo de exercício e uma
 
 Um tipo novo usa a sua entrada em `CATS`. As conquistas com `cat` igual a esse tipo aparecem sozinhas, com a legenda. Uma conquista que vale para qualquer exercício vai para `geral` ou `coracao`.
 - Os gráficos e tiles de Treinos estão divididos em "Natação" e "Caminhadas". Devem ser gerados a partir de `TIPOS`.
+
+## Conquistas (v1.8.0)
+
+- `conquistas()` devolve uma lista de `{id, cat, ic|txt, t, d, data, falta}`. As que se repetem têm também `niveis:[bronze, prata, ouro]` e `conta`.
+- Funções de apoio genéricas, que servem para qualquer tipo: `segDe`, `addDias`, semanas cumpridas, meses perfeitos e `marcos(id)`.
+- **Marcos manuais**: `DADOS.marcos = [{data, id}]`, para coisas que o relógio não mede. Exemplos: `sexta_sem_copos` e `roupa`.
+- **Campos opcionais por treino**:
+  - `crawlBloco`: piscinas seguidas só em crawl.
+  - `blocoTempo`: duração do maior bloco sem parar.
+  - `corridaSeguida`: minutos seguidos a correr.
+- **Semana cumprida**: todas as sessões do plano dessa semana; se não houver plano, 3 ou mais treinos de qualquer tipo.
