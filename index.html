@@ -360,7 +360,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.8.0"; // ver CHANGELOG.md
+const VERSAO = "1.8.1"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -1097,7 +1097,7 @@ function conquistas(){
     {id:"visc9",cat:"corpo",ic:"heart",t:"Visceral saudável",d:"Gordura visceral na zona saudável da balança (até 9).",data:prim(P,p=>p.visceral<=9),falta:`Agora ${z.visceral}`},
     {id:"musc",cat:"corpo",ic:"bolt",t:"Músculo protegido",d:"10 kg perdidos com a massa muscular a descer no máximo um quarto disso. É sinal de que o que sai é sobretudo gordura.",data:musc,falta:perdido<10?faltaKg(10-perdido):"Músculo a descer demais"},
     ...[4,8,12].map(n=>({id:"pes"+n,cat:"corpo",txt:String(n),t:`Pesagem fiel: ${n}`,d:`${n} pesagens semanais seguidas, sem falhar.`,data:pesFiel.d[n]||null,falta:`Sequência actual: ${pesFiel.n}`})),
-    {id:"roupa",cat:"corpo",ic:"star",t:"Um número abaixo",d:"Um tamanho de roupa abaixo, ou o cinto um furo acima.",...conta(marcos("roupa"),[1,3,5]),falta:"Diz-me quando acontecer"},
+    ...[42,40].map(n=>({id:"calcas"+n,cat:"corpo",txt:String(n),t:`Calças ${n}`,d:`Voltaste a vestir calças tamanho ${n}.`,data:marcos("calcas"+n)[0]||null,falta:DADOS.perfil.calcas?`Agora: ${DADOS.perfil.calcas}`:"Diz-me quando servirem"})),
     {id:"desce4",cat:"corpo",ic:"down2",t:"4 semanas a descer",d:"Quatro pesagens seguidas a descer.",data:(()=>{let s=0;for(let i=1;i<P.length;i++){s=P[i].peso<P[i-1].peso?s+1:0;if(s>=4)return P[i].data;}return null;})(),falta:"4 descidas seguidas"},
     {id:"meta",cat:"corpo",ic:"trophy",t:"Meta: 100 kg",d:"Chegaste à meta de peso.",data:prim(P,p=>p.peso<=DADOS.metas.peso),falta:faltaKg(z.peso-DADOS.metas.peso)}
   ];

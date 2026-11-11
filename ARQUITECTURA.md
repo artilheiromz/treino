@@ -63,7 +63,7 @@ Um tipo novo usa a sua entrada em `CATS`. As conquistas com `cat` igual a esse t
 
 - `conquistas()` devolve uma lista de `{id, cat, ic|txt, t, d, data, falta}`. As que se repetem têm também `niveis:[bronze, prata, ouro]` e `conta`.
 - Funções de apoio genéricas, que servem para qualquer tipo: `segDe`, `addDias`, semanas cumpridas, meses perfeitos e `marcos(id)`.
-- **Marcos manuais**: `DADOS.marcos = [{data, id}]`, para coisas que o relógio não mede. Exemplos: `sexta_sem_copos` e `roupa`.
+- **Marcos manuais**: `DADOS.marcos = [{data, id}]`, para coisas que o relógio não mede. Exemplos: `sexta_sem_copos`, `calcas42` e `calcas40`.
 - **Campos opcionais por treino**:
   - `crawlBloco`: piscinas seguidas só em crawl.
   - `blocoTempo`: duração do maior bloco sem parar.
