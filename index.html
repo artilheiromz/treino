@@ -360,7 +360,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.8.1"; // ver CHANGELOG.md
+const VERSAO = "1.8.2"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -370,7 +370,7 @@ const PLANO = [
     blocos:[ B("Aquecimento","4 × 25 m variado (crawl, costas, bruços)","desc. 30 s","Leve",100),
              B("Aquecimento","100 m crawl contínuo","","Leve",100),
              B("Teste","10 min contínuos de crawl. Anota a distância","Podes alternar com bruços se precisares","Moderado","300–500"),
-             B("Pernas","4 × 25 m pernas de costas","desc. 30 s","Leve",100),
+             B("Pernas","4 × 25 m pernas de costas (sem prancha)","desc. 30 s","Leve",100),
              B("Retorno à calma","100 m variado","","Leve",100) ],
     nota:"O teste não é para ir a fundo: nada a um ritmo que conseguisses manter mais 5 minutos." },
   { id:"s2", data:"2026-11-05", sem:1, nome:"Técnica + base", dur:"40 min", total:800,
@@ -382,13 +382,13 @@ const PLANO = [
   { id:"s3", data:"2026-11-09", sem:2, nome:"Resistência", dur:"45 min", total:900,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Principal","3 × 8 piscinas: 4 crawl + 4 bruços","desc. 60 s","Moderado",600),
-             B("Pernas","4 piscinas pernas de costas","","Leve",100),
+             B("Pernas","4 piscinas pernas de costas (sem prancha: de costas, braços junto ao corpo)","","Leve",100),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
   { id:"s4", data:"2026-11-11", sem:2, nome:"Técnica + base", dur:"45 min", total:1000,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Crawl curto","6 × 2 piscinas crawl","desc. 30 s","Moderado",300),
              B("Principal","4 × 4 piscinas: 2 crawl + 2 bruços","desc. 40 s","Moderado",400),
-             B("Pernas","4 piscinas pernas de costas","","Leve",100),
+             B("Pernas","4 piscinas pernas de costas (sem prancha: de costas, braços junto ao corpo)","","Leve",100),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
   { id:"s5", data:"2026-11-13", sem:2, nome:"Intervalos", dur:"40 min", total:900,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
@@ -405,7 +405,7 @@ const PLANO = [
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
              B("Técnica","6 × 2 piscinas crawl: braçada longa, cabeça baixa","desc. 20 s","Leve",300),
              B("Principal","5 × 4 piscinas crawl","desc. 30 s","Moderado",500),
-             B("Pernas","4 piscinas pernas de costas","","Leve",100),
+             B("Pernas","4 piscinas pernas de costas (sem prancha: de costas, braços junto ao corpo)","","Leve",100),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
   { id:"s8", data:"2026-11-20", sem:3, nome:"Intervalos", dur:"45 min", total:1000,
     blocos:[ B("Aquecimento","4 piscinas variadas, devagar","","Leve",100),
@@ -421,7 +421,7 @@ const PLANO = [
     blocos:[ B("Aquecimento","8 piscinas variadas, devagar","","Leve",200),
              B("Técnica","8 × 1 piscina crawl técnica","desc. 20 s","Leve",200),
              B("Principal","6 × 4 piscinas crawl","desc. 25 s","Moderado",600),
-             B("Pernas","4 × 2 piscinas pernas","desc. 30 s","Moderado",200),
+             B("Pernas","4 × 2 piscinas pernas de costas (sem prancha)","desc. 30 s","Moderado",200),
              B("Retorno à calma","4 piscinas variadas","","Leve",100) ] },
   { id:"s11", data:"2026-11-27", sem:4, nome:"Intervalos", dur:"45 min", total:1200,
     blocos:[ B("Aquecimento","8 piscinas variadas, devagar","","Leve",200),
@@ -995,7 +995,7 @@ function conquistas(){
   const feriados=[...new Set(A.filter(x=>FERIADOS_MZ.includes(x.data.slice(5))).map(x=>x.data))];
   const aniv=DADOS.perfil.aniversario; const anivD=aniv?[...new Set(A.filter(x=>x.data.slice(5)===aniv).map(x=>x.data))]:[];
   /* recordes batidos por treino (natação) */
-  const metr=[[x=>piscinasDe(x)],[x=>x.duracao],[x=>secs(x.nadar)],[x=>x.blocoMax],[x=>x.crawl25,1],[x=>secs(x.parado),1],[x=>x.kcal],[x=>x.teste10]];
+  const metr=[[x=>piscinasDe(x)],[x=>x.duracao],[x=>secs(x.nadar)],[x=>x.blocoMax],[x=>x.crawl25,1],[x=>secs(x.parado),1],[x=>x.kcal],[x=>x.teste10],[x=>ritmoSeg(x),1],[x=>x.estilos&&x.estilos.crawl]];
   const recPorTreino=S.map((x,i)=>{if(!i)return{x,n:0};const ant=S.slice(0,i);let n=0;
     metr.forEach(([f,menor])=>{const v=f(x);if(!v)return;const vs=ant.map(f).filter(Boolean);if(!vs.length)return;if(menor?v<Math.min(...vs):v>Math.max(...vs))n++;});return{x,n};});
   const superacao=recPorTreino.filter(r=>r.n>=1).map(r=>r.x.data), hat=recPorTreino.find(r=>r.n>=3);
@@ -1113,6 +1113,8 @@ function recordes(){
   if(r=best(x=>x.duracao)) out.push({ic:"timer",t:"Treino mais longo",v:fmtMin(r.v),s:"tempo total na piscina",data:r.x.data});
   if(r=best(x=>secs(x.nadar))) out.push({ic:"wave",t:"Mais tempo a nadar",v:mmss(r.v),s:"sem contar paragens",data:r.x.data});
   if(r=best(x=>x.blocoMax)) out.push({ic:"star",t:"Maior bloco sem parar",v:r.v+" piscinas",s:(r.v*25)+" m seguidos",data:r.x.data});
+  if(r=best(x=>ritmoSeg(x),true)) out.push({ic:"bolt",t:"Ritmo mais rápido a nadar",v:mmss(r.v)+" /100 m",s:"sem contar paragens",data:r.x.data});
+  if(r=best(x=>x.estilos&&x.estilos.crawl)) out.push({ic:"wave",t:"Mais crawl num treino",v:r.v+" m",s:(r.v/25)+" piscinas de crawl",data:r.x.data});
   if(r=best(x=>x.crawl25,true)) out.push({ic:"bolt",t:"Piscina de crawl mais rápida",v:r.v+" s",s:"25 m",data:r.x.data});
   if(r=best(x=>secs(x.parado),true)) out.push({ic:"timer",t:"Menos tempo parado",v:mmss(r.v),s:"num treino",data:r.x.data});
   if(r=best(x=>x.teste10)) out.push({ic:"flag",t:"Teste de 10 minutos",v:r.v+" m",s:(r.v/25)+" piscinas",data:r.x.data});
@@ -1163,6 +1165,8 @@ function evolucaoView(pb){
     ["Distância",x=>x.distancia,v=>v+" m",false],
     ["Tempo a nadar",x=>secs(x.nadar),v=>mmss(v),false],
     ["Tempo parado",x=>secs(x.parado),v=>mmss(v),true],
+    ["Ritmo a nadar",x=>ritmoSeg(x),v=>mmss(v),true],
+    ["Crawl",x=>x.estilos&&x.estilos.crawl,v=>v+" m",false],
     ["Maior bloco",x=>x.blocoMax,v=>v+" pisc.",false],
     ["Freq. cardíaca média",x=>x.fcMedia,v=>v+" bpm",true],
     ["Calorias",x=>x.kcal,v=>v,false]

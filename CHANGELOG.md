@@ -7,6 +7,12 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.8.2 — 11 Nov 2026
+- Novos recordes pessoais: **Ritmo mais rápido a nadar** (por 100 m, sem contar paragens) e **Mais crawl num treino**. Os dois também contam para a conquista Superação.
+- Tabela "Treino a treino": novas linhas **Ritmo a nadar** e **Crawl**.
+- Plano: os blocos de pernas passam a explicar que se fazem **de costas e sem prancha** (braços junto ao corpo), porque o Bruno ainda não tem prancha.
+- Dados: treino de 11 Nov (sessão 4).
+
 ## v1.8.1 — 11 Nov 2026
 - A conquista genérica "Um número abaixo" deu lugar a duas conquistas concretas: **Calças 42** e **Calças 40**. Ficam por ganhar mostrando o tamanho actual (44), e são marcadas quando o Bruno disser que lhe servem.
 - Dados: data de aniversário (para "Aniversário activo"), tamanho de calças actual, 4 piscinas seguidas só em crawl a 3 Nov e maior bloco de 6:49 a 9 Nov.
