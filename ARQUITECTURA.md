@@ -69,3 +69,13 @@ Um tipo novo usa a sua entrada em `CATS`. As conquistas com `cat` igual a esse t
   - `blocoTempo`: duração do maior bloco sem parar.
   - `corridaSeguida`: minutos seguidos a correr.
 - **Semana cumprida**: todas as sessões do plano dessa semana; se não houver plano, 3 ou mais treinos de qualquer tipo.
+
+## Actualizar dados (várias conversas)
+
+Os dados podem ser actualizados a partir de mais do que uma conversa com o Claude. Antes de mexer nos dados:
+
+1. `git pull` no repositório.
+2. Desencriptar o `dados.enc.json` do GitHub para a cópia local de trabalho, que nunca vai para o repositório.
+3. Só depois acrescentar o que é novo, voltar a encriptar e fazer o commit.
+
+Nunca editar a partir de uma cópia local antiga: isso apagaria os registos feitos noutras conversas.
