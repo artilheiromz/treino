@@ -7,6 +7,34 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.9.0 — 18 Nov 2026
+**Musculação** entra na app como novo tipo de exercício (cor laranja), com os treinos da academia do Bruno.
+- **Plano de ginásio a partir de 1 Dez:** terça, quinta e sábado. Natação continua à segunda, quarta e sexta.
+  - **Treino A (terça), peito, ombros e tríceps:** supino reto, supino inclinado, supino na máquina, desenvolvimento na Smith, elevação lateral e tríceps na polia.
+  - **Treino B (quinta), pernas, sem agachamento, para poupar os joelhos:** cadeira abdutora, cadeira flexora, stiff adaptado, cadeira extensora, leg press 45° e panturrilha no leg press.
+  - **Treino C (sábado), costas, bíceps e abdominais:** puxada pronada, remada baixa com triângulo, remada baixa com barra, face pull, rosca alternada, prancha e abdominal (crunch).
+- **Estrutura de cada treino:**
+  - aquecimento de 8–10 min (bicicleta reclinada com encosto, ou passadeira);
+  - exercícios de 3 × 10 com descanso de 60–90 s;
+  - alongamento de 5 min, com lista para ir marcando.
+- **Ficha de cada exercício** (toca no exercício):
+  - animação própria: uma figura que faz o movimento, com o músculo trabalhado a laranja;
+  - músculos, séries, passos de "Como fazer", "Atenção" e equipamento;
+  - última carga e recorde;
+  - botões Anterior e Seguinte para usar no ginásio.
+- **No dia de ginásio:**
+  - checklist "Antes de começar";
+  - números para marcar cada exercício feito;
+  - resumo do treino registado: tempo, kcal, frequência cardíaca, volume levantado e cargas por exercício.
+- **Separador Plano:** passa a "Plano de treino", com os dias de ginásio nas semanas e uma secção "Plano de ginásio" com os três treinos e as fichas.
+- **Conquistas de musculação:**
+  - Primeira série, Ciclo completo (A, B e C na mesma semana) e Habitué do ginásio (10/25/50 treinos);
+  - Mais peso, Carga dobrada, 5 toneladas num treino, 50 e 250 toneladas no total, e Todos os exercícios;
+  - geral: Semana de ferro (3 natação + 3 ginásio na mesma semana).
+- **Recordes de musculação:** mais peso levantado num treino e treino de ginásio mais longo. Na Evolução, um cartão "Cargas máximas" por exercício.
+- **Início:** mostra o treino de ginásio do dia e o próximo treino (natação ou ginásio). O cartão da semana conta os treinos de ginásio.
+- **Registo de dados:** `{tipo:"musculacao", treino:"A", ex:{supino:[20,20,25], …}}`, com as cargas em kg por série.
+
 ## v1.8.2 — 11 Nov 2026
 - Novos recordes pessoais: **Ritmo mais rápido a nadar** (por 100 m, sem contar paragens) e **Mais crawl num treino**. Os dois também contam para a conquista Superação.
 - Tabela "Treino a treino": novas linhas **Ritmo a nadar** e **Crawl**.

@@ -31,6 +31,7 @@
   --walk:#b59cf5;
   --walk-soft:rgba(181,156,245,.16);
   --warm:#f2b456;
+  --gym:#ffb46b;
   --good:#5fd08a;
   --display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -190,7 +191,7 @@ nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(
 /* ===== Tema vidro (v1.2.0): fundo de água azul + superfícies translúcidas ===== */
 :root{--bg:#052b45;--surface:rgba(255,255,255,.13);--surface-2:rgba(255,255,255,.2);--line:rgba(255,255,255,.28);
   --ink:#ffffff;--ink-2:rgba(255,255,255,.92);--muted:rgba(255,255,255,.8);--accent:#b8f6ff;--accent-soft:rgba(255,255,255,.22);
-  --walk:#e4dbff;--walk-soft:rgba(214,200,255,.16);--warm:#ffd27a;--good:#9dffc4;
+  --walk:#e4dbff;--walk-soft:rgba(214,200,255,.16);--gym:#ffcf9a;--warm:#ffd27a;--good:#9dffc4;
   --glass-bg:rgba(255,255,255,.13);--glass-strong:rgba(255,255,255,.2);--glass-line:rgba(255,255,255,.28);
   --glass-blur:blur(26px) saturate(170%);--glass-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 10px 28px rgba(2,16,30,.22);
   --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Atkinson Hyperlegible",system-ui,sans-serif;
@@ -326,6 +327,41 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 .medbig{display:flex;justify-content:center}.medbig .med{filter:drop-shadow(0 18px 40px rgba(0,0,0,.6))}
 .medleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:rgba(255,255,255,.85)}.medleg span{display:inline-flex;align-items:center;gap:6px}.medleg i,.catdot{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
 .medd{text-align:center;margin-top:16px;font-weight:700;font-size:16px}
+/* v1.9.0 — Musculação */
+.hero.gym{border-color:rgba(255,207,154,.65)}
+.result.gymr{background:rgba(255,191,122,.13);border-color:rgba(255,207,154,.5)}
+.wd .dot.gym{border-color:var(--gym);background:transparent}
+.srow.g .t{color:var(--gym)}
+.exr{display:flex;align-items:center;gap:10px}
+.exr .nb{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.45);cursor:pointer;font:inherit;font-weight:800}
+.exr.ok .nb{background:#9dffc4;border-color:#9dffc4;color:#06324d}
+.exb{flex:1;min-width:0;display:flex;align-items:center;gap:12px;text-align:left;color:#fff;font:inherit;padding:8px 12px 8px 8px;border-radius:20px;border:1px solid var(--glass-border,rgba(255,255,255,.35));background:var(--glass-bg,rgba(255,255,255,.14));cursor:pointer;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.exr.ok .exb{opacity:.7}
+.exb .col{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}.exb b{font-size:16px;line-height:1.2}
+.exb .set{font-size:14px;color:rgba(255,255,255,.9)}.exb .mus{font-size:12.5px;color:var(--gym)}
+.exb .go,.srow .go{font-size:22px;opacity:.6}
+.thumb{flex:none;border-radius:14px;background:rgba(6,30,48,.45);display:grid;place-items:center;overflow:hidden}
+.thumb .fig{display:block}
+.fig .b{stroke:rgba(255,255,255,.95);stroke-linecap:round;fill:none}
+.fig .f{stroke:rgba(255,255,255,.4);stroke-linecap:round;fill:none}
+.fig .tr{fill:rgba(255,255,255,.95);stroke:rgba(255,255,255,.95);stroke-width:6;stroke-linejoin:round}
+.fig .hd{fill:rgba(255,255,255,.95)}
+.fig .m{stroke:#ff7a52;stroke-linecap:round;fill:none}
+.fig .m2{stroke:#ffb59a;stroke-linecap:round;fill:none;opacity:.85}
+.fig .eq{stroke:rgba(184,232,255,.7);stroke-linecap:round;fill:none}
+.fig .eqf{fill:rgba(184,232,255,.85);stroke:rgba(184,232,255,.85)}
+.srow.exs{display:flex;align-items:center;gap:12px;text-align:left}
+.srow.exs .t{flex:1;display:flex;flex-direction:column}
+.cartao.exov{padding:calc(56px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));overflow-y:auto;display:block}
+.exfig{display:flex;justify-content:center}.exfig .fig{width:100%;max-width:340px;height:auto;border-radius:24px;background:rgba(255,255,255,.06)}
+.mchips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}
+.mchip{font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.85)}
+.mchip.m{border-color:#ff7a52;color:#ffb59a}
+.exset{text-align:center;margin-top:12px;display:flex;flex-direction:column;gap:2px}.exset b{font-size:20px}.exset span{font-size:13px;color:rgba(255,255,255,.7)}
+.exbox{max-width:420px;margin:16px auto 0;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14)}
+.exbox h3{margin:0 0 8px;font-size:15px}.exbox ol,.exbox ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.4}
+.exbox.warn{border-color:rgba(255,210,122,.4)}
+.exnav{max-width:420px;margin:18px auto 0;display:flex;justify-content:space-between}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -360,7 +396,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.8.2"; // ver CHANGELOG.md
+const VERSAO = "1.9.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -440,6 +476,296 @@ const NSEM=Object.keys(SEMANAS).map(Number);
 const CAMINHADA = { nome:"Caminhada", alvo:"30–45 min", obj:60,
   passos:["Ritmo em que consigas falar, mas sintas a respiração mais activa","Primeiros 5 min devagar para aquecer","Apple Watch: Caminhada ao ar livre","Sapatilhas confortáveis e água"] };
 
+/* ===== MUSCULAÇÃO (v1.9.0) =====
+   Tipo de exercício novo. Plano A/B/C (terça, quinta, sábado) a partir de GIN_INI.
+   Biblioteca de exercícios com animação própria (figura simples em SVG, músculo destacado),
+   passos de execução e cuidados. Registos: {tipo:"musculacao", treino:"A", ex:{id:[kg,kg,kg]}, ...} */
+const GIN_INI="2026-12-01";
+const TIPOS={
+  natacao:{nome:"Natação",curto:"natação",cor:"var(--accent)"},
+  caminhada:{nome:"Caminhada",curto:"caminhada",cor:"var(--walk)"},
+  musculacao:{nome:"Musculação",curto:"ginásio",cor:"var(--gym)"}
+};
+const gyms=()=>ACT().filter(a=>a.tipo==="musculacao");
+
+/* --- Animações: poses-chave com pontos nomeados; a app interpola entre elas --- */
+const V=(x,y)=>[x,y];
+const ST={hd:V(102,12),sh:V(101,26),hp:V(100,74),kn:V(101,107),an:V(100,140),to:V(112,141),el:V(102,52),ha:V(103,77)}; // em pé, de lado
+const FR={hd:V(100,14),shL:V(86,30),shR:V(114,30),hpL:V(92,76),hpR:V(108,76),knL:V(91,108),knR:V(109,108),anL:V(90,140),anR:V(110,140)}; // em pé, de frente
+const SEAT={hd:V(83,42),sh:V(82,56),hp:V(80,104),kn:V(116,106),an:V(118,138),to:V(129,139)};
+const eqL=(a,b,w=5)=>`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" class="eq" stroke-width="${w}"/>`;
+const eqC=(c,r,f)=>`<circle cx="${c[0]}" cy="${c[1]}" r="${r}" class="${f?"eqf":"eq"}" stroke-width="2.5"/>`;
+const chao=y=>eqL(V(20,y),V(185,y),2);
+const plate=p=>eqC(p,11,1)+`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="#0a1c2e"/>`;
+const halter=p=>eqL(V(p[0]-9,p[1]),V(p[0]+9,p[1]),4)+eqC(V(p[0]-9,p[1]),4.5,1)+eqC(V(p[0]+9,p[1]),4.5,1);
+const ANIM={
+  supino:{dur:2600,kf:[{el:V(70,84),ha:V(70,60)},{el:V(80,124),ha:V(74,100)}],
+    base:{hd:V(52,104),sh:V(68,108),hp:V(118,110),kn:V(150,96),an:V(152,130),to:V(163,131)},
+    musc:[["sh","hp",0,.38,17,1],["sh","el",0,.9,9,2]],
+    back:()=>chao(132)+eqL(V(42,117),V(138,117),7)+eqL(V(52,120),V(52,132),4)+eqL(V(128,120),V(128,132),4),front:p=>plate(p.ha)},
+  supinoInc:{dur:2600,kf:[{el:V(88,48),ha:V(88,24)},{el:V(104,90),ha:V(96,68)}],
+    base:{hd:V(76,58),sh:V(84,72),hp:V(112,112),kn:V(146,104),an:V(150,136),to:V(161,137)},
+    musc:[["sh","hp",0,.32,17,1],["sh","el",0,.9,9,2]],
+    back:()=>chao(138)+eqL(V(78,62),V(120,118),7)+eqL(V(110,120),V(140,120),7)+eqL(V(122,122),V(122,138),4),front:p=>plate(p.ha)},
+  supinoMaq:{dur:2600,kf:[{el:V(70,80),ha:V(100,64)},{el:V(108,64),ha:V(134,62)}],base:SEAT,
+    musc:[["sh","hp",0,.38,17,1],["sh","el",0,.9,9,2]],
+    back:()=>chao(140)+eqL(V(68,40),V(68,110),7)+eqL(V(64,112),V(110,112),7)+eqL(V(166,14),V(166,140),6),
+    front:p=>eqL(V(p.ha[0],p.ha[1]-9),V(p.ha[0],p.ha[1]+9),6)+eqL(p.ha,V(166,p.ha[1]),2)},
+  desenvSmith:{dur:2600,kf:[{el:V(112,72),ha:V(104,50)},{el:V(101,30),ha:V(98,8)}],
+    base:{hd:V(92,42),sh:V(91,56),hp:V(90,104),kn:V(124,106),an:V(126,138),to:V(137,139)},
+    musc:[["sh","el",0,.6,13,1],["el","ha",0,.4,8,2]],
+    back:()=>chao(140)+eqL(V(77,40),V(79,110),7)+eqL(V(74,112),V(116,112),7)+eqL(V(102,0),V(102,140),2),front:p=>eqC(p.ha,6,1)},
+  elevLat:{view:"f",dur:2400,kf:[{elL:V(83,54),haL:V(82,78),elR:V(117,54),haR:V(118,78)},{elL:V(62,32),haL:V(38,34),elR:V(138,32),haR:V(162,34)}],base:FR,
+    musc:[["shL","elL",0,.55,12,1],["shR","elR",0,.55,12,1]],back:()=>chao(142),front:p=>halter(p.haL)+halter(p.haR)},
+  tricepsPolia:{dur:2200,kf:[{ha:V(115,32)},{ha:V(104,78)}],base:{...ST,hd:V(99,13),sh:V(96,27),el:V(98,52)},
+    musc:[["sh","el",0,1,10,1]],back:()=>chao(142)+eqL(V(158,0),V(158,142),6)+eqC(V(150,6),5),front:p=>eqL(V(150,6),p.ha,2)+eqL(V(p.ha[0]-6,p.ha[1]),V(p.ha[0]+6,p.ha[1]),5)},
+  abdutora:{view:"f",dur:2400,kf:[{knL:V(94,108),knR:V(106,108),anL:V(94,138),anR:V(106,138)},{knL:V(70,104),knR:V(130,104),anL:V(76,136),anR:V(124,136)}],
+    base:{hd:V(100,26),shL:V(86,40),shR:V(114,40),hpL:V(90,90),hpR:V(110,90),elL:V(80,64),haL:V(78,88),elR:V(120,64),haR:V(122,88)},
+    musc:[["hpL","knL",0,.6,11,1],["hpR","knR",0,.6,11,1]],back:()=>chao(142)+eqL(V(74,96),V(126,96),7),
+    front:p=>eqL(V(p.knL[0]-5,p.knL[1]-8),V(p.knL[0]-5,p.knL[1]+8),6)+eqL(V(p.knR[0]+5,p.knR[1]-8),V(p.knR[0]+5,p.knR[1]+8),6)},
+  flexora:{dur:2400,kf:[{an:V(149,104),to:V(152,93)},{an:V(112,132),to:V(123,134)}],base:{hd:V(75,34),sh:V(76,48),hp:V(80,96),kn:V(116,98),el:V(84,72),ha:V(100,86)},
+    musc:[["hp","kn",0,1,13,1],["kn","an",0,.5,10,2]],back:()=>chao(142)+eqL(V(62,36),V(70,100),7)+eqL(V(64,103),V(118,103),7),
+    front:p=>eqL(V(96,89),V(120,91),6)+eqC(V(p.an[0]+1,p.an[1]+6),6,1)},
+  stiff:{dur:3000,kf:[{hd:V(103,12),sh:V(102,26),hp:V(100,74),kn:V(102,107),el:V(103,52),ha:V(104,76)},{hd:V(144,46),sh:V(131,53),hp:V(88,78),kn:V(100,108),el:V(132,79),ha:V(133,104)}],
+    base:{an:V(100,140),to:V(112,141)},musc:[["hp","kn",0,1,13,1],["sh","hp",.65,1,16,2]],back:()=>chao(142),front:p=>plate(p.ha)},
+  extensora:{dur:2400,kf:[{an:V(118,132),to:V(129,134)},{an:V(150,92),to:V(153,81)}],base:{hd:V(77,34),sh:V(78,48),hp:V(80,96),kn:V(116,98),el:V(82,72),ha:V(98,90)},
+    musc:[["hp","kn",0,1,13,1]],back:()=>chao(142)+eqL(V(64,36),V(70,100),7)+eqL(V(64,103),V(118,103),7),front:p=>eqC(V(p.an[0]+5,p.an[1]+2),6,1)},
+  legPress:{dur:2800,kf:[{kn:V(84,74),an:V(112,66),to:V(118,56)},{kn:V(99,85),an:V(123,61),to:V(129,52)}],
+    base:{hd:V(33,61),sh:V(42,72),hp:V(74,110),el:V(56,96),ha:V(70,108)},musc:[["hp","kn",0,1,13,1],["kn","an",0,.4,10,2]],
+    back:()=>chao(140)+eqL(V(30,62),V(76,114),7)+eqL(V(60,118),V(92,118),7)+eqL(V(96,124),V(186,34),3),
+    front:p=>eqL(V(p.an[0]-11,p.an[1]-11),V(p.an[0]+11,p.an[1]+11),6)},
+  panturrilha:{dur:1800,kf:[{an:V(123,61),to:V(130,52)},{an:V(121,63),to:V(135,47)}],
+    base:{hd:V(33,61),sh:V(42,72),hp:V(74,110),kn:V(99,85),el:V(56,96),ha:V(70,108)},musc:[["kn","an",0,1,11,1]],
+    back:()=>chao(140)+eqL(V(30,62),V(76,114),7)+eqL(V(60,118),V(92,118),7)+eqL(V(96,124),V(186,34),3),
+    front:p=>eqL(V(p.to[0]-11,p.to[1]-11),V(p.to[0]+11,p.to[1]+11),6)},
+  puxada:{dur:2600,kf:[{el:V(94,32),ha:V(100,8)},{el:V(80,84),ha:V(96,58)}],base:{hd:V(86,43),sh:V(88,57),hp:V(90,104),kn:V(124,104),an:V(126,136),to:V(137,137)},
+    musc:[["sh","hp",.1,.75,18,1],["el","sh",0,.5,9,2]],back:()=>chao(140)+eqL(V(76,110),V(126,110),7)+eqL(V(110,95),V(134,95),6),
+    front:p=>eqL(V(100,0),p.ha,2)+eqC(p.ha,4,1)},
+  remadaTri:{dur:2600,kf:[{el:V(98,70),ha:V(122,76)},{el:V(60,80),ha:V(86,88)}],base:{hd:V(75,46),sh:V(74,60),hp:V(70,108),kn:V(104,96),an:V(134,104),to:V(138,92)},
+    musc:[["sh","hp",.05,.7,18,1],["sh","el",0,.9,9,2]],back:()=>chao(140)+eqL(V(46,114),V(102,114),7)+eqL(V(142,84),V(142,114),6),
+    front:p=>eqL(p.ha,V(150,100),2)+`<path d="M${p.ha[0]-5} ${p.ha[1]+5}L${p.ha[0]+5} ${p.ha[1]+5}L${p.ha[0]} ${p.ha[1]-5}Z" class="eq" stroke-width="2.5" fill="none"/>`},
+  remadaBaixa:{dur:2600,kf:[{el:V(98,68),ha:V(122,74)},{el:V(58,72),ha:V(86,80)}],base:{hd:V(75,46),sh:V(74,60),hp:V(70,108),kn:V(104,96),an:V(134,104),to:V(138,92)},
+    musc:[["sh","hp",.0,.55,18,1],["sh","el",0,.6,10,2]],back:()=>chao(140)+eqL(V(46,114),V(102,114),7)+eqL(V(142,84),V(142,114),6),
+    front:p=>eqL(p.ha,V(150,100),2)+eqL(V(p.ha[0],p.ha[1]-7),V(p.ha[0],p.ha[1]+7),5)},
+  facePull:{dur:2400,kf:[{el:V(116,24),ha:V(140,20)},{el:V(86,16),ha:V(102,8)}],base:{...ST,hd:V(90,12),sh:V(90,26),hp:V(92,74),kn:V(93,107),an:V(92,140),to:V(104,141)},
+    musc:[["sh","el",0,.55,12,1],["sh","hp",0,.25,16,2]],back:()=>chao(142)+eqL(V(170,0),V(170,142),6)+eqC(V(162,16),5),front:p=>eqL(V(162,16),p.ha,2)+eqL(V(p.ha[0],p.ha[1]-6),V(p.ha[0],p.ha[1]+6),4)},
+  rosca:{view:"f",dur:2600,kf:[{elL:V(84,56),haL:V(88,36),elR:V(116,56),haR:V(118,80)},{elL:V(84,56),haL:V(82,80),elR:V(116,56),haR:V(112,36)}],base:FR,
+    musc:[["shL","elL",.15,1,11,1],["shR","elR",.15,1,11,1]],back:()=>chao(142),front:p=>halter(p.haL)+halter(p.haR)},
+  prancha:{dur:3200,kf:[{hp:V(108,116)},{hp:V(108,118)}],base:{hd:V(42,104),sh:V(56,110),kn:V(130,124),an:V(152,130),to:V(155,138),el:V(56,136),ha:V(76,136)},
+    musc:[["sh","hp",.35,1,17,1]],back:()=>chao(139),front:()=>""},
+  abdominal:{dur:2400,kf:[{hd:V(40,126),sh:V(54,128),el:V(48,114),ha:V(40,122)},{hd:V(50,104),sh:V(62,114),el:V(54,98),ha:V(48,106)}],
+    base:{hp:V(100,130),kn:V(126,104),an:V(146,130),to:V(156,132)},musc:[["sh","hp",.15,.95,17,1]],back:()=>chao(137),front:()=>""},
+  bike:{dur:1800,loop:1,kf:[0,45,90,135,180,225,270,315].map(g=>{const r=g*Math.PI/180,c=[132,106];
+      return {an:V(c[0]+13*Math.cos(r),c[1]+13*Math.sin(r)),an2:V(c[0]-13*Math.cos(r),c[1]-13*Math.sin(r))};}),
+    base:{hd:V(44,48),sh:V(52,62),hp:V(76,104),el:V(64,86),ha:V(78,100)},ik:1,musc:[["hp","kn",0,1,13,1]],
+    back:()=>chao(142)+eqL(V(42,54),V(80,110),7)+eqL(V(64,112),V(96,112),7)+eqL(V(90,114),V(132,106),5)+eqL(V(132,106),V(122,140),5)+eqL(V(146,104),V(156,56),5)+eqC(V(132,106),13),front:()=>""},
+  passadeira:{dur:1600,loop:1,kf:[
+      {kn:V(110,104),an:V(116,134),to:V(127,135),kn2:V(90,106),an2:V(78,132),to2:V(88,138),el:V(92,50),ha:V(86,72),el2:V(106,50),ha2:V(116,70)},
+      {kn:V(100,106),an:V(98,138),to:V(110,138),kn2:V(104,102),an2:V(98,128),to2:V(108,128),el:V(98,50),ha:V(99,75),el2:V(100,50),ha2:V(101,75)},
+      {kn:V(90,106),an:V(78,132),to:V(88,138),kn2:V(110,104),an2:V(116,134),to2:V(127,135),el:V(106,50),ha:V(116,70),el2:V(92,50),ha2:V(86,72)},
+      {kn:V(104,102),an:V(98,128),to:V(108,128),kn2:V(100,106),an2:V(98,138),to2:V(110,138),el:V(100,50),ha:V(101,75),el2:V(98,50),ha2:V(99,75)}],
+    base:{hd:V(99,10),sh:V(98,24),hp:V(96,72)},musc:[],back:()=>eqL(V(48,143),V(160,143),7)+eqL(V(160,143),V(152,40),5)+eqL(V(152,44),V(132,50),5),front:()=>""}
+};
+function ikJoelho(h,a,L1=36,L2=34){const dx=a[0]-h[0],dy=a[1]-h[1],d=Math.min(Math.hypot(dx,dy),L1+L2-0.1);
+  const t=Math.acos((L1*L1+d*d-L2*L2)/(2*L1*d)),b=Math.atan2(dy,dx)-t;return V(h[0]+L1*Math.cos(b),h[1]+L1*Math.sin(b));}
+function poseEm(an,t){ // t em [0,1]: ida e volta (ou ciclo) pelas poses-chave
+  const k=an.kf, n=k.length; let i,f;
+  if(an.loop){const x=t*n;i=Math.floor(x)%n;f=x-Math.floor(x);}else{const x=t<.5?t*2:2-t*2;const e=x*x*(3-2*x);i=0;f=e;}
+  const A=k[i],B=an.loop?k[(i+1)%n]:k[1]||k[0],p={...an.base};
+  for(const key of new Set([...Object.keys(A),...Object.keys(B)])){const a=A[key]||B[key],b=B[key]||A[key];p[key]=V(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f);}
+  if(an.ik){p.kn=ikJoelho(p.hp,p.an);p.kn2=ikJoelho(p.hp,p.an2);p.to=V(p.an[0]+10,p.an[1]-4);p.to2=V(p.an2[0]+10,p.an2[1]-4);}
+  return p;
+}
+function desenharFig(an,p){
+  const L=(a,b,w,c)=>a&&b?`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" class="${c}" stroke-width="${w}"/>`:"";
+  const seg=(m)=>{const a=p[m[0]],b=p[m[1]];if(!a||!b)return"";const q=t=>V(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t);return L(q(m[2]),q(m[3]),m[4],m[5]===1?"m":"m2");};
+  let s=an.back(p);
+  if(an.view==="f"){
+    s+=L(p.hpL,p.knL,12,"b")+L(p.knL,p.anL,10,"b")+L(p.hpR,p.knR,12,"b")+L(p.knR,p.anR,10,"b");
+    s+=`<path d="M${p.shL} L${p.shR} L${p.hpR} L${p.hpL}Z" class="tr"/>`;
+    s+=L(p.shL,p.elL,9,"b")+L(p.elL,p.haL,8,"b")+L(p.shR,p.elR,9,"b")+L(p.elR,p.haR,8,"b");
+    s+=`<circle cx="${p.hd[0]}" cy="${p.hd[1]}" r="9" class="hd"/>`;
+  } else {
+    s+=L(p.sh,p.el2,8,"f")+L(p.el2,p.ha2,7,"f")+L(p.hp,p.kn2,11,"f")+L(p.kn2,p.an2,9,"f")+L(p.an2,p.to2,6,"f");
+    s+=L(p.hp,p.kn,13,"b")+L(p.kn,p.an,11,"b")+L(p.an,p.to,7,"b")+L(p.sh,p.hp,17,"b")+L(p.sh,p.hd,7,"b");
+    s+=`<circle cx="${p.hd[0].toFixed(1)}" cy="${p.hd[1].toFixed(1)}" r="9" class="hd"/>`;
+    s+=L(p.sh,p.el,10,"b")+L(p.el,p.ha,9,"b");
+  }
+  s+=an.musc.map(seg).join("");
+  s+=an.front(p);
+  return s;
+}
+function svgEx(id,px,anim){
+  const an=ANIM[(EX[id]||{}).anim||id]; if(!an) return "";
+  return `<svg class="fig" ${anim?`data-anim="${(EX[id]||{}).anim||id}"`:""} viewBox="0 0 200 150" width="${px}" height="${Math.round(px*.75)}" aria-hidden="true"><g>${desenharFig(an,poseEm(an,anim?0:.5))}</g></svg>`;
+}
+let animRaf=0;
+function animarFichas(root){
+  cancelAnimationFrame(animRaf);
+  const els=[...root.querySelectorAll("svg[data-anim]")]; if(!els.length) return;
+  const reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const t0=performance.now();
+  const passo=now=>{els.forEach(svg=>{if(!svg.isConnected)return;const an=ANIM[svg.dataset.anim];const t=reduz?.5:((now-t0)%an.dur)/an.dur;svg.firstChild.innerHTML=desenharFig(an,poseEm(an,t));});
+    if(!reduz&&els.some(e=>e.isConnected)) animRaf=requestAnimationFrame(passo);};
+  animRaf=requestAnimationFrame(passo);
+}
+
+/* --- Biblioteca de exercícios --- */
+const EX={
+  supino:{nome:"Supino reto com barra",musc:"Peito",sec:"Tríceps e ombros (frente)",equip:"Banco reto e barra",
+    passos:["Deita-te no banco com os olhos por baixo da barra e os pés bem assentes no chão.","Agarra a barra um pouco mais aberto do que a largura dos ombros.","Tira a barra do suporte e desce-a devagar até tocar ao de leve no meio do peito.","Empurra para cima até os braços ficarem esticados, sem trancar os cotovelos."],
+    cuidado:["As costas e o rabo ficam sempre encostados ao banco.","Começa só com a barra, ou pede a alguém que fique atrás de ti (ajuda)."]},
+  supinoInc:{nome:"Supino inclinado com barra",musc:"Peito (parte de cima)",sec:"Ombros (frente) e tríceps",equip:"Banco inclinado e barra",
+    passos:["Encosta-te ao banco inclinado (cerca de 30°) com os pés no chão.","Agarra a barra um pouco mais aberto do que os ombros.","Desce a barra devagar até à parte de cima do peito, perto das clavículas.","Empurra para cima até esticar os braços."],
+    cuidado:["Não arqueies as costas para ajudar a subir.","Usa menos peso do que no supino reto."]},
+  supinoMaq:{nome:"Supino na máquina",musc:"Peito",sec:"Tríceps e ombros (frente)",equip:"Máquina de peito (sentado)",
+    passos:["Ajusta o banco para os punhos ficarem à altura do meio do peito.","Senta-te com as costas bem encostadas.","Empurra os punhos para a frente até esticar os braços.","Volta devagar até sentires o peito a alongar."],
+    cuidado:["Ombros para baixo e para trás, longe das orelhas.","A volta é tão importante como a ida: 2 a 3 segundos."]},
+  desenvSmith:{nome:"Desenvolvimento na máquina Smith",musc:"Ombros",sec:"Tríceps",equip:"Máquina Smith (barra guiada) e banco com encosto",
+    passos:["Põe o banco com encosto vertical por baixo da barra.","Senta-te com as costas encostadas; a barra começa à altura do queixo.","Empurra a barra para cima até quase esticar os braços.","Desce devagar até ao queixo."],
+    cuidado:["Não deixes a barra descer atrás da cabeça.","Se os ombros doerem, encurta o movimento."]},
+  elevLat:{nome:"Elevação lateral com halteres",musc:"Ombros (lado)",sec:"Trapézio",equip:"Dois halteres leves",
+    passos:["Em pé, com um halter em cada mão ao lado do corpo.","Cotovelos ligeiramente dobrados.","Sobe os braços pelos lados até à altura dos ombros.","Desce devagar."],
+    cuidado:["Usa halteres leves: este exercício engana.","Não balances o corpo para ajudar."]},
+  tricepsPolia:{nome:"Tríceps na polia",musc:"Tríceps (parte de trás do braço)",sec:"",equip:"Polia alta com barra ou corda",
+    passos:["De frente para a polia, agarra a barra com as palmas para baixo.","Cotovelos colados ao corpo.","Empurra a barra para baixo até esticar os braços.","Volta devagar até aos cotovelos ficarem a 90°."],
+    cuidado:["Só os antebraços se mexem; os cotovelos ficam parados.","Corpo direito, sem te inclinares sobre a barra."]},
+  abdutora:{nome:"Cadeira abdutora",musc:"Glúteos (lado da anca)",sec:"",equip:"Máquina abdutora",
+    passos:["Senta-te com as costas encostadas e as almofadas por fora dos joelhos.","Abre as pernas devagar, empurrando para fora.","Segura 1 segundo aberto.","Fecha devagar, sem deixar os pesos bater."],
+    cuidado:["Movimento controlado, sem impulso.","Agarra os punhos da máquina para ficares estável."]},
+  flexora:{nome:"Cadeira flexora",musc:"Parte de trás da coxa",sec:"Gémeos",equip:"Máquina flexora (sentado)",
+    passos:["Senta-te com a almofada por cima das coxas e o rolo por trás dos tornozelos.","Joelhos alinhados com o eixo da máquina.","Dobra os joelhos, puxando o rolo para baixo e para trás.","Volta devagar até quase esticar."],
+    cuidado:["A anca não sai do banco.","Não deixes o peso cair na volta."]},
+  stiff:{nome:"Stiff adaptado",musc:"Parte de trás da coxa e glúteos",sec:"Lombar",equip:"Barra leve ou halteres",
+    passos:["Em pé, pés à largura da anca, barra junto às coxas.","Joelhos ligeiramente dobrados (e ficam assim).","Leva a anca para trás e desce a barra junto às pernas até abaixo dos joelhos.","Volta a subir empurrando a anca para a frente."],
+    cuidado:["Costas sempre direitas: se arredondarem, desce menos.","Começa muito leve. Se sentires a lombar, pára e diz ao Claude."]},
+  extensora:{nome:"Cadeira extensora",musc:"Frente da coxa (quadríceps)",sec:"",equip:"Máquina extensora",
+    passos:["Senta-te com as costas encostadas e o rolo à frente dos tornozelos.","Joelhos alinhados com o eixo da máquina.","Estica as pernas até ficarem quase direitas.","Desce devagar até 90°."],
+    cuidado:["Agarra os punhos ao lado do banco.","Peso moderado: é um exercício que carrega o joelho."]},
+  legPress:{nome:"Leg press 45°",musc:"Coxas e glúteos",sec:"Gémeos",equip:"Máquina leg press 45°",
+    passos:["Senta-te com as costas e a cabeça encostadas.","Pés na plataforma à largura dos ombros.","Solta as travas e dobra os joelhos devagar até cerca de 90°.","Empurra a plataforma até quase esticar as pernas."],
+    cuidado:["Nunca trancar os joelhos no fim.","O rabo não levanta do banco quando desces."]},
+  panturrilha:{nome:"Panturrilha no leg press",musc:"Gémeos (barriga da perna)",sec:"",equip:"Máquina leg press 45°",
+    passos:["Na leg press, pernas quase esticadas.","Só a parte da frente dos pés (pontas) fica na plataforma.","Empurra com as pontas dos pés, esticando os tornozelos.","Volta devagar, deixando os calcanhares descer."],
+    cuidado:["Os joelhos não dobram durante o exercício.","Mantém as travas perto para segurança."]},
+  puxada:{nome:"Puxada pronada",musc:"Costas (dorsais)",sec:"Bíceps",equip:"Máquina de puxada (polia alta)",
+    passos:["Senta-te com as coxas presas pela almofada.","Agarra a barra larga com as palmas viradas para a frente.","Puxa a barra até à parte de cima do peito, levando os cotovelos para baixo.","Sobe devagar até esticar os braços."],
+    cuidado:["Peito para cima, sem balançar o corpo para trás.","Nunca puxar a barra por trás da cabeça."]},
+  remadaTri:{nome:"Remada baixa com triângulo",musc:"Costas (meio)",sec:"Bíceps",equip:"Polia baixa com pega em triângulo",
+    passos:["Senta-te com os pés na plataforma e os joelhos ligeiramente dobrados.","Agarra o triângulo com os braços esticados e as costas direitas.","Puxa até à barriga, juntando as omoplatas.","Volta devagar, sem arredondar as costas."],
+    cuidado:["O tronco fica direito: são os braços e as costas que trabalham.","Não te deites para trás para puxar."]},
+  remadaBaixa:{nome:"Remada baixa (barra)",musc:"Costas (parte de cima e meio)",sec:"Ombros (trás) e bíceps",equip:"Polia baixa com barra",
+    passos:["Mesma posição da remada com triângulo.","Agarra a barra mais aberto, com as palmas para baixo.","Puxa até à parte de baixo do peito, cotovelos um pouco afastados do corpo.","Volta devagar."],
+    cuidado:["Costas direitas o tempo todo.","Ombros para baixo, longe das orelhas."]},
+  facePull:{nome:"Face pull",musc:"Ombros (parte de trás)",sec:"Parte de cima das costas",equip:"Polia à altura da cara, com corda",
+    passos:["Põe a polia à altura da cara e agarra a corda.","Dá um passo atrás com os braços esticados.","Puxa a corda em direcção à cara, abrindo as mãos e os cotovelos para os lados.","Volta devagar."],
+    cuidado:["Peso leve: é um exercício de controlo.","Protege os ombros para a natação."]},
+  rosca:{nome:"Rosca alternada",musc:"Bíceps",sec:"Antebraços",equip:"Dois halteres",
+    passos:["Em pé, um halter em cada mão, palmas viradas para o corpo.","Sobe um halter, rodando a palma para cima.","Desce devagar e sobe o outro.","Cada lado conta como uma repetição."],
+    cuidado:["Cotovelos parados junto ao corpo.","Não balances o tronco."]},
+  prancha:{nome:"Prancha",musc:"Abdominais",sec:"Ombros e glúteos",equip:"Colchão",tempo:1,
+    passos:["Apoia os antebraços no chão, cotovelos por baixo dos ombros.","Estica as pernas e apoia-te nas pontas dos pés.","Corpo em linha recta, da cabeça aos calcanhares.","Aguenta o tempo indicado, a respirar normalmente."],
+    cuidado:["A anca não cai nem sobe.","Se for difícil, apoia os joelhos no chão."]},
+  abdominal:{nome:"Abdominal (crunch)",musc:"Abdominais",sec:"",equip:"Colchão",
+    passos:["Deitado de costas, joelhos dobrados e pés no chão.","Mãos atrás da cabeça, sem puxar o pescoço.","Sobe os ombros do chão, a contrair a barriga.","Desce devagar."],
+    cuidado:["Movimento curto: não é preciso sentar.","Olha para o tecto, não para os joelhos."]},
+  bike:{nome:"Bicicleta reclinada",musc:"Aquecimento (pernas e coração)",sec:"",equip:"Bicicleta com encosto",cardio:1,
+    passos:["Ajusta o banco para a perna ficar quase esticada no ponto mais longe.","Começa muito leve e aumenta um pouco aos 3 minutos.","Ritmo em que consegues falar."],cuidado:["Usa sempre a bicicleta com encosto."]},
+  passadeira:{nome:"Caminhada na passadeira",musc:"Aquecimento (pernas e coração)",sec:"",equip:"Passadeira",cardio:1,
+    passos:["Começa a 4 km/h e sobe para 5 a 5,5 km/h.","Passada natural, braços a acompanhar.","Ritmo em que consegues falar."],cuidado:["Segura a barra só se precisares de equilíbrio."]}
+};
+const GINASIO={
+  A:{id:"A",dia:2,nome:"Peito, ombros e tríceps",aquec:"bike",ex:[["supino","3 × 10"],["supinoInc","3 × 10"],["supinoMaq","3 × 10"],["desenvSmith","3 × 10"],["elevLat","3 × 10"],["tricepsPolia","3 × 10"]],
+    along:["Peito na parede ou na porta — 30 s cada lado","Ombro: braço cruzado à frente do peito — 30 s cada lado","Tríceps: mão nas costas, por trás da cabeça — 30 s cada lado","Rodar os ombros devagar — 10 vezes"]},
+  B:{id:"B",dia:4,nome:"Pernas",aquec:"bike",ex:[["abdutora","3 × 10"],["flexora","3 × 10"],["stiff","3 × 10"],["extensora","3 × 10"],["legPress","3 × 10"],["panturrilha","3 × 10"]],
+    along:["Frente da coxa: em pé, com apoio, puxar o pé atrás — 30 s cada perna","Trás da coxa: sentado no banco, perna esticada — 30 s cada perna","Glúteo: sentado, tornozelo em cima do joelho — 30 s cada lado","Gémeos: mãos na parede, perna atrás esticada — 30 s cada perna"]},
+  C:{id:"C",dia:6,nome:"Costas, bíceps e abdominais",aquec:"passadeira",ex:[["puxada","3 × 10"],["remadaTri","3 × 10"],["remadaBaixa","3 × 10"],["facePull","3 × 10"],["rosca","3 × 10"],["prancha","3 × 20–30 s"],["abdominal","3 × 12"]],
+    along:["Costas: braços esticados à frente, arredondar — 30 s","Dorsal: agarrar um poste e levar a anca para trás — 30 s cada lado","Bíceps: palma na parede, braço esticado — 30 s cada lado","Peito na parede ou na porta — 30 s cada lado"]}
+};
+const ginDia=d=>{if(d<GIN_INI)return null;const w=pd(d).getDay();return Object.values(GINASIO).find(g=>g.dia===w)||null;};
+const ginFeito=d=>ACT().find(a=>a.tipo==="musculacao"&&a.data===d);
+function historicoEx(id){ // [{data,max}] por ordem
+  return porData(gyms()).filter(a=>a.ex&&a.ex[id]).map(a=>({data:a.data,max:Math.max(...[].concat(a.ex[id]).filter(n=>typeof n==="number"))})).filter(h=>isFinite(h.max));}
+function volumeTreino(a){let v=0;if(!a.ex)return 0;for(const [id,c] of Object.entries(a.ex)){const reps=(a.reps&&a.reps[id])||10;[].concat(c).forEach(k=>{if(typeof k==="number")v+=k*reps;});}return v;}
+
+function exRow(id,serie,i,checks,ver){
+  const e=EX[id], h=historicoEx(id), ult=h[h.length-1], rec=h.length?Math.max(...h.map(x=>x.max)):null;
+  const ok=checks.includes(i);
+  return `<div class="exr ${ok?"ok":""}">
+    ${ver?`<span class="nb" aria-hidden="true">${typeof i==="string"?i:i+1}</span>`:`<button class="nb" data-ok="${i}" aria-pressed="${ok}" aria-label="Marcar ${esc(e.nome)} como feito">${ok?"✓":i+1}</button>`}
+    <button class="exb" data-ex="${id}" aria-label="Ver como fazer: ${esc(e.nome)}">
+      <span class="thumb">${svgEx(id,74,false)}</span>
+      <span class="col"><b>${esc(e.nome)}</b><span class="set">${esc(serie)}${e.tempo||e.cardio?"":" · descanso 60–90 s"}</span>
+      <span class="mus">${esc(e.musc)}${ult?` · última ${kgF(ult.max)} kg${rec>ult.max?` · recorde ${kgF(rec)} kg`:""}`:""}</span></span>
+      <span class="go" aria-hidden="true">›</span></button></div>`;
+}
+function resumoGin(t){
+  const g=GINASIO[t.treino], vol=volumeTreino(t);
+  const f=(v,l)=>v||v===0?`<div><b>${v}</b><span>${l}</span></div>`:"";
+  return `<div class="card result gymr stack" style="gap:10px">
+    <div class="spread"><h2>Ginásio${g?` · Treino ${g.id}`:""}</h2>${t.sensacao?`<span class="pill done">esforço ${t.sensacao}/10</span>`:""}</div>
+    ${t.inicio?`<div class="muted sm" style="margin-top:-6px">${t.inicio}–${t.fim}</div>`:""}
+    <div class="facts" style="margin-top:0">
+      ${f(t.duracao?fmtMin(t.duracao):null,"tempo total")}
+      ${f(t.kcal,"kcal activas")}
+      ${f(t.fcMedia?t.fcMedia+(t.fcMax?" / "+t.fcMax:""):null,"Frequência cardíaca média"+(t.fcMax?" / máxima":""))}
+      ${f(vol?(vol>=1000?f1(vol/1000)+" t":vol+" kg"):null,"volume levantado")}
+    </div>
+    ${t.ex?`<div class="stack" style="gap:6px">${Object.entries(t.ex).map(([id,c])=>`<div class="spread sm"><span>${esc((EX[id]||{nome:id}).nome)}</span><span class="num">${[].concat(c).map(k=>typeof k==="number"?kgF(k):k).join(" · ")}${[].concat(c).some(k=>typeof k==="number")?" kg":""}</span></div>`).join("")}</div>`:""}
+    ${t.notas?`<div class="ink2">${esc(t.notas)}</div>`:""}</div>`;
+}
+function corpoGin(d,g,passado){
+  const t=ginFeito(d), checks=store.get("gin-"+d)||[], al=store.get("gin-al-"+d)||[], pre=store.get("gin-pre-"+d)||[];
+  const st=t?{c:"done",t:"Feito"}:d===HOJE?{c:"today",t:"Hoje"}:d<HOJE?{c:"miss",t:"Sem registo"}:{c:"",t:DC[pd(d).getDay()]};
+  const ver=!!t||passado;
+  let h=`<div class="hero gym">
+    <div class="spread"><span class="k">Musculação · Treino ${g.id}</span><span class="pill ${st.c}">${st.t}</span></div>
+    <h1 style="margin-top:6px">${esc(g.nome)}</h1>
+    <div class="hfacts"><div><b class="big">${g.ex.length}</b><span>exercícios</span></div><div><b>3 séries</b><span>de 10 repetições</span></div><div><b>50–60 min</b><span>com aquecimento</span></div></div></div>`;
+  if(t) h+=resumoGin(t);
+  else if(passado) h+=`<div class="note warm">Ainda sem registo deste treino. Se o fizeste, manda o print do Apple Watch ao Claude e diz-lhe os pesos que usaste.</div>`;
+  if(!ver) h+=`<h3>Antes de começar</h3><div class="pre">${["Garrafa de água e toalha","Apple Watch: Treino de Força Tradicional","Começar leve: as 2–3 últimas repetições devem custar, mas sair bem"].map((p,i)=>`
+      <label class="chk" for="gpre${i}"><input type="checkbox" id="gpre${i}" data-gpre="${i}" ${pre.includes(i)?"checked":""}><span>${p}</span></label>`).join("")}</div>`;
+  h+=`<div class="spread"><h3>1 · Aquecimento</h3><span class="muted sm">8–10 min</span></div>${exRow(g.aquec,"8–10 min, ritmo leve",`<svg viewBox="0 0 24 24" width="18" height="18"><path d="${ICO.flame}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,[],true)}`;
+  h+=`<div class="spread"><h3>2 · Exercícios</h3>${ver?"":`<span class="muted sm">Toca no número quando acabares</span>`}</div>
+    <div class="blocks">${g.ex.map(([id,s],i)=>exRow(id,s,i,checks,ver)).join("")}</div>`;
+  h+=`<div class="spread"><h3>3 · Alongamento</h3><span class="muted sm">5 min</span></div><div class="pre">${g.along.map((p,i)=>`
+      <label class="chk" for="gal${i}"><input type="checkbox" id="gal${i}" data-gal="${i}" ${al.includes(i)?"checked":""} ${ver?"disabled":""}><span>${esc(p)}</span></label>`).join("")}</div>`;
+  if(!ver) h+=`<div class="card ink2" style="font-size:15px">No fim, manda ao Claude o print do resumo do Apple Watch e os pesos que usaste em cada exercício (basta, por exemplo, "supino 20, 20, 25").</div>`;
+  return h;
+}
+function ligarGin(el,d,g){
+  el.querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>{const i=+b.dataset.ok;let c=store.get("gin-"+d)||[];c=c.includes(i)?c.filter(x=>x!==i):c.concat(i);store.set("gin-"+d,c);renderTreinos();});
+  el.querySelectorAll("[data-gpre]").forEach(cb=>cb.onchange=()=>{const i=+cb.dataset.gpre;let c=store.get("gin-pre-"+d)||[];c=cb.checked?c.concat(i):c.filter(x=>x!==i);store.set("gin-pre-"+d,c);});
+  el.querySelectorAll("[data-gal]").forEach(cb=>cb.onchange=()=>{const i=+cb.dataset.gal;let c=store.get("gin-al-"+d)||[];c=cb.checked?c.concat(i):c.filter(x=>x!==i);store.set("gin-al-"+d,c);});
+  const lista=[g.aquec,...g.ex.map(x=>x[0])];
+  el.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>abrirEx(b.dataset.ex,lista,g));
+}
+function abrirEx(id,lista,g){
+  const e=EX[id], ov=document.getElementById("cartao"), i=lista?lista.indexOf(id):-1;
+  const h=historicoEx(id), rec=h.length?Math.max(...h.map(x=>x.max)):null, ult=h[h.length-1];
+  const serie=g?((g.ex.find(x=>x[0]===id)||[])[1]||"8–10 min"):"";
+  ov.classList.add("medov","exov");
+  ov.innerHTML=`<button class="navbtn" id="fecharCartao" aria-label="Fechar" style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px">✕</button>
+    <div class="exfig">${svgEx(id,300,true)}</div>
+    <div class="eyebrow" style="text-align:center;margin-top:8px">${g?`Treino ${g.id} · ${i<1?"aquecimento":"exercício "+i+" de "+(lista.length-1)}`:"Exercício"}</div>
+    <div class="ct" style="text-align:center">${esc(e.nome)}</div>
+    <div class="mchips"><span class="mchip m">${esc(e.musc)}</span>${e.sec?`<span class="mchip">${esc(e.sec)}</span>`:""}</div>
+    ${serie?`<div class="exset"><b>${esc(serie)}</b>${e.tempo||e.cardio?"":"<span>descanso 60–90 s entre séries</span>"}</div>`:""}
+    <div class="exbox"><h3>Como fazer</h3><ol>${e.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol></div>
+    <div class="exbox warn"><h3>Atenção</h3><ul>${e.cuidado.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>
+    <div class="exbox"><h3>Equipamento</h3><div class="ink2">${esc(e.equip)}</div>
+      ${e.cardio||e.tempo?"":`<div class="muted sm" style="margin-top:6px">${ult?`Última vez: ${kgF(ult.max)} kg (${curto(ult.data)})${rec>ult.max?` · recorde ${kgF(rec)} kg`:""}`:"Ainda sem carga registada. Começa leve."}</div>`}</div>
+    ${lista&&lista.length>1?`<div class="exnav"><button class="linkbtn" id="exAnt" ${i<=0?"disabled":""}>‹ Anterior</button><button class="linkbtn" id="exSeg" ${i>=lista.length-1?"disabled":""}>Seguinte ›</button></div>`:""}`;
+  ov.hidden=false; document.body.style.overflow="hidden"; ov.scrollTop=0;
+  animarFichas(ov);
+  const fechar=()=>{cancelAnimationFrame(animRaf);ov.hidden=true;ov.classList.remove("medov","exov");document.body.style.overflow="";};
+  ov.querySelector("#fecharCartao").onclick=fechar;
+  const a=ov.querySelector("#exAnt"),s=ov.querySelector("#exSeg");
+  if(a) a.onclick=()=>abrirEx(lista[i-1],lista,g);
+  if(s) s.onclick=()=>abrirEx(lista[i+1],lista,g);
+}
+
 /* ===== Utilitários ===== */
 const DIAS=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
 const DC=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
@@ -473,10 +799,15 @@ function agenda(d){
   const s=sessaoDia(d), dow=pd(d).getDay();
   if(s) return {tipo:"natacao", s};
   if(d<PLANO_INI) return {tipo:"antes"};
+  const gd=ginDia(d); if(gd) return {tipo:"musculacao", g:gd};
   if(d>PLANO_FIM) return {tipo:"depois"};
   if(d<MUDANCA_DIAS){ if(dow===3||dow===0) return {tipo:"caminhada"}; return {tipo:"descanso", sexta:dow===5}; }
   if(dow===2||dow===6) return {tipo:"caminhada"};
   return {tipo:"descanso"};
+}
+function proxTreino(d){ // próximo dia com natação ou ginásio, depois de d
+  for(let x=addD(d,1),k=0;k<14;k++,x=addD(x,1)){const a=agenda(x);if(a.tipo==="natacao")return{d:x,nome:a.s.nome};if(a.tipo==="musculacao")return{d:x,nome:"Ginásio · Treino "+a.g.id};}
+  return null;
 }
 function estadoSessao(s){
   if(feito(s.id)) return {c:"done",t:"Feito"};
@@ -586,8 +917,9 @@ function renderInicio(){
   const ag=agenda(HOJE), d=new Date();
   let hojeT="",hojeS="";
   if(ag.tipo==="natacao"){hojeT=ag.s.nome;hojeS=`Natação · ${ag.s.totalTxt||ag.s.total} m · ${ag.s.dur}`;}
+  else if(ag.tipo==="musculacao"){hojeT=`Ginásio · Treino ${ag.g.id}`;hojeS=`${ag.g.nome} · ${ag.g.ex.length} exercícios`;}
   else if(ag.tipo==="caminhada"){hojeT="Caminhada (opcional)";hojeS=CAMINHADA.alvo+" em ritmo leve a moderado";}
-  else if(ag.tipo==="descanso"){const n=PLANO.find(s=>s.data>HOJE);hojeT="Descanso";hojeS=n?`Próximo treino: ${DC[pd(n.data).getDay()]}, ${curto(n.data)} · ${n.nome}`:"";}
+  else if(ag.tipo==="descanso"){const n=proxTreino(HOJE);hojeT="Descanso";hojeS=n?`Próximo treino: ${DC[pd(n.d).getDay()]}, ${curto(n.d)} · ${n.nome}`:"";}
   else {hojeT="Sem treino marcado";hojeS="O plano começa a 3 Nov";}
   const feitosHoje=actsDia(HOJE);
   const w=semanaAtual(), [i0,i1]=SEMANAS[w];
@@ -608,7 +940,7 @@ function renderInicio(){
       <button class="mcard main" data-go="treinos" data-dia="${HOJE}">
         <span class="k">Treino de hoje</span><span class="go" aria-hidden="true">›</span>
         <span class="t">${esc(hojeT)}</span>
-        <span class="s">${feitosHoje.length?"Feito hoje: "+feitosHoje.map(x=>x.tipo==="natacao"?x.distancia+" m de natação":f1(x.distancia)+" km de caminhada").join(" · "):esc(hojeS)}</span>
+        <span class="s">${feitosHoje.length?"Feito hoje: "+feitosHoje.map(x=>x.tipo==="natacao"?x.distancia+" m de natação":x.tipo==="musculacao"?"treino de ginásio"+(x.treino?" "+x.treino:""):f1(x.distancia)+" km de caminhada").join(" · "):esc(hojeS)}</span>
       </button>
       <button class="gcard" data-go="progresso" data-sub="corpo">
         <span class="row"><span class="k">O meu progresso</span><span class="pill done">desde ${curto(a.data)}</span></span>
@@ -627,7 +959,7 @@ function renderInicio(){
         <span class="stats">
           <span><b>${natW.m} m</b><span>${Math.round(natW.m/25)} piscinas</span></span>
           <span><b>${fmtMin(natW.min+camW.min)}</b><span>de treino</span></span>
-          <span><b>${camW.n}</b><span>caminhadas</span></span>
+          ${i1>=GIN_INI?`<span><b>${gyms().filter(x=>x.data>=i0&&x.data<=i1).length}</b><span>ginásio</span></span>`:`<span><b>${camW.n}</b><span>caminhadas</span></span>`}
         </span>
       </button>
       <div class="gpill"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M8 9a4 4 0 0 1 8 0"/><path d="M12 9l1.5-1.5"/></svg></span>
@@ -643,7 +975,7 @@ function renderInicio(){
 }
 
 /* ===== TREINOS (dia a dia) ===== */
-let DIA_MIN="2026-10-10"; const DIA_MAX=PLANO_FIM;
+let DIA_MIN="2026-10-10"; const DIA_MAX="2027-01-31";
 let diaSel=HOJE;
 
 function resumoNat(t,s){
@@ -698,9 +1030,11 @@ function semanaStrip(d){
   let h=`<div class="wk" role="group" aria-label="Dias da semana">`;
   for(let i=0;i<7;i++){
     const x=addD(seg,i), ag=agenda(x), acts=actsDia(x);
-    const fezNat=acts.some(a=>a.tipo==="natacao"), fezCam=acts.some(a=>a.tipo==="caminhada");
+    const fezNat=acts.some(a=>a.tipo==="natacao"), fezCam=acts.some(a=>a.tipo==="caminhada"), fezGin=acts.some(a=>a.tipo==="musculacao");
     let dot="";
     if(ag.tipo==="natacao") dot=fezNat?"done":"swim";
+    else if(ag.tipo==="musculacao") dot=fezGin?"done":"gym";
+    else if(fezGin) dot="done";
     else if(fezNat) dot="done";
     else if(fezCam) dot="walkdone";
     else if(ag.tipo==="caminhada") dot="walk";
@@ -737,6 +1071,8 @@ function renderTreinos(){
           <span class="pc"><b>${pisc(b.m)}</b><small>pisc.</small></span></button>`).join("")}</div>
       ${s.nota?`<div class="note">${esc(s.nota)}</div>`:""}`;
     if(!t && !passado) corpo+=`<div class="card ink2" style="font-size:15px">No fim, manda ao Claude o print do resumo do Apple Watch e diz-lhe como te sentiste, de 1 a 10.</div>`;
+  } else if(ag.tipo==="musculacao"){
+    corpo+=corpoGin(d,ag.g,passado);
   } else if(ag.tipo==="caminhada"){
     const c=acts.find(a=>a.tipo==="caminhada");
     corpo+=`<div class="hero walk"><div class="spread"><h1>Caminhada</h1><span class="pill ${c?"done":"opt"}">${c?"Feita":"Opcional"}</span></div>
@@ -744,7 +1080,7 @@ function renderTreinos(){
     if(!c && !passado) corpo+=`<div class="stack" style="gap:8px">${CAMINHADA.passos.map(p=>`<div class="note walk">${p}</div>`).join("")}</div>`;
     if(!c && passado) corpo+=`<div class="muted">Sem caminhada registada neste dia.</div>`;
   } else if(ag.tipo==="descanso"){
-    const n=PLANO.find(s=>s.data>d);
+    const n0=proxTreino(d), n=n0?{data:n0.d,nome:n0.nome}:null;
     corpo+=`<div class="hero"><h1>Descanso</h1><div class="ink2" style="margin-top:8px">${ag.sexta?"Se não puderes nadar no sábado, a sessão de sábado pode passar para hoje. ":""}Recuperar também faz parte do plano.</div>
       ${n?`<div class="muted sm" style="margin-top:10px">Próximo treino: ${longo(n.data)} · ${esc(n.nome)}</div>`:""}</div>`;
   } else if(ag.tipo==="antes"){
@@ -756,7 +1092,8 @@ function renderTreinos(){
   let regs="";
   acts.forEach(a=>{
     if(ag.tipo==="natacao" && a.sessao===ag.s.id) return;
-    regs += a.tipo==="natacao" ? resumoNat(a,PLANO.find(s=>s.id===a.sessao)) : resumoCam(a);
+    if(ag.tipo==="musculacao" && a.tipo==="musculacao") return;
+    regs += a.tipo==="natacao" ? resumoNat(a,PLANO.find(s=>s.id===a.sessao)) : a.tipo==="musculacao" ? resumoGin(a) : resumoCam(a);
   });
   el.innerHTML=`
     <div class="spread">
@@ -780,6 +1117,7 @@ function renderTreinos(){
     el.querySelectorAll("[data-pre]").forEach(cb=>cb.onchange=()=>{const i=+cb.dataset.pre;let c=store.get("nat-pre-"+d)||[];
       c=cb.checked?c.concat(i):c.filter(x=>x!==i);store.set("nat-pre-"+d,c);});
   }
+  if(ag.tipo==="musculacao") ligarGin(el,d,ag.g);
   el.querySelectorAll("[data-pes]").forEach(b=>b.onclick=()=>{progSub="corpo";pesSel=b.dataset.pes;go("progresso");});
   const ac=el.querySelector("#abrirCartao"); if(ac) ac.onclick=()=>abrirCartao(ag.s);
 }
@@ -939,7 +1277,8 @@ const ICO={
   down2:"M3 6l5 5 4-3 5 5 4-3M17 13h4v-4",
   wave:"M2.5 9.5c2.4-2.4 4.8-2.4 7.2 0s4.8 2.4 7.2 0 3.2-1.8 4.6-.8M2.5 15.5c2.4-2.4 4.8-2.4 7.2 0s4.8 2.4 7.2 0 3.2-1.8 4.6-.8",
   star:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",
-  trophy:"M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5M12 14v4M8 21h8M9.5 18h5"
+  trophy:"M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5M12 14v4M8 21h8M9.5 18h5",
+  halter:"M2.5 10v4M5.5 7.5v9M18.5 7.5v9M21.5 10v4M5.5 12h13"
 };
 const kgF=n=>f1(n).replace(",0","");
 function porData(a){return a.slice().sort((x,y)=>x.data<y.data?-1:1);}
@@ -1017,6 +1356,16 @@ function conquistas(){
   const corr=n=>prim(R,x=>(x.corridaSeguida||0)>=n);
   const kmPe=W.concat(R).sort((a,b)=>a.data<b.data?-1:1), totKmPe=kmPe.reduce((a,x)=>a+(x.distancia||0),0);
   const crawlMax=Math.max(0,...S.map(x=>x.crawlBloco||0));
+  /* musculação */
+  const G=porData(gyms());
+  const semABC=(()=>{const w={};for(const x of G){const k=segDe(x.data);(w[k]=w[k]||new Set()).add(x.treino);if(w[k].size>=3)return x.data;}return null;})();
+  const semFerro=(()=>{const w={};for(const x of A){const k=segDe(x.data);w[k]=w[k]||{n:0,g:0};if(x.tipo==="natacao")w[k].n++;if(x.tipo==="musculacao")w[k].g++;if(w[k].n>=3&&w[k].g>=3)return x.data;}return null;})();
+  const exIds=Object.keys(EX).filter(k=>!EX[k].cardio);
+  const subiu=(()=>{let d=null;for(const id of exIds){const h=historicoEx(id);for(let i=1;i<h.length;i++)if(h[i].max>Math.max(...h.slice(0,i).map(x=>x.max))){if(!d||h[i].data<d)d=h[i].data;break;}}return d;})();
+  const dobro=(()=>{let d=null;for(const id of exIds){const h=historicoEx(id);if(!h.length)continue;const b=h[0].max;const x=h.find(y=>b>0&&y.max>=2*b);if(x&&(!d||x.data<d))d=x.data;}return d;})();
+  const volT=G.map(x=>({d:x.data,v:volumeTreino(x)})), volTot=volT.reduce((a,x)=>a+x.v,0);
+  const volAc=lim=>{let t=0;for(const x of volT){t+=x.v;if(t>=lim)return x.d;}return null;};
+  const todosEx=(()=>{const vistos=new Set();for(const x of G){Object.keys(x.ex||{}).forEach(k=>vistos.add(k));if(exIds.every(k=>vistos.has(k)))return x.data;}return null;})();
   const L=[
     /* ---- Gerais ---- */
     {id:"arranque",cat:"geral",ic:"flag",t:"Início da jornada",d:"Primeiro treino registado, de qualquer tipo.",data:A[0]?.data,falta:"Regista o primeiro treino"},
@@ -1071,6 +1420,17 @@ function conquistas(){
     {id:"t10",cat:"natacao",txt:"10K",t:"10 km nadados",d:"10 km nadados no total.",data:acum(S,10000,x=>x.distancia),falta:faltaM(10000-totM)},
     {id:"t25",cat:"natacao",txt:"25K",t:"25 km nadados",d:"25 km nadados no total.",data:acum(S,25000,x=>x.distancia),falta:faltaM(25000-totM)},
     {id:"plano5",cat:"natacao",ic:"trophy",t:"Plano de natação completo",d:"Todas as sessões do plano de 5 semanas feitas.",data:todos,falta:`${PLANO.filter(s=>feito(s.id)).length} de ${PLANO.length} sessões`},
+    /* ---- Musculação ---- */
+    {id:"gin1",cat:"musculacao",ic:"halter",t:"Primeira série",d:"Primeiro treino de ginásio registado.",data:G[0]?.data,falta:`Começa a ${curto(GIN_INI)}`},
+    {id:"ginABC",cat:"musculacao",txt:"ABC",t:"Ciclo completo",d:"Treinos A, B e C na mesma semana.",data:semABC,falta:"A, B e C na mesma semana"},
+    {id:"ginN",cat:"musculacao",ic:"halter",t:"Habitué do ginásio",d:"Treinos de ginásio registados.",...conta(G.map(x=>x.data),[10,25,50]),falta:`${G.length} de 10`},
+    {id:"ginSobe",cat:"musculacao",ic:"bolt",t:"Mais peso",d:"Subiste a carga num exercício pela primeira vez.",data:subiu,falta:"Sobe a carga num exercício"},
+    {id:"ginDobro",cat:"musculacao",txt:"×2",t:"Carga dobrada",d:"Duplicaste a carga inicial num exercício.",data:dobro,falta:"O dobro da carga inicial"},
+    {id:"ginTon",cat:"musculacao",txt:"5t",t:"5 toneladas num treino",d:"5000 kg levantados num só treino (carga × repetições, somando todas as séries).",data:volT.find(x=>x.v>=5000)?.d||null,falta:`Melhor treino: ${f1(Math.max(0,...volT.map(x=>x.v))/1000)} t`},
+    {id:"ginTon50",cat:"musculacao",txt:"50t",t:"50 toneladas",d:"50 000 kg levantados no total.",data:volAc(50000),falta:`Levas ${f1(volTot/1000)} t`},
+    {id:"ginTon250",cat:"musculacao",txt:"250t",t:"250 toneladas",d:"250 000 kg levantados no total.",data:volAc(250000),falta:`Levas ${f1(volTot/1000)} t`},
+    {id:"ginTodos",cat:"musculacao",ic:"star",t:"Todos os exercícios",d:"Fizeste todos os exercícios do plano pelo menos uma vez.",data:todosEx,falta:"Os 3 treinos completos"},
+    {id:"ferro",cat:"geral",txt:"6",t:"Semana de ferro",d:"3 treinos de natação e 3 de ginásio na mesma semana.",data:semFerro,falta:"3 + 3 na mesma semana"},
     /* ---- Caminhada e corrida ---- */
     {id:"camin",cat:"corrida",ic:"walk",t:"Primeira caminhada",d:"Primeira caminhada registada.",data:W[0]?.data,falta:"Caminhada à terça ou sábado"},
     {id:"camin5",cat:"corrida",txt:"5K",t:"5 km a caminhar",d:"5 km numa só caminhada.",data:prim(W,x=>(x.distancia||0)>=5),falta:"5 km numa saída"},
@@ -1122,6 +1482,10 @@ function recordes(){
   if(r=best(x=>x.fcMedia,true)) out.push({ic:"heart",t:"Frequência cardíaca média mais baixa",v:r.v+" bpm",s:"batidas por minuto",data:r.x.data});
   const sem=NSEM.map(w=>({w,m:S.filter(x=>x.data>=SEMANAS[w][0]&&x.data<=SEMANAS[w][1]).reduce((a,x)=>a+(x.distancia||0),0)})).sort((a,b)=>b.m-a.m)[0];
   if(sem&&sem.m) out.push({ic:"cal",t:"Semana com mais metros",v:sem.m+" m",s:"semana "+sem.w,data:SEMANAS[sem.w][1]<HOJE?SEMANAS[sem.w][1]:null,txt:curto(SEMANAS[sem.w][0])+" a "+curto(SEMANAS[sem.w][1])});
+  const G=porData(gyms());
+  if(G.length){let b=null;for(const x of G){const v=volumeTreino(x);if(!b||v>b.v)b={v,x};}
+    if(b&&b.v) out.push({ic:"halter",t:"Mais peso levantado num treino",v:(b.v>=1000?f1(b.v/1000)+" t":b.v+" kg"),s:"ginásio · treino "+(b.x.treino||""),data:b.x.data});
+    let l=null;for(const x of G)if(x.duracao&&(!l||x.duracao>l.duracao))l=x; if(l) out.push({ic:"timer",t:"Treino de ginásio mais longo",v:fmtMin(l.duracao),s:"ginásio",data:l.data});}
   let pb=null; for(let i=1;i<P.length;i++){const d=P[i-1].peso-P[i].peso;if(!pb||d>pb.d)pb={d,a:P[i-1],b:P[i]};}
   if(pb&&pb.d>0) out.push({ic:"down",t:"Maior perda numa semana",v:kgF(pb.d)+" kg",s:"peso",data:pb.b.data,txt:curto(pb.a.data)+" → "+curto(pb.b.data)});
   return out;
@@ -1196,6 +1560,7 @@ function evolucaoView(pb){
     <div class="card stack"><h2>Recordes pessoais</h2><div class="reclist">${R.map(r=>`<div class="rec">
       <span class="rico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="${ICO[r.ic]}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       <span class="rt"><b>${esc(r.t)}</b><span class="muted sm">${esc(r.s)} · ${r.txt||curto(r.data)}</span></span><span class="rv num">${esc(r.v)}</span></div>`).join("")}</div></div>
+    ${cargasCard()}
     ${cmp}
     <div class="card stack"><div class="spread"><h2>Tempo parado</h2><span class="muted sm">min:seg · mais baixo é melhor</span></div>
       ${lineChart(par,{c:"var(--good)",fmt:v=>mmss(v),u:"",aria:"Tempo parado por treino",vazio:"Aparece depois de 2 treinos."})}</div>
@@ -1208,6 +1573,13 @@ function evolucaoView(pb){
   pb.querySelector("#partEvo").onclick=()=>partilharImg(imgEvolucao(C,R),"evolucao-natacao.png","A minha evolução na natação");
 }
 
+function cargasCard(){
+  const rows=Object.keys(EX).filter(k=>!EX[k].cardio).map(id=>{const h=historicoEx(id);if(!h.length)return null;const best=h.reduce((a,x)=>x.max>a.max?x:a);return {id,best,primeira:h[0].max};}).filter(Boolean);
+  if(!rows.length) return "";
+  return `<div class="card stack"><div class="spread"><h2>Cargas máximas</h2><span class="muted sm">ginásio</span></div><div class="reclist">${rows.map(r=>`<div class="rec">
+    <span class="rico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="${ICO.halter}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <span class="rt"><b>${esc(EX[r.id].nome)}</b><span class="muted sm">${curto(r.best.data)}${r.best.max>r.primeira?` · começaste com ${kgF(r.primeira)} kg`:""}</span></span><span class="rv num">${kgF(r.best.max)} kg</span></div>`).join("")}</div></div>`;
+}
 function abrirMedalha(c){
   const ov=document.getElementById("cartao");
   ov.classList.add("medov");
@@ -1323,8 +1695,8 @@ function partilharImg(cv,nome,titulo){
 /* ===== PLANO ===== */
 function renderPlano(){
   const el=document.getElementById("v-plano");
-  let h=`<div class="stack" style="gap:6px"><div class="eyebrow">Novembro 2026</div><h1>Plano de natação</h1>
-    <div class="ink2">Desde 9 Nov: natação à segunda, quarta e sexta. Caminhadas opcionais à terça e ao sábado.</div></div>`;
+  let h=`<div class="stack" style="gap:6px"><div class="eyebrow">Novembro e Dezembro 2026</div><h1>Plano de treino</h1>
+    <div class="ink2">Natação à segunda, quarta e sexta. A partir de ${curto(GIN_INI)}: ginásio à terça, quinta e sábado (antes disso, caminhadas opcionais).</div></div>`;
   NSEM.forEach(w=>{
     const [i0,i1]=SEMANAS[w];
     const ss=PLANO.filter(s=>s.sem===w), tot=ss.reduce((a,s)=>a+s.total,0);
@@ -1335,6 +1707,9 @@ function renderPlano(){
       if(ag.tipo==="natacao"){const s=ag.s,st=estadoSessao(s);
         rows+=`<button class="srow ${x===HOJE?"now":""}" data-d="${x}"><span class="d">${curto(x)}<small>${DIAS[pd(x).getDay()]}</small></span>
           <span class="t">${esc(s.nome)}<small>${s.totalTxt||s.total} m · ${s.dur}</small></span><span class="pill ${st.c}">${st.t}</span></button>`;}
+      else if(ag.tipo==="musculacao"){const t=ginFeito(x),st=t?{c:"done",t:"Feito"}:x===HOJE?{c:"today",t:"Hoje"}:x<HOJE?{c:"miss",t:"Sem registo"}:{c:"",t:DC[pd(x).getDay()]};
+        rows+=`<button class="srow g ${x===HOJE?"now":""}" data-d="${x}"><span class="d">${curto(x)}<small>${DIAS[pd(x).getDay()]}</small></span>
+          <span class="t" style="color:var(--gym)">Ginásio · Treino ${ag.g.id}<small>${esc(ag.g.nome)}</small></span><span class="pill ${st.c}">${st.t}</span></button>`;}
       else if(ag.tipo==="caminhada"){const c=actsDia(x).find(a=>a.tipo==="caminhada");
         rows+=`<button class="srow w ${x===HOJE?"now":""}" data-d="${x}"><span class="d">${curto(x)}<small>${DIAS[pd(x).getDay()]}</small></span>
           <span class="t" style="color:var(--walk)">Caminhada<small>opcional · 30–45 min</small></span><span class="pill ${c?"done":"opt"}">${c?"Feita":"Opcional"}</span></button>`;}
@@ -1342,9 +1717,16 @@ function renderPlano(){
     h+=`<div class="week"><div class="spread"><h2>Semana ${w} <span class="muted" style="font-size:15px;font-weight:500">${curto(i0)}–${curto(i1)}</span></h2>
       <span class="num ink2">${fx?fx+" / ":""}≈ ${tot} m</span></div>${rows}</div>`;
   });
-  h+=`<div class="note">Depois do novo teste (30 Nov) entram 2 sessões curtas de força (cerca de 20 min) para proteger a massa muscular.</div>`;
+  h+=`<div class="stack" style="gap:6px;margin-top:8px"><div class="eyebrow">A partir de ${curto(GIN_INI)}</div><h1>Plano de ginásio</h1>
+    <div class="ink2">Cada treino: aquecimento de 8–10 min, os exercícios (3 séries de 10, descanso de 60–90 s) e 5 min de alongamento. Toca num exercício para ver como se faz.</div></div>`;
+  Object.values(GINASIO).forEach(g=>{
+    h+=`<div class="week gymw"><div class="spread"><h2>Treino ${g.id} <span class="muted" style="font-size:15px;font-weight:500">${DIAS[g.dia]}</span></h2><span class="ink2 sm">${esc(g.nome)}</span></div>
+      ${[g.aquec,...g.ex.map(x=>x[0])].map((id,i)=>`<button class="srow exs" data-pex="${id}" data-pg="${g.id}"><span class="thumb">${svgEx(id,56,false)}</span>
+        <span class="t">${esc(EX[id].nome)}<small>${i===0?"aquecimento · 8–10 min":esc(g.ex[i-1][1])+" · "+esc(EX[id].musc)}</small></span><span class="go" aria-hidden="true">›</span></button>`).join("")}</div>`;
+  });
   el.innerHTML=h;
-  el.querySelectorAll(".srow").forEach(b=>b.onclick=()=>{diaSel=b.dataset.d;go("treinos");});
+  el.querySelectorAll(".srow[data-d]").forEach(b=>b.onclick=()=>{diaSel=b.dataset.d;go("treinos");});
+  el.querySelectorAll("[data-pex]").forEach(b=>b.onclick=()=>{const g=GINASIO[b.dataset.pg];abrirEx(b.dataset.pex,[g.aquec,...g.ex.map(x=>x[0])],g);});
 }
 
 /* ===== Navegação ===== */

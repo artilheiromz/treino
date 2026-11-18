@@ -79,3 +79,14 @@ Os dados podem ser actualizados a partir de mais do que uma conversa com o Claud
 3. Só depois acrescentar o que é novo, voltar a encriptar e fazer o commit.
 
 Nunca editar a partir de uma cópia local antiga: isso apagaria os registos feitos noutras conversas.
+
+## Musculação (v1.9.0)
+
+- **`TIPOS`** é o registo dos tipos de exercício: natação, caminhada e musculação, com nome e cor. Um tipo novo (corrida, padel) acrescenta-se aqui e em `agenda()`.
+- **`EX`** é a biblioteca de exercícios: nome, músculos, equipamento, passos e cuidados.
+- **`ANIM`** guarda as animações:
+  - cada uma tem poses-chave com pontos nomeados, que `poseEm()` interpola;
+  - `desenharFig()` desenha a figura, de lado ou de frente, com o músculo destacado e o equipamento;
+  - para criar uma animação nova, basta acrescentar uma entrada.
+- **`GINASIO`** tem os treinos A, B e C, com o dia da semana, o aquecimento, os exercícios e os alongamentos. `GIN_INI` é a data de início.
+- **Registo:** `ex` é um mapa `id → [kg por série]`; `reps` é opcional (10 por omissão). O volume é carga × repetições.
