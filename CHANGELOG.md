@@ -7,6 +7,14 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.12.0 — 19 Nov 2026
+Segunda versão da amostra da **puxada pronada**, mais realista (ainda só neste exercício, para aprovação).
+- **Máquina com mais pormenor:** roldana com raios, guias, pilha de placas numeradas com pino de selecção laranja, almofadas das coxas, pegas da barra e sombra no chão.
+- **Músculos com mais anatomia:** fibras em leque no grande dorsal, trapézio e rombóides, eretores da coluna, infraespinhoso e redondo maior.
+- **Movimento mais real:** as omoplatas descem e juntam-se ao puxar, e a cabeça inclina ligeiramente.
+- **Corpo com mais pormenor:** tríceps com as duas cabeças, deltóide posterior com fibras, punhos com dedos, sapatilhas e calções com pregas.
+- As etiquetas de dica afastam-se dos cantos arredondados do cartão.
+
 ## v1.11.0 — 19 Nov 2026
 Amostra de ilustração detalhada, só na **puxada pronada**, para o Bruno aprovar antes de passar para os outros exercícios.
 - **Desenho mais realista**, em vez do boneco:

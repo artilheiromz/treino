@@ -387,6 +387,8 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 .rf{flex:1;text-align:center;font-size:12px;color:rgba(255,255,255,.7);border-radius:14px;padding:4px;border:2px solid transparent;display:flex;flex-direction:column;gap:4px;align-items:center}
 .rf.on{border-color:#ffd27a;color:#fff}.rf svg{width:100%;height:auto;border-radius:10px}
 .thumb .real{border-radius:10px}
+.real .rnum{fill:#cfcfcf;font:600 4.6px -apple-system,system-ui,sans-serif;text-anchor:middle}
+.real .rfib{fill:none;stroke:#8e2414;stroke-width:.8;opacity:.45;stroke-linecap:round}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -421,7 +423,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.11.0"; // ver CHANGELOG.md
+const VERSAO = "1.12.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -802,6 +804,9 @@ const RDEFS=`<defs>
   <linearGradient id="rmu" x1="0" x2="1"><stop offset="0" stop-color="#b3301d"/><stop offset=".5" stop-color="#ff6a4d"/><stop offset="1" stop-color="#b3301d"/></linearGradient>
   <linearGradient id="rmu2" x1="0" x2="1"><stop offset="0" stop-color="#d9826f"/><stop offset=".5" stop-color="#ffb5a3"/><stop offset="1" stop-color="#d9826f"/></linearGradient>
   <linearGradient id="rmt" x1="0" x2="1"><stop offset="0" stop-color="#d4d4d4"/><stop offset=".5" stop-color="#f4f4f4"/><stop offset="1" stop-color="#bcbcbc"/></linearGradient>
+  <linearGradient id="rbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f1f1f1"/></linearGradient>
+  <linearGradient id="rsk2" x1="0" x2="1"><stop offset="0" stop-color="#dcdcdc"/><stop offset=".5" stop-color="#f2f2f2"/><stop offset="1" stop-color="#d6d6d6"/></linearGradient>
+  <radialGradient id="rhd" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e3e3e3"/><stop offset="1" stop-color="#b9b9b9"/></radialGradient>
   <linearGradient id="rsh" x1="0" x2="1"><stop offset="0" stop-color="#2c2c2c"/><stop offset=".5" stop-color="#4a4a4a"/><stop offset="1" stop-color="#2c2c2c"/></linearGradient>
 </defs>`;
 function limbR(a,b,w1,wm,w2,fill){ // membro com "barriga" muscular (curvas suaves)
@@ -812,55 +817,82 @@ function limbR(a,b,w1,wm,w2,fill){ // membro com "barriga" muscular (curvas suav
 }
 const MX=x=>300-x;
 const REAL={
-  puxada:{dur:2600,r:.42,forca:0,
-    kf:[{sL:V(112,146),sR:V(188,146),eL:V(90,96),eR:V(210,96),hL:V(70,44),hR:V(230,44),ap:158,lift:0},
-        {sL:V(113,153),sR:V(187,153),eL:V(100,198),eR:V(200,198),hL:V(98,140),hR:V(202,140),ap:177,lift:46}],
+  puxada:{dur:2800,r:.42,forca:0,
+    kf:[{sL:V(112,146),sR:V(188,146),eL:V(90,96),eR:V(210,96),hL:V(70,44),hR:V(230,44),ap:158,lift:0,ri:0,rd:0,hy:0},
+        {sL:V(113,153),sR:V(187,153),eL:V(101,198),eR:V(199,198),hL:V(98,140),hR:V(202,140),ap:177,lift:46,ri:6,rd:7,hy:-3}],
     fases:["Puxa a barra até ao peito","Sobe devagar, sem largar"],
-    cues:[["Peito para cima",6,320],["Cotovelos descem",-1,320]],
+    cues:[["Peito para cima",14,314],["Cotovelos descem",-1,314]],
     draw:(P,k,det)=>{
-      const s=[];
-      s.push(`<rect x="0" y="0" width="300" height="330" rx="18" fill="#ffffff"/>`);
-      // máquina (atrás de tudo: está à frente da pessoa)
-      s.push(`<rect x="116" y="4" width="68" height="20" rx="5" fill="url(#rmt)" class="rln"/><circle cx="150" cy="16" r="7" fill="#9a9a9a" class="rln"/>`);
-      s.push(`<rect x="128" y="20" width="9" height="296" fill="url(#rmt)" class="rln"/><rect x="163" y="20" width="9" height="296" fill="url(#rmt)" class="rln"/>`);
-      s.push(`<line x1="143" y1="190" x2="143" y2="306" stroke="#8d8d8d" stroke-width="1.6"/><line x1="157" y1="190" x2="157" y2="306" stroke="#8d8d8d" stroke-width="1.6"/>`);
-      let pl="";for(let i=0;i<6;i++)pl+=`<rect x="138" y="${262+i*7.5}" width="24" height="6.5" rx="1.5" fill="url(#rsh)"/>`;
-      s.push(pl+`<rect x="138" y="${F1(232-P.lift)}" width="24" height="26" rx="2" fill="url(#rsh)"/><line x1="150" y1="16" x2="150" y2="${F1(232-P.lift)}" stroke="#555" stroke-width="1.4"/>`);
-      s.push(`<rect x="104" y="306" width="92" height="14" rx="4" fill="url(#rmt)" class="rln"/>`);
-      // cabo e barra (à frente da pessoa, por isso por trás do corpo neste ângulo)
+      const s=[],L=P.sL,R=P.sR,ap=P.ap,X=(m,x)=>m?300-x:x,op=v=>v.toFixed(2);
+      /* fundo: parede e chão */
+      s.push(`<rect x="0" y="0" width="300" height="330" rx="18" fill="url(#rbg)"/><rect x="0" y="300" width="300" height="30" fill="#ececec"/>`);
+      s.push(`<ellipse cx="150" cy="318" rx="92" ry="9" fill="#000" opacity=".09"/>`);
+      /* máquina: torre, roldana, pilha de pesos com pino de selecção */
+      s.push(`<rect x="114" y="3" width="72" height="22" rx="6" fill="url(#rmt)" class="rln"/><rect x="132" y="8" width="36" height="5" rx="2.5" fill="#d0d0d0"/>`);
+      s.push(`<g transform="translate(150 16)"><circle r="8.5" fill="#bdbdbd" class="rln"/><circle r="5" fill="#e6e6e6" class="rln"/><path d="M-5 0H5M0-5V5" stroke="#8a8a8a" stroke-width="1"/></g>`);
+      s.push(`<rect x="127" y="22" width="10" height="292" rx="2" fill="url(#rmt)" class="rln"/><rect x="163" y="22" width="10" height="292" rx="2" fill="url(#rmt)" class="rln"/>`);
+      s.push(`<line x1="143" y1="180" x2="143" y2="306" stroke="#9c9c9c" stroke-width="1.8"/><line x1="157" y1="180" x2="157" y2="306" stroke="#9c9c9c" stroke-width="1.8"/>`);
+      let pl="";const lift=P.lift;
+      for(let i=0;i<8;i++){const y=246+i*7.4;pl+=`<rect x="138" y="${F1(y)}" width="24" height="6.6" rx="1.4" fill="url(#rsh)"/><text x="150" y="${F1(y+5)}" class="rnum">${(i+1)*5}</text>`;}
+      s.push(pl+`<rect x="137" y="${F1(219-lift)}" width="26" height="9" rx="2" fill="url(#rmt)" class="rln"/><rect x="138" y="${F1(228-lift)}" width="24" height="16" rx="1.6" fill="url(#rsh)"/><circle cx="163.5" cy="${F1(236-lift)}" r="2.6" fill="#ff8a3d" class="rln"/>`);
+      s.push(`<line x1="150" y1="24" x2="150" y2="${F1(219-lift)}" stroke="#4a4a4a" stroke-width="1.5"/>`);
+      s.push(`<rect x="100" y="304" width="100" height="14" rx="4" fill="url(#rmt)" class="rln"/>`);
+      /* cabo e barra larga com punhos (à frente da pessoa: fica por trás do corpo neste ângulo) */
       const yb=(P.hL[1]+P.hR[1])/2;
-      s.push(`<line x1="150" y1="16" x2="150" y2="${F1(yb-3)}" stroke="#555" stroke-width="1.6"/>`);
-      s.push(`<path d="M${F1(P.hL[0]-16)} ${F1(P.hL[1]+9)}L${F1(P.hL[0])} ${F1(P.hL[1])}L${F1(P.hR[0])} ${F1(P.hR[1])}L${F1(P.hR[0]+16)} ${F1(P.hR[1]+9)}" fill="none" stroke="#3a3a3a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>`);
-      // banco
-      s.push(`<rect x="104" y="270" width="92" height="13" rx="6" fill="url(#rsh)"/><rect x="144" y="283" width="12" height="24" fill="url(#rmt)" class="rln"/>`);
-      // pernas (gémeos e sapatilhas)
-      const calf=m=>{const X=m?MX:x=>x;return `<path d="M${X(122)} 278C${X(111)} 290 ${X(111)} 302 ${X(118)} 312L${X(129)} 312C${X(131)} 300 ${X(134)} 290 ${X(134)} 278Z" fill="url(#rsk)" class="rln"/><ellipse cx="${X(123)}" cy="315" rx="11" ry="4.5" fill="#2a2a2a"/>`;};
-      s.push(calf(0)+calf(1));
-      // tronco
-      const L=P.sL,R=P.sR,ap=P.ap;
-      s.push(`<path d="M140 120L160 120L163 134L137 134Z" fill="url(#rsk)" class="rln"/>`);
+      s.push(`<line x1="150" y1="16" x2="150" y2="${F1(yb-4)}" stroke="#4a4a4a" stroke-width="1.6"/><path d="M146 ${F1(yb-6)}h8v5h-8z" fill="#8a8a8a"/>`);
+      s.push(`<path d="M${F1(P.hL[0]-17)} ${F1(P.hL[1]+10)}L${F1(P.hL[0]-2)} ${F1(P.hL[1])}L${F1(P.hR[0]+2)} ${F1(P.hR[1])}L${F1(P.hR[0]+17)} ${F1(P.hR[1]+10)}" fill="none" stroke="#3b3b3b" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>`);
+      s.push(`<path d="M${F1(P.hL[0]-17)} ${F1(P.hL[1]+10)}L${F1(P.hL[0]-7)} ${F1(P.hL[1]+4)}M${F1(P.hR[0]+17)} ${F1(P.hR[1]+10)}L${F1(P.hR[0]+7)} ${F1(P.hR[1]+4)}" stroke="#1d1d1d" stroke-width="6.5" stroke-linecap="round"/>`);
+      /* almofadas das coxas e banco */
+      s.push(`<rect x="84" y="226" width="30" height="15" rx="7.5" fill="url(#rsh)"/><rect x="186" y="226" width="30" height="15" rx="7.5" fill="url(#rsh)"/>`);
+      s.push(`<rect x="102" y="268" width="96" height="15" rx="7" fill="url(#rsh)"/><rect x="144" y="283" width="12" height="22" fill="url(#rmt)" class="rln"/>`);
+      /* pernas: gémeos com volume e sapatilhas */
+      const perna=m=>`<path d="M${X(m,121)} 279C${X(m,110)} 289 ${X(m,109)} 300 ${X(m,116)} 311L${X(m,129)} 311C${X(m,131)} 299 ${X(m,135)} 289 ${X(m,134)} 279Z" fill="url(#rsk)" class="rln"/>
+        <path d="M${X(m,124)} 283C${X(m,118)} 291 ${X(m,118)} 299 ${X(m,121)} 305" class="rdt"/>
+        <path d="M${X(m,110)} 312C${X(m,110)} 308 ${X(m,134)} 307 ${X(m,135)} 312L${X(m,135)} 318L${X(m,110)} 318Z" fill="#2b2b2b"/><rect x="${m?165:110}" y="316" width="25" height="3" rx="1.5" fill="#d8d8d8"/>`;
+      s.push(perna(0)+perna(1));
+      /* tronco (costas) */
       s.push(`<path d="M${F1(L[0]-3)} ${F1(L[1]-3)}C${F1(L[0]-13)} ${F1(L[1]+22)} 99 ${F1(ap+22)} 106 210C110 232 115 244 116 258L184 258C185 244 190 232 194 210C201 ${F1(ap+22)} ${F1(R[0]+13)} ${F1(R[1]+22)} ${F1(R[0]+3)} ${F1(R[1]-3)}C176 ${F1(R[1]-14)} 165 133 159 129L141 129C135 133 124 ${F1(L[1]-14)} ${F1(L[0]-3)} ${F1(L[1]-3)}Z" fill="url(#rsk)" class="rln"/>`);
-      // grande dorsal (músculo principal) — acende na fase de esforço
-      const lat=m=>{const X=m?MX:x=>x;const sx=m?R[0]:L[0];const X2=m?(x=>x):(x=>x);
-        return `<path d="M${F1(m?sx-2:sx+2)} ${F1(ap)}C${X(103)} ${F1(ap+18)} ${X(103)} 206 ${X(116)} 238C${X(126)} 247 ${X(140)} 241 ${X(147)} 233C${X(146)} 214 ${X(140)} 198 ${X(132)} ${F1(ap+10)}C${X(126)} ${F1(ap+2)} ${X(118)} ${F1(ap-4)} ${F1(m?sx-2:sx+2)} ${F1(ap)}Z" fill="url(#rmu)" opacity="${(.55+.45*k).toFixed(2)}" class="rln"/>`;};
+      /* oblíquos e eretores da coluna (não destacados, só forma) */
+      s.push(`<path d="M107 214C111 230 114 242 116 252M193 214C189 230 186 242 184 252" class="rdt"/>`);
+      s.push(`<path d="M143 204C139 224 139 240 142 254L148 254L148 204Z" fill="url(#rsk2)" opacity=".9"/><path d="M157 204C161 224 161 240 158 254L152 254L152 204Z" fill="url(#rsk2)" opacity=".9"/>`);
+      /* grande dorsal (principal) com fibras em leque */
+      const lat=m=>{const ax=m?R[0]-2:L[0]+2;
+        let f=`<path d="M${F1(ax)} ${F1(ap)}C${X(m,103)} ${F1(ap+18)} ${X(m,103)} 206 ${X(m,116)} 238C${X(m,126)} 247 ${X(m,140)} 241 ${X(m,147)} 233C${X(m,146)} 214 ${X(m,140)} 198 ${X(m,133)} ${F1(ap+11)}C${X(m,127)} ${F1(ap+3)} ${X(m,118)} ${F1(ap-4)} ${F1(ax)} ${F1(ap)}Z" fill="url(#rmu)" opacity="${op(.6+.4*k)}" class="rln"/>`;
+        const a1=[ax+(m?-1:1)*2,ap+4],a2=[X(m,106),ap+22];
+        [[136,ap+18],[141,202],[145,218],[146,230],[136,241],[124,241],[115,232]].forEach((e,i)=>{const t=i/6,a=[a1[0]+(a2[0]-a1[0])*t,a1[1]+(a2[1]-a1[1])*t];
+          f+=`<path d="M${F1(a[0])} ${F1(a[1])}Q${F1((a[0]+X(m,e[0]))/2+(m?-3:3))} ${F1((a[1]+e[1])/2-4)} ${F1(X(m,e[0]))} ${F1(e[1])}" class="rfib"/>`;});
+        return f;};
       s.push(lat(0)+lat(1));
-      // trapézio e rombóides (ajudam)
-      s.push(`<path d="M142 130L158 130C170 137 ${F1(R[0]-8)} ${F1(R[1]-6)} ${F1(R[0]-6)} ${F1(R[1]+2)}L150 202L${F1(L[0]+6)} ${F1(L[1]+2)}C${F1(L[0]+8)} ${F1(L[1]-6)} 130 137 142 130Z" fill="url(#rmu2)" opacity="${(.45+.3*k).toFixed(2)}" class="rln"/>`);
-      // linhas anatómicas
-      s.push(`<path d="M150 132V252M128 160Q121 182 136 197M172 160Q179 182 164 197M144 212Q142 236 144 252M156 212Q158 236 156 252" class="rdt"/>`);
-      // calções
-      s.push(`<path d="M114 250L186 250C193 262 195 272 193 282L107 282C105 272 107 262 114 250Z" fill="url(#rsh)"/><path d="M150 252V282" stroke="#1d1d1d" stroke-width="1.2"/>`);
-      // cabeça (careca, de trás)
-      s.push(`<ellipse cx="133" cy="108" rx="3.6" ry="6.5" fill="url(#rsk)" class="rln"/><ellipse cx="167" cy="108" rx="3.6" ry="6.5" fill="url(#rsk)" class="rln"/><ellipse cx="150" cy="104" rx="17" ry="21" fill="url(#rsk)" class="rln"/>`);
-      // braços
-      const arm=m=>{const S=m?P.sR:P.sL,E=m?P.eR:P.eL,H=m?P.hR:P.hL;
-        const d=[E[0]-S[0],E[1]-S[1]],ang=Math.atan2(d[1],d[0])*180/Math.PI,dc=[S[0]+d[0]*.18,S[1]+d[1]*.18];
-        return limbR(S,E,22,24,15,"url(#rsk)")+limbR(E,H,15,17,10,"url(#rsk)")+
-          `<path d="M${F1(S[0]+d[0]*.3)} ${F1(S[1]+d[1]*.3)}Q${F1(S[0]+d[0]*.62+(m?-4:4))} ${F1(S[1]+d[1]*.62)} ${F1(S[0]+d[0]*.85)} ${F1(S[1]+d[1]*.85)}" class="rdt"/>`+
-          `<g transform="translate(${F1(dc[0])} ${F1(dc[1])}) rotate(${F1(ang)})"><ellipse rx="14" ry="12" fill="url(#rsk)" class="rln"/><ellipse rx="12" ry="9.5" fill="url(#rmu2)" opacity="${(.4+.35*k).toFixed(2)}"/></g>`+
-          `<circle cx="${F1(H[0])}" cy="${F1(H[1])}" r="7.5" fill="url(#rsk)" class="rln"/><path d="M${F1(H[0]-5)} ${F1(H[1]-2)}h10M${F1(H[0]-5)} ${F1(H[1]+1.5)}h10" class="rdt"/>`;};
-      s.push(arm(0)+arm(1));
-      if(det) s.push(REAL.puxada.cues.map(([t,x,y])=>{const w=t.length*5.6+14;if(x<0)x=300-w-6;return `<rect x="${x}" y="${y-9}" width="${F1(w)}" height="18" rx="9" fill="#0a1c2e" opacity=".85"/><text x="${F1(x+w/2)}" y="${y+4}" class="rtx">${t}</text>`;}).join(""));
+      /* omoplatas: infraespinhoso e redondo maior (ajudam), mexem-se ao puxar */
+      const omo=m=>{const ix=(m?-1:1)*P.ri,dy=P.rd;
+        return `<path d="M${X(m,126)+ix*.6} ${F1(149+dy*.4)}Q${X(m,118)} ${F1(148+dy*.3)} ${X(m,113)} ${F1(158+dy*.3)}L${F1(X(m,129)+ix)} ${F1(192+dy)}Q${F1(X(m,135)+ix)} ${F1(190+dy)} ${F1(X(m,135)+ix)} ${F1(184+dy)}L${F1(X(m,132)+ix)} ${F1(153+dy*.5)}Z" fill="url(#rmu2)" opacity="${op(.45+.3*k)}" class="rln"/>
+          <path d="M${F1(X(m,131)+ix)} ${F1(189+dy)}Q${X(m,121)} ${F1(184+dy*.6)} ${X(m,112)} ${F1(170+dy*.4)}" stroke="#b8503c" stroke-width="3.6" stroke-linecap="round" opacity="${op(.22+.25*k)}" fill="none"/>
+          <path d="M${X(m,118)} ${F1(160+dy*.3)}L${F1(X(m,131)+ix)} ${F1(170+dy*.7)}" class="rdt"/>`;};
+      s.push(omo(0)+omo(1));
+      /* trapézio (superior, médio, inferior) e rombóides — ajudam */
+      s.push(`<path d="M141 130L159 130C171 137 ${F1(R[0]-8)} ${F1(R[1]-6)} ${F1(R[0]-6)} ${F1(R[1]+2)}C178 160 ${F1(162+P.ri*.3)} 176 150 206C${F1(138-P.ri*.3)} 176 122 160 ${F1(L[0]+6)} ${F1(L[1]+2)}C${F1(L[0]+8)} ${F1(L[1]-6)} 129 137 141 130Z" fill="url(#rmu2)" opacity="${op(.5+.3*k)}" class="rln"/>`);
+      s.push(`<path d="M150 134V250M138 152Q144 172 150 176Q156 172 162 152M132 146Q141 150 150 150Q159 150 168 146" class="rdt"/>`);
+      /* calções com pregas */
+      s.push(`<path d="M114 250L186 250C193 262 195 272 193 283L107 283C105 272 107 262 114 250Z" fill="url(#rsh)"/><path d="M150 252V283M120 262Q130 268 138 266M180 262Q170 268 162 266" stroke="#1b1b1b" stroke-width="1.1" fill="none"/>`);
+      /* pescoço e cabeça (careca, de trás) */
+      s.push(`<path d="M139 119L161 119L164 134L136 134Z" fill="url(#rsk)" class="rln"/><path d="M145 121V132M155 121V132" class="rdt"/>`);
+      const hy=P.hy;
+      s.push(`<g transform="translate(0 ${F1(hy)})"><ellipse cx="133" cy="108" rx="3.8" ry="6.8" fill="url(#rsk)" class="rln"/><path d="M133.5 104Q131 108 133.5 112" class="rdt"/><ellipse cx="167" cy="108" rx="3.8" ry="6.8" fill="url(#rsk)" class="rln"/><path d="M166.5 104Q169 108 166.5 112" class="rdt"/>
+        <ellipse cx="150" cy="104" rx="17.5" ry="21" fill="url(#rhd)" class="rln"/><path d="M139 120Q150 124 161 120" class="rdt"/></g>`);
+      /* braços: deltoide posterior (ajuda), tríceps com duas cabeças, antebraço, mão a agarrar a barra */
+      const braco=m=>{const S=m?P.sR:P.sL,E=m?P.eR:P.eL,H=m?P.hR:P.hL;
+        const d=[E[0]-S[0],E[1]-S[1]],ang=Math.atan2(d[1],d[0])*180/Math.PI,dc=[S[0]+d[0]*.16,S[1]+d[1]*.16];
+        const q=t=>[S[0]+d[0]*t,S[1]+d[1]*t],e2=[H[0]-E[0],H[1]-E[1]],qf=t=>[E[0]+e2[0]*t,E[1]+e2[1]*t];
+        const nx=-d[1]/Math.hypot(...d),ny=d[0]/Math.hypot(...d),sg=m?-1:1;
+        let b="";
+        b+=limbR(S,E,23,25,15,"url(#rsk)")+limbR(E,H,15,17,10,"url(#rsk)");
+        b+=`<path d="M${F1(q(.3)[0])} ${F1(q(.3)[1])}Q${F1(q(.6)[0]+nx*5*sg)} ${F1(q(.6)[1]+ny*5*sg)} ${F1(q(.86)[0])} ${F1(q(.86)[1])}M${F1(q(.32)[0]-nx*4*sg)} ${F1(q(.32)[1]-ny*4*sg)}Q${F1(q(.58)[0]-nx*6*sg)} ${F1(q(.58)[1]-ny*6*sg)} ${F1(q(.8)[0])} ${F1(q(.8)[1])}" class="rdt"/>`;
+        b+=`<path d="M${F1(qf(.08)[0])} ${F1(qf(.08)[1])}Q${F1(qf(.4)[0]+3*sg)} ${F1(qf(.4)[1])} ${F1(qf(.82)[0])} ${F1(qf(.82)[1])}" class="rdt"/>`;
+        b+=`<g transform="translate(${F1(dc[0])} ${F1(dc[1])}) rotate(${F1(ang)})"><ellipse rx="15" ry="12.5" fill="url(#rsk)" class="rln"/><ellipse rx="12.5" ry="10" fill="url(#rmu2)" opacity="${op(.45+.35*k)}"/><path d="M-9 -3Q0 -6 9 -3M-9 3Q0 0 9 3" stroke="#b5503c" stroke-width=".8" fill="none" opacity=".6"/></g>`;
+        b+=`<g transform="translate(${F1(H[0])} ${F1(H[1])})"><rect x="-8" y="-7" width="16" height="13" rx="5" fill="url(#rsk)" class="rln"/><path d="M-4 -6V5M0 -6V5M4 -6V5" class="rdt"/></g>`;
+        return b;};
+      s.push(braco(0)+braco(1));
+      if(det) s.push(REAL.puxada.cues.map(([t,x,y])=>{const w=t.length*5.6+14;if(x<0)x=300-w-14;return `<rect x="${x}" y="${y-9}" width="${F1(w)}" height="18" rx="9" fill="#0a1c2e" opacity=".85"/><text x="${F1(x+w/2)}" y="${y+4}" class="rtx">${t}</text>`;}).join(""));
       return s.join("");
     }}
 };
