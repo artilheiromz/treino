@@ -424,7 +424,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.13.0"; // ver CHANGELOG.md
+const VERSAO = "1.14.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -768,12 +768,12 @@ function animarFichas(root){
   const reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const t0=performance.now(); let ultF="";
   const passo=now=>{els.forEach(svg=>{if(!svg.isConnected)return;
-      if(svg.dataset.real){const R=REAL[svg.dataset.real],t=reduz?.42:((now-t0)%(R.dur*1.25))/(R.dur*1.25),P=realPose(R,t);
+      if(svg.dataset.real){const R=REAL[svg.dataset.real],t=reduz?.42:(Math.max(0,now-t0)%(R.dur*1.25))/(R.dur*1.25),P=realPose(R,t);
         if(svg._t&&now-svg._t<30)return;svg._t=now;
         svg.lastChild.innerHTML=realRender(R,P,P._ph===R.forca?1:.4,true,svg.dataset.u);
         if(fase){const tx=R.fases[P._ph];if(tx!==ultF){fase.textContent=tx;ultF=tx;}}
         const ai=P._f<.33?0:P._f<.67?1:2;strip.forEach((e,i)=>e.classList.toggle("on",i===ai));return;}
-      const an=ANIM[svg.dataset.anim];const t=reduz?.5:((now-t0)%(an.dur*1.25))/(an.dur*1.25);const p=poseEm(an,t);
+      const an=ANIM[svg.dataset.anim];const t=reduz?.5:(Math.max(0,now-t0)%(an.dur*1.25))/(an.dur*1.25);const p=poseEm(an,t);
       svg.firstChild.innerHTML=desenharFig(an,p,true);
       if(fase&&an.fases&&!root.querySelector("svg[data-real]")){const tx=an.fases[an.loop?0:p._ph]||an.fases[0];if(tx!==ultF){fase.textContent=tx;ultF=tx;}}});
     if(!reduz&&els.some(e=>e.isConnected)) animRaf=requestAnimationFrame(passo);};
@@ -1060,7 +1060,203 @@ const REAL={
       return s.join("");
     }}
 };
+/* ===== Ilustrações v3 para todos os exercícios: corpo realista (de lado ou de frente) desenhado a partir das poses das animações ===== */
+const MZ=.57; // escala dos desenhos v3 → unidades das poses (200×150)
+const tomM=(M,key)=>M[0].includes(key)?"mus":M[1].includes(key)?"mus2":null;
+const muscR=(d,c,n,w,tom,k)=>pth(d,grN(c,n,w,tom))+(tom==="mus"?ativo(d,k):"");
+const tubo=(a,b,w,tom="metal")=>pth(membroD(a,b,w,w,w,.5),cyl(a,b,w*1.05,tom));
+const estofo=(a,b,w)=>{const f=quadro(a,b);return tubo(a,b,w,"preto")+`<path d="M${RN(f(.04,-w*.2))}L${RN(f(.96,-w*.2))}" stroke="#6a6a70" stroke-width=".3" stroke-dasharray=".7 .7"/>`;};
+const discoR=(c,r)=>pth(ell(c,r,r),sph(c[0],c[1],r*1.05,"preto"))+`<circle cx="${F1(c[0])}" cy="${F1(c[1])}" r="${F1(r*.88)}" fill="none" stroke="#46464c" stroke-width="${F1(r*.035)}"/><circle cx="${F1(c[0])}" cy="${F1(c[1])}" r="${F1(r*.52)}" fill="none" stroke="#2a2a2e" stroke-width="${F1(r*.07)}"/>`+pth(ell(c,r*.2,r*.2),sph(c[0],c[1],r*.24,"metal"))+luz(`M${F1(c[0]-r*.7)} ${F1(c[1]-r*.4)}Q${F1(c[0]-r*.45)} ${F1(c[1]-r*.72)} ${F1(c[0]-r*.12)} ${F1(c[1]-r*.8)}`,.35,r*.07);
+const cabo=(a,b)=>`<path d="M${RN(a)}L${RN(b)}" stroke="#2c2f33" stroke-width=".7"/><path d="M${RN(a)}L${RN(b)}" stroke="#8d9297" stroke-width=".22"/>`;
+const roldanaR=(c,r)=>pth(ell(c,r,r),sph(c[0],c[1],r,"metal"))+pth(ell(c,r*.42,r*.42),sph(c[0],c[1],r*.5,"aco"));
+function pilhaR(x0,y0,x1,y1,n=8){const g=gr([x0,0],[x1,0],"preto"),h=(y1-y0)/n;let o=tubo([x0+1.4,y0-14],[x0+1.4,y1],1.4)+tubo([x1-1.4,y0-14],[x1-1.4,y1],1.4);
+  for(let i=0;i<n;i++)o+=`<rect x="${F1(x0)}" y="${F1(y0+i*h)}" width="${F1(x1-x0)}" height="${F1(h*.86)}" rx=".8" fill="${g}"/>`;
+  return o+pth(ell([x1-1,y0+h*2.4],1.2,1.2),sph(x1-1,y0+h*2.4,1.5,"mus"));}
+const pega=(a,b)=>tubo(a,b,2.8,"preto");
+const sombraChao=(cx,y,rx)=>`<ellipse cx="${F1(cx)}" cy="${F1(y)}" rx="${F1(rx)}" ry="3" fill="#000" opacity=".2" filter="url(#rbl2)"/>`;
+
+/* --- corpo de lado (vira para a direita; c=-1 para quem está de barriga para baixo) --- */
+function tenisR(A,To,K){const f=quadro(A,To),s=((K[0]-A[0])*f.n[0]+(K[1]-A[1])*f.n[1])>0?1:-1,q=(t,o)=>f(t,o*s*.85);
+  let o=pth(liso([q(-.22,2.6),q(-.3,-1),q(-.22,-3.6),q(.4,-3.9),q(.95,-3.3),q(1.08,-1.4),q(.98,.9),q(.6,2.2),q(.25,3.4),q(-.05,4.4)]),grN(q(.35,0),f.n,8,"tenis"));
+  o+=`<path d="M${RN(q(-.25,-3.1))}L${RN(q(1.01,-2.8))}" stroke="#fff" stroke-width="1.1" stroke-linecap="round"/>`;
+  [.22,.36,.5].forEach(t=>o+=`<path d="M${RN(q(t,2.4+(.5-t)*2.6))}L${RN(q(t+.07,1.3+(.5-t)*2.6))}" stroke="#6b7079" stroke-width=".5"/>`);
+  return o;}
+function pernaLado(H,K,A,To,M,k,c){let o="";const fT=quadro(H,K),fS=quadro(K,A),P=(f,t,v)=>f(t,v*MZ*c);
+  o+=seg(H,K,17,17.4,10.6,"pele",.4);
+  const th=tomM(M,"posterior"),tq=tomM(M,"quadriceps"),tg=tomM(M,"gemeos");
+  if(th){const d=liso([P(fT,.12,8),P(fT,.45,14.6),P(fT,.8,10.5),P(fT,.97,6),P(fT,.8,4.5),P(fT,.45,5.5),P(fT,.15,4.5)]);o+=muscR(d,P(fT,.5,10),fT.n,7,th,k);
+    for(let i=0;i<4;i++)o+=fib(`M${RN(P(fT,.18+i*.04,6+i*2))}Q${RN(P(fT,.5,8+i*1.8))} ${RN(P(fT,.9-i*.03,5+i*1.2))}`,.22);}
+  if(tq){const d=liso([P(fT,.1,-11.5),P(fT,.36,-15.4),P(fT,.66,-14.2),P(fT,.9,-9),P(fT,.985,-5),P(fT,.93,-.5),P(fT,.62,2.5),P(fT,.28,3.2),P(fT,.1,-1.5)]);
+    o+=muscR(d,P(fT,.5,-6),fT.n,11,tq,k)+vinco(`M${RN(P(fT,.16,-6))}Q${RN(P(fT,.5,-8.5))} ${RN(P(fT,.88,-5.5))}`,.5,.55);
+    for(let i=0;i<8;i++){const t=.14+i*.095;o+=fib(`M${RN(P(fT,t,1.5))}Q${RN(P(fT,t+.05,-4))} ${RN(P(fT,t+.11,-12.5))}`,.3)+fibL(`M${RN(P(fT,t+.012,1.2))}Q${RN(P(fT,t+.062,-4.3))} ${RN(P(fT,t+.122,-12.6))}`,.2);}
+    o+=luz(`M${RN(P(fT,.2,-12))}Q${RN(P(fT,.5,-15.5))} ${RN(P(fT,.82,-11))}`,.35,1.3);}
+  if(!tq&&!th)o+=vinco(`M${RN(P(fT,.15,1))}Q${RN(P(fT,.5,2.5))} ${RN(P(fT,.9,1))}`,.3,.6);
+  o+=pth(liso([P(fT,.12,3.6),P(fT,.5,4.6),P(fT,.92,1.2),P(fT,.92,2.6),P(fT,.5,6),P(fT,.12,5)]),"#e9e0dc",' stroke-opacity=".35"');
+  o+=seg(K,A,10.3,10.6,5.4,"pele",.32,c>0?1.22:.86,c>0?.86:1.22);
+  if(tg){const d=liso([P(fS,.04,6),P(fS,.22,11),P(fS,.45,9.6),P(fS,.66,4.6),P(fS,.5,2.2),P(fS,.24,2.4),P(fS,.08,2)]);o+=muscR(d,P(fS,.3,7),fS.n,7,tg,k)+fib(`M${RN(P(fS,.06,4))}Q${RN(P(fS,.3,7.5))} ${RN(P(fS,.62,4))}`,.25);}
+  else o+=vinco(`M${RN(P(fS,.08,4))}Q${RN(P(fS,.3,7))} ${RN(P(fS,.6,3.5))}`,.25,.5);
+  o+=luz(`M${RN(P(fS,.12,-7))}L${RN(P(fS,.82,-4.3))}`,.5,.8);
+  const kc=P(fT,.99,-8);o+=`<ellipse cx="${F1(kc[0])}" cy="${F1(kc[1])}" rx="2" ry="2" fill="#fff" opacity=".5" filter="url(#rbl05)"/>`;
+  return o+tenisR(A,To,K);}
+function troncoLado(H,S,M,k,c){const Lt=Math.hypot(S[0]-H[0],S[1]-H[1]),dir=nrm([S[0]-H[0],S[1]-H[1]]),ant=[-dir[1]*c,dir[0]*c],sc=Lt/66;
+  const T=(l,a)=>[H[0]+dir[0]*l*sc+ant[0]*a*.78,H[1]+dir[1]*l*sc+ant[1]*a*.78],R=(pts)=>liso(pts.map(q=>T(q[0],q[1])));
+  let o=pth(R([[-4,-13],[12,-13.5],[30,-12.5],[48,-14],[62,-12.5],[70,-7],[73,0],[68,7],[56,13.5],[44,12.5],[32,12],[20,13.6],[8,13],[-2,9],[-7,-3]]),grN(T(34,0),ant,22,"pele"));
+  const tp=tomM(M,"peito"),ta=tomM(M,"abdominais"),td=tomM(M,"dorsais"),tz=tomM(M,"trapezio"),tl=tomM(M,"lombar");
+  if(td){const d=R([[60,-6],[54,-13.5],[40,-12.8],[26,-11.5],[22,-7],[34,-2],[48,0],[58,-1.5]]);o+=muscR(d,T(42,-7),ant,12,td,k);
+    for(let i=0;i<6;i++)o+=fib(`M${RN(T(58-i*1.5,-2-i*.4))}Q${RN(T(48-i*3,-8-i*.6))} ${RN(T(40-i*3.4,-12.6))}`,.28);}
+  else o+=vinco(`M${RN(T(58,-3))}Q${RN(T(42,-6))} ${RN(T(26,-10))}`,.25,.6);
+  if(tl){const d=R([[32,-12.8],[18,-13.6],[4,-12.8],[2,-9],[16,-9.6],[32,-9.2]]);o+=muscR(d,T(16,-11),ant,6,tl,k);for(let i=0;i<3;i++)o+=fib(`M${RN(T(30,-12+i*1.2))}L${RN(T(4,-12+i*1.2))}`,.22);}
+  if(tz){const d=R([[78,-3],[73,-10],[64,-13.6],[54,-13.8],[60,-8],[68,-3.5]]);o+=muscR(d,T(66,-9),ant,8,tz,k)+fib(`M${RN(T(76,-4))}Q${RN(T(68,-10))} ${RN(T(56,-13))}`,.25);}
+  if(ta){const d=R([[44,12],[32,12.3],[20,13.8],[8,13.2],[4,9.5],[18,9.8],[32,9.4],[44,8.8]]),ob=R([[42,8],[28,9],[12,10],[6,4],[16,-3],[30,-4],[42,1]]);
+    o+=muscR(ob,T(24,3),ant,12,ta==="mus"?"mus2":"mus2",k)+muscR(d,T(24,11),ant,5,ta,k);
+    [36,28,20].forEach(l=>o+=vinco(`M${RN(T(l,9.6))}L${RN(T(l,12.6))}`,.5,.5));
+    for(let i=0;i<4;i++)o+=fib(`M${RN(T(40-i*6,1))}L${RN(T(34-i*6,8))}`,.25);}
+  else o+=vinco(`M${RN(T(38,10))}Q${RN(T(30,8))} ${RN(T(22,10.5))}`,.22,.6);
+  if(tp){const d=R([[66,4],[63,10],[57,14],[49,14],[45,9],[50,4.5],[59,3]]);o+=muscR(d,T(56,9),ant,9,tp,k);for(let i=0;i<5;i++)o+=fib(`M${RN(T(64-i*.6,4+i*1.6))}Q${RN(T(56,6+i*1.6))} ${RN(T(47+i*.6,8+i*1.2))}`,.28);}
+  else o+=vinco(`M${RN(T(58,12.5))}Q${RN(T(48,11))} ${RN(T(45,5))}`,.4,.7);
+  o+=luz(`M${RN(T(52,12))}Q${RN(T(60,10.5))} ${RN(T(66,6))}`,.5,.9);
+  return {T,ant,dir,o};}
+function calcoesLado(H,K,T,ant,M,k,c){const fT=quadro(H,K),post=[-ant[0],-ant[1]],bis=nrm(add([fT.n[0]*c,fT.n[1]*c],post)),G=add(H,bis,5.5),z=MZ;
+  let o=pth(liso([T(12,-14.2),T(12,13.7),T(-1,10.5),fT(.17,-8.9*c),fT(.17,8.8*c),add(G,bis,6.8),T(-6,-13.6)]),grN(H,ant,20,"tecido"));
+  o+=`<path d="M${RN(T(12.4,-14))}L${RN(T(12.4,13.5))}" stroke="#4b505c" stroke-width="1.2"/>`+vinco(`M${RN(T(4,6))}Q${RN(fT(.08,-3.4*c))} ${RN(fT(.15,-6.8*c))}`,.5,.6);
+  const tg=tomM(M,"gluteos");
+  if(tg){const pp=[-bis[1],bis[0]],A2=(a,b)=>add(add(G,pp,a*z),bis,b*z),gl=liso([A2(-12,-3),A2(-8,7),A2(0,11.5),A2(9,8),A2(13,-2),A2(6,-9),A2(-6,-9)]);
+    o+=pth(gl,grN(G,bis,15,tg),' opacity=".92"')+(tg==="mus"?ativo(gl,k):"");
+    for(let i=-2;i<=2;i++)o+=fib(`M${RN(A2(-10,i*3.2-1))}Q${RN(A2(0,i*3.6+1))} ${RN(A2(11,i*2.6))}`,.26);}
+  return o;}
+function cabecaLado(N0,Hd,c){const up=nrm([Hd[0]-N0[0],Hd[1]-N0[1]]),fc=[-up[1]*c,up[0]*c],z=.66;
+  const Q=(l,a)=>[Hd[0]+up[0]*(l-88)*z+fc[0]*(a-1.5)*z,Hd[1]+up[1]*(l-88)*z+fc[1]*(a-1.5)*z];
+  let o=seg(N0,Q(80,-1),7.8,7.6,7.2,"pele");
+  const c0=Q(92,3);o+=pth(liso([Q(101,0),Q(96,-10),Q(85,-12.5),Q(78,-8),Q(77,1),Q(76.6,9.6),Q(80.5,11.6),Q(84.5,12.8),Q(86.8,15.2),Q(89,12.8),Q(93,12.6),Q(98,8.5)]),sph(c0[0],c0[1],11,"pele"));
+  const e=Q(85,-4);o+=pth(ell(e,1.9,2.8),sph(e[0],e[1],3.2,"pele"))+vinco(`M${RN(Q(90.5,10))}Q${RN(Q(91.5,8.5))} ${RN(Q(92.5,10))}`,.45,.5)+vinco(`M${RN(Q(78.5,6.5))}Q${RN(Q(81,4))} ${RN(Q(80,0))}`,.35,.7);
+  return o;}
+function bracoLado(S,E,W,ant,M,k){const fa=quadro(S,E),ff=quadro(E,W),dW=(W[0]-E[0])*fa.n[0]+(W[1]-E[1])*fa.n[1];
+  let sb=Math.abs(dW)>2?Math.sign(dW):(Math.sign(ant[0]*fa.n[0]+ant[1]*fa.n[1])||1);
+  let o=seg(S,E,11.4,12.8,8,"pele",.38)+seg(E,W,8.4,9.6,5.6,"pele",.25,1.1,1.05);
+  const tb=tomM(M,"biceps"),tt=tomM(M,"triceps"),tf=tomM(M,"antebraco"),to=tomM(M,"ombro"),tp=tomM(M,"ombroP");
+  if(tb){const d=liso([fa(.22,sb*2),fa(.45,sb*6.4),fa(.72,sb*6),fa(.9,sb*3),fa(.82,sb*.6),fa(.45,sb*1)]);o+=muscR(d,fa(.55,sb*3.5),fa.n,7,tb,k);for(let i=0;i<3;i++)o+=fib(`M${RN(fa(.25,sb*(1.6+i*1.4)))}Q${RN(fa(.55,sb*(2.4+i*1.5)))} ${RN(fa(.88,sb*(1+i*.7)))}`,.25);}
+  if(tt){const d=liso([fa(.12,-sb*2),fa(.4,-sb*6.6),fa(.7,-sb*5.8),fa(.93,-sb*3.2),fa(.86,-sb*.8),fa(.4,-sb*1.2)]);o+=muscR(d,fa(.5,-sb*3.5),fa.n,7,tt,k)+vinco(`M${RN(fa(.3,-sb*3.6))}Q${RN(fa(.6,-sb*4.4))} ${RN(fa(.86,-sb*2.2))}`,.4,.45);}
+  if(!tb&&!tt)o+=vinco(`M${RN(fa(.3,-sb*2))}Q${RN(fa(.6,-sb*3))} ${RN(fa(.88,-sb*1.2))}`,.3,.6);
+  if(tf){const sf=Math.sign((S[0]-E[0])*ff.n[0]+(S[1]-E[1])*ff.n[1])||1,d=liso([ff(.06,sf*1.6),ff(.3,sf*5),ff(.62,sf*3.4),ff(.86,sf*1.6),ff(.6,sf*.4),ff(.2,sf*.2)]);o+=muscR(d,ff(.35,sf*2.5),ff.n,5,tf,k);}
+  const S0=add(S,fa.d,-2),cp=membroD(S0,fa(.42,0),12.6,13,5,.3);
+  o+=pth(cp,to?sph(S0[0]+fa.d[0]*4,S0[1]+fa.d[1]*4,10,to):sph(S0[0]+fa.d[0]*4,S0[1]+fa.d[1]*4,10,"pele"))+(to==="mus"?ativo(cp,k):"");
+  if(!to&&tp){const ps=-(Math.sign(ant[0]*fa.n[0]+ant[1]*fa.n[1])||1),d=liso([fa(-.06,0),fa(.02,ps*6.6),fa(.2,ps*7),fa(.4,ps*2.4),fa(.3,ps*.2),fa(.08,ps*.2)]);o+=muscR(d,fa(.15,ps*4),fa.n,8,tp,k);}
+  if(to||tp)for(let i=-2;i<=2;i++)o+=fib(`M${RN(add(S0,fa.n,i*2))}Q${RN(add(fa(.18,0),fa.n,i*1.9))} ${RN(fa(.42,i*.35))}`,.25);
+  const h=(a,b)=>[W[0]+ff.d[0]*a+ff.n[0]*b,W[1]+ff.d[1]*a+ff.n[1]*b];
+  o+=pth(liso([h(-3.2,-3.4),h(1,-4),h(3.6,-2.2),h(3.8,2),h(1,4),h(-3.2,3.4)]),sph(W[0]-1,W[1]-1.5,6,"pele"))+vinco(`M${RN(h(.5,-2.4))}L${RN(h(3.2,-1.2))}M${RN(h(.6,0))}L${RN(h(3.5,.4))}M${RN(h(.5,2.3))}L${RN(h(3.1,1.9))}`,.4,.35);
+  return o;}
+function figLado(p,M,k,c,G){const t=troncoLado(p.hp,p.sh,M,k,c),far=s=>`<g transform="translate(2.2 -1.6)" filter="url(#rdim)">${s}</g>`;
+  const el2=p.el2||p.el,ha2=p.ha2||p.ha,kn2=p.kn2||p.kn,an2=p.an2||p.an,to2=p.to2||p.to;
+  let s=far(pernaLado(p.hp,kn2,an2,to2,M,k,c)+bracoLado(p.sh,el2,ha2,t.ant,M,k)+(G.farEq?G.farEq(p):""));
+  s+=(G.mid?G.mid(p):"")+t.o+calcoesLado(p.hp,p.kn,t.T,t.ant,M,k,c)+pernaLado(p.hp,p.kn,p.an,p.to,M,k,c)+cabecaLado(t.T(64,-2),p.hd,c)+(G.front?G.front(p):"")+bracoLado(p.sh,p.el,p.ha,t.ant,M,k);
+  return s;}
+
+/* --- corpo de frente (elevação lateral, abdutora) --- */
+function figFrente(p,M,k,G){let o="";const L=p.shL,R=p.shR,HL=p.hpL,HR=p.hpR,cx=(L[0]+R[0])/2;
+  const perna=(H,K,A,lado)=>{const f=quadro(H,K),fs=quadro(K,A),ou=Math.sign(f.n[0]*lado)||1;let s=seg(H,K,14.6,15,9.4,"pele",.38);
+    const tq=tomM(M,"quadriceps"),tb=tomM(M,"abdutores"),td=tomM(M,"adutores");
+    const q=liso([f(.1,-3*ou),f(.14,4.6*ou),f(.5,6.4*ou),f(.86,3.8*ou),f(.98,0),f(.86,-4*ou),f(.55,-5.4*ou),f(.2,-5*ou)]);
+    s+=tq?muscR(q,f(.5,0),f.n,12,tq,k):vinco(`M${RN(f(.2,-1*ou))}Q${RN(f(.55,1.5*ou))} ${RN(f(.9,-2.5*ou))}`,.3,.55);
+    s+=vinco(`M${RN(f(.6,-4.4*ou))}Q${RN(f(.85,-4.6*ou))} ${RN(f(.95,-1.5*ou))}`,.35,.5);
+    if(td)s+=muscR(liso([f(.02,-5*ou),f(.15,-7*ou),f(.45,-5.5*ou),f(.35,-3.5*ou),f(.12,-3*ou)]),f(.2,-5*ou),f.n,5,td,k);
+    if(tb){const d=liso([f(-.14,4.6*ou),f(.04,7.6*ou),f(.38,7.3*ou),f(.56,5.6*ou),f(.3,4.2*ou),f(.04,3.6*ou)]);s+=muscR(d,f(.15,6*ou),f.n,6,tb,k);for(let i=0;i<4;i++)s+=fib(`M${RN(f(-.08+i*.04,(4.6+i*.7)*ou))}L${RN(f(.4+i*.03,(5.8+i*.3)*ou))}`,.28);}
+    s+=seg(K,A,9.4,10,5.2,"pele",.3,1.12,1.12)+luz(`M${RN(fs(.15,-1*ou))}L${RN(fs(.8,-.8*ou))}`,.45,.7)+`<ellipse cx="${F1(K[0])}" cy="${F1(K[1])}" rx="2.6" ry="2.2" fill="#fff" opacity=".45" filter="url(#rbl05)"/>`;
+    s+=pth(liso([[A[0]-3.8,A[1]-.6],[A[0]+3.8,A[1]-.6],[A[0]+4.4,A[1]+3],[A[0]+2,A[1]+4.8],[A[0]-2,A[1]+4.8],[A[0]-4.4,A[1]+3]]),grN(A,[1,0],9,"tenis"))+`<path d="M${F1(A[0]-4.2)} ${F1(A[1]+4.1)}H${F1(A[0]+4.2)}" stroke="#fff" stroke-width="1"/><path d="M${F1(A[0]-1.4)} ${F1(A[1]+.6)}H${F1(A[0]+1.4)}M${F1(A[0]-1.6)} ${F1(A[1]+1.8)}H${F1(A[0]+1.6)}" stroke="#6b7079" stroke-width=".45"/>`;
+    return {s,f,ou};};
+  const pl=perna(HL,p.knL,p.anL,-1),pr=perna(HR,p.knR,p.anR,1);o+=pl.s+pr.s;
+  o+=pth(liso([[HL[0]-5.2,HL[1]-6],[HR[0]+5.2,HR[1]-6],[HR[0]+6.4,HR[1]+1],pr.f(.3,7.6*pr.ou),pr.f(.3,-7.4*pr.ou),[cx,HL[1]+6],pl.f(.3,-7.4*pl.ou),pl.f(.3,7.6*pl.ou),[HL[0]-6.4,HL[1]+1]]),gr([HL[0]-7,0],[HR[0]+7,0],"tecido"))+`<path d="M${F1(HL[0]-5)} ${F1(HL[1]-4.6)}H${F1(HR[0]+5)}" stroke="#4b505c" stroke-width="1.2"/>`+vinco(`M${F1(cx)} ${F1(HL[1]-3)}V${F1(HL[1]+5)}`,.45,.5);
+  const tb=tomM(M,"abdutores");if(tb){[[HL,-1],[HR,1]].forEach(([H,sd])=>{const d=liso([[H[0]+sd*2.4,H[1]-10],[H[0]+sd*7.2,H[1]-6.5],[H[0]+sd*8.6,H[1]+1],[H[0]+sd*7.4,H[1]+8],[H[0]+sd*4.6,H[1]+5],[H[0]+sd*3.6,H[1]-3]]);
+    o+=pth(d,grN([H[0]+sd*6,H[1]-1],[1,0],7,tb),' opacity=".9"')+(tb==="mus"?ativo(d,k):"");for(let i=0;i<4;i++)o+=fib(`M${F1(H[0]+sd*(3+i*.8))} ${F1(H[1]-8+i*.6)}L${F1(H[0]+sd*(5.6+i*.7))} ${F1(H[1]+5)}`,.3);});}
+  o+=pth(liso([[cx-4.5,L[1]-6],[L[0]+2,L[1]-2.5],[L[0]-1.5,L[1]+3],[L[0]+.5,L[1]+14],[L[0]+3.5,L[1]+28],[HL[0]-4.5,HL[1]-4],[HL[0]-4,HL[1]+1],[HR[0]+4,HR[1]+1],[HR[0]+4.5,HR[1]-4],[R[0]-3.5,R[1]+28],[R[0]-.5,R[1]+14],[R[0]+1.5,R[1]+3],[R[0]-2,R[1]-2.5],[cx+4.5,R[1]-6]]),gr([L[0]-2,0],[R[0]+2,0],"pele"));
+  const tp=tomM(M,"peito"),ta=tomM(M,"abdominais"),tz=tomM(M,"trapezio");
+  [-1,1].forEach(sd=>{const S=sd<0?L:R,X=x=>cx+(x-cx)*1,m=v=>cx+sd*v;
+    const pc=liso([[m(.5),S[1]+3],[m(Math.abs(S[0]-cx)*.5),S[1]+1.4],[m(Math.abs(S[0]-cx)-3),S[1]+5],[m(Math.abs(S[0]-cx)-3.5),S[1]+12],[m(Math.abs(S[0]-cx)*.5),S[1]+15],[m(.5),S[1]+14]]);
+    o+=tp?muscR(pc,[m(6),S[1]+8],[1,0],14,tp,k):vinco(`M${F1(m(.8))} ${F1(S[1]+14)}Q${F1(m(7))} ${F1(S[1]+16)} ${F1(m(Math.abs(S[0]-cx)-3.5))} ${F1(S[1]+11)}`,.4,.7);
+    const tr=liso([[m(4),S[1]-6],[m(Math.abs(S[0]-cx)-3),S[1]-2.4],[m(Math.abs(S[0]-cx)),S[1]+.4],[m(4.4),S[1]-1]]);
+    o+=tz?muscR(tr,[m(8),S[1]-3],[0,1],5,tz,k):"";
+    o+=luz(`M${F1(m(2))} ${F1(S[1]-.6)}Q${F1(m(7))} ${F1(S[1]-1.6)} ${F1(m(Math.abs(S[0]-cx)-2))} ${F1(S[1]-.8)}`,.55,.7);
+    o+=vinco(`M${F1(m(Math.abs(S[0]-cx)-2.6))} ${F1(S[1]+18)}L${F1(m(Math.abs(S[0]-cx)-4.4))} ${F1(S[1]+21)}M${F1(m(Math.abs(S[0]-cx)-2.8))} ${F1(S[1]+22)}L${F1(m(Math.abs(S[0]-cx)-4.6))} ${F1(S[1]+25)}`,.3,.5);});
+  const y0=L[1]+16,y1=HL[1]-2,ab=`M${F1(cx-5.4)} ${F1(y0)}H${F1(cx+5.4)}L${F1(cx+5)} ${F1(y1)}Q${F1(cx)} ${F1(y1+3)} ${F1(cx-5)} ${F1(y1)}Z`;
+  if(ta)o+=muscR(ab,[cx,(y0+y1)/2],[1,0],11,ta,k);
+  o+=vinco(`M${F1(cx)} ${F1(y0)}V${F1(y1)}`+[0,1,2].map(i=>`M${F1(cx-5)} ${F1(y0+(y1-y0)*(.22+i*.22))}H${F1(cx+5)}`).join(""),ta?.5:.28,.5)+`<ellipse cx="${F1(cx)}" cy="${F1(y1-3)}" rx=".9" ry="1.2" fill="#6f747a" opacity=".5"/>`;
+  /* cabeça */
+  const hd=p.hd;o+=seg([cx,L[1]-3],[hd[0],hd[1]+6],8,7.8,7.2,"pele");
+  [-1,1].forEach(sd=>o+=pth(ell([hd[0]+sd*7.5,hd[1]-.4],1.8,2.8),sph(hd[0]+sd*7.5,hd[1]-.4,3,"pele")));
+  o+=pth(liso([[hd[0],hd[1]-9.6],[hd[0]+5.6,hd[1]-7.2],[hd[0]+7.3,hd[1]-1],[hd[0]+6.2,hd[1]+4.6],[hd[0]+3.2,hd[1]+8.4],[hd[0],hd[1]+9.4],[hd[0]-3.2,hd[1]+8.4],[hd[0]-6.2,hd[1]+4.6],[hd[0]-7.3,hd[1]-1],[hd[0]-5.6,hd[1]-7.2]]),sph(hd[0]-1.5,hd[1]-2.5,11.5,"pele"));
+  o+=`<ellipse cx="${F1(hd[0]-2.8)}" cy="${F1(hd[1]-.6)}" rx="1.7" ry="1" fill="#6f747a" opacity=".3" filter="url(#rbl05)"/><ellipse cx="${F1(hd[0]+2.8)}" cy="${F1(hd[1]-.6)}" rx="1.7" ry="1" fill="#6f747a" opacity=".3" filter="url(#rbl05)"/>`+vinco(`M${F1(hd[0]+.4)} ${F1(hd[1])}L${F1(hd[0]+.9)} ${F1(hd[1]+3)}L${F1(hd[0]-.6)} ${F1(hd[1]+3.3)}M${F1(hd[0]-1.7)} ${F1(hd[1]+5.6)}Q${F1(hd[0])} ${F1(hd[1]+6.1)} ${F1(hd[0]+1.7)} ${F1(hd[1]+5.6)}`,.35,.45);
+  o+=G.front?G.front(p):"";
+  /* braços */
+  const to=tomM(M,"ombro"),tbi=tomM(M,"biceps");
+  [["L",-1],["R",1]].forEach(([s,sd])=>{const S=p["sh"+s],E=p["el"+s],W=p["ha"+s],fa=quadro(S,E),ff=quadro(E,W);
+    o+=seg(S,E,9.8,11,7,"pele",.38)+seg(E,W,7.6,8.6,5.4,"pele",.25);
+    if(tbi)o+=muscR(liso([fa(.25,-2),fa(.5,-3.3),fa(.84,-2),fa(.92,0),fa(.84,2),fa(.5,3.3),fa(.25,2)]),fa(.55,0),fa.n,7,tbi,k);
+    else o+=vinco(`M${RN(fa(.35,0))}L${RN(fa(.85,0))}`,.25,.5);
+    const S0=add(add(S,fa.d,-2),[sd,0],.6),cp=membroD(S0,fa(.46,0),11.6,12,4.8,.3);
+    o+=pth(cp,sph(S0[0]+fa.d[0]*4,S0[1]+fa.d[1]*4,9,to||"pele"))+(to==="mus"?ativo(cp,k):"");
+    if(to)for(let i=-2;i<=2;i++)o+=fib(`M${RN(add(S0,fa.n,i*2))}Q${RN(add(fa(.2,0),fa.n,i*1.8))} ${RN(fa(.45,i*.3))}`,.28);
+    o+=pth(ell(W,4.1,4.1),sph(W[0]-1,W[1]-1.4,5,"pele"))+vinco(`M${F1(W[0]-2.4)} ${F1(W[1]+.4)}H${F1(W[0]+2.4)}M${F1(W[0]-2.2)} ${F1(W[1]+2)}H${F1(W[0]+2.2)}`,.35,.35);});
+  return o;}
+
+/* --- configuração de cada exercício: enquadramento [x0,y0,x1,chão], lado (c), equipamento atrás / no meio / à frente --- */
+const banco=(x0,x1,y,yc)=>estofo([x0,y],[x1,y],7)+tubo([x0+10,y+4],[x0+10,yc],3,"aco")+tubo([x1-10,y+4],[x1-10,yc],3,"aco")+tubo([x0+4,yc-1.2],[x1-4,yc-1.2],2.4,"aco");
+const torre=(x,y0,yc)=>tubo([x,y0],[x,yc],5,"aco")+tubo([x-14,yc-1.4],[x+8,yc-1.4],2.8,"aco");
+const GEN={
+  supino:{box:[30,44,172,132],back:()=>tubo([60,132],[60,58],3.2,"aco")+tubo([60,64],[67,62],2,"aco")+tubo([50,131],[70,131],2.4,"aco"),
+    mid:p=>discoR(p.ha,11)+banco(38,140,117,132),front:p=>pth(ell(p.ha,2.4,2.4),sph(p.ha[0],p.ha[1],2.8,"metal"))},
+  supinoInc:{box:[54,10,168,138],back:()=>tubo([74,138],[74,30],3.2,"aco")+tubo([74,32],[82,29],2,"aco")+tubo([64,137],[84,137],2.4,"aco"),
+    mid:p=>discoR(p.ha,11)+estofo([78,60],[120,117],7)+estofo([110,120],[144,120],7)+tubo([122,124],[122,138],3,"aco")+tubo([100,137],[150,137],2.4,"aco")+tubo([98,98],[110,136],2.6,"aco"),front:p=>pth(ell(p.ha,2.4,2.4),sph(p.ha[0],p.ha[1],2.8,"metal"))},
+  supinoMaq:{box:[44,10,182,140],back:()=>torre(166,10,140)+pilhaR(158,98,174,138)+tubo([150,12],[170,12],4,"aco"),
+    mid:()=>estofo([68,36],[68,110],7)+estofo([60,113],[114,113],7)+tubo([84,117],[84,139],3.5,"aco")+tubo([50,138.6],[120,138.6],2.6,"aco"),
+    front:p=>tubo([p.ha[0],p.ha[1]],[166,p.ha[1]],2.6,"metal")+pega([p.ha[0],p.ha[1]-8],[p.ha[0],p.ha[1]+8])},
+  desenvSmith:{box:[56,0,162,140],back:()=>tubo([150,2],[150,140],4,"aco")+tubo([92,2],[154,2],4,"aco")+tubo([102,3],[102,139],2.2,"metal")+tubo([140,138.6],[158,138.6],2.6,"aco"),
+    mid:p=>discoR(p.ha,9)+estofo([78,36],[79,110],7)+estofo([72,113],[120,113],7)+tubo([94,117],[94,139],3.5,"aco")+tubo([64,138.6],[124,138.6],2.6,"aco"),
+    front:p=>tubo([p.ha[0]-4,p.ha[1]],[p.ha[0]+4,p.ha[1]],3.4,"aco")+pth(ell(p.ha,2.4,2.4),sph(p.ha[0],p.ha[1],2.8,"metal"))},
+  elevLat:{fr:1,box:[34,0,166,142],front:p=>discoR(p.haL,5.4)+discoR(p.haR,5.4)},
+  tricepsPolia:{box:[64,0,170,142],back:()=>torre(158,0,142)+pilhaR(150,104,166,140)+tubo([148,3],[162,3],3,"aco")+roldanaR([150,6],4.5),
+    front:p=>cabo([150,6],p.ha)+tubo([p.ha[0]-6.5,p.ha[1]],[p.ha[0]+6.5,p.ha[1]],2.2,"metal")},
+  abdutora:{fr:1,box:[54,10,146,142],baseX:{elL:V(78,64),haL:V(71,91),elR:V(122,64),haR:V(129,91)},back:()=>tubo([68,30],[68,141],3.4,"aco")+tubo([132,30],[132,141],3.4,"aco")+pth("M78 22H122A6 6 0 0 1 128 28V88A6 6 0 0 1 122 94H78A6 6 0 0 1 72 88V28A6 6 0 0 1 78 22Z",gr([72,0],[128,0],"preto"))+estofo([72,96],[128,96],7)+tubo([60,140.6],[140,140.6],2.6,"aco"),
+    front:p=>[["L",-1],["R",1]].map(([s,sd])=>{const K=p["kn"+s],A=p["an"+s],H=p["ha"+s];return tubo([K[0]+sd*6,K[1]+7],[100+sd*12,139],2.2,"metal")+estofo([K[0]+sd*6,K[1]-8],[K[0]+sd*6,K[1]+8],5)+tubo([A[0]-5,A[1]+5.6],[A[0]+5,A[1]+5.6],2.2,"aco")+pega([H[0],H[1]-4],[H[0],H[1]+4]);}).join("")},
+  flexora:{box:[48,22,168,142],back:()=>torre(134,40,142)+pilhaR(140,100,156,140),
+    mid:()=>estofo([62,32],[70,100],7)+estofo([62,103.5],[122,103.5],7)+tubo([90,108],[90,141],3.5,"aco")+tubo([56,140.6],[138,140.6],2.6,"aco")+tubo([122,100],[134,94],3,"aco"),
+    front:p=>{const r=[p.an[0]+1,p.an[1]+6];return tubo([120,97],r,2.4,"metal")+pth(ell([120,97],3.4,3.4),sph(120,97,4,"aco"))+pth(ell(r,5.4,5.4),sph(r[0],r[1],6,"preto"))+estofo([96,88.5],[123,90.5],6)+tubo([123,90],[134,82],2.4,"aco")+pega([p.ha[0]-3,p.ha[1]],[p.ha[0]+4,p.ha[1]]);}},
+  stiff:{box:[56,0,166,142],front:p=>discoR(p.ha,11)},
+  extensora:{box:[48,22,168,142],back:()=>torre(134,40,142)+pilhaR(140,100,156,140),
+    mid:()=>estofo([62,32],[70,100],7)+estofo([62,103.5],[122,103.5],7)+tubo([90,108],[90,141],3.5,"aco")+tubo([56,140.6],[138,140.6],2.6,"aco")+tubo([122,100],[134,94],3,"aco"),
+    front:p=>{const r=[p.an[0]+5,p.an[1]+2];return tubo([118,99],r,2.4,"metal")+pth(ell([118,99],3.4,3.4),sph(118,99,4,"aco"))+pth(ell(r,5.4,5.4),sph(r[0],r[1],6,"preto"))+pega([p.ha[0]-3,p.ha[1]],[p.ha[0]+4,p.ha[1]]);}},
+  panturrilha:{box:[22,24,192,140],back:()=>tubo([96,124],[186,34],3.2,"metal")+tubo([182,38],[182,139],3.6,"aco")+tubo([20,138.6],[188,138.6],3,"aco"),
+    mid:()=>estofo([28,60],[76,114],7)+estofo([60,118],[94,118],7)+tubo([46,90],[46,139],3.4,"aco")+tubo([80,122],[80,139],3.4,"aco"),
+    front:p=>{const u=[.707,-.707],t=p.to,d=[t[0]+u[0]*14+3,t[1]+u[1]*14+3];return discoR(d,12)+tubo([t[0]-12+3,t[1]-12+3],[t[0]+12+3,t[1]+12+3],3.4,"aco");}},
+  remadaTri:{box:[36,30,182,140],back:()=>torre(160,34,140)+pilhaR(164,98,178,138)+roldanaR([150,100],4),
+    mid:()=>estofo([44,114],[106,114],7)+tubo([62,118],[62,139],3.4,"aco")+tubo([40,138.6],[166,138.6],2.6,"aco")+tubo([142,84],[142,138],3.4,"aco")+estofo([140,82],[140,100],4.6),
+    front:p=>{const h=p.ha;return cabo([150,100],[h[0]+5,h[1]])+`<path d="M${F1(h[0]-5)} ${F1(h[1]+5)}L${F1(h[0]+5)} ${F1(h[1]+5)}L${F1(h[0]+5)} ${F1(h[1]-5)}Z" fill="none" stroke="${gr([h[0]-5,0],[h[0]+5,0],"metal")}" stroke-width="2" stroke-linejoin="round"/>`;}},
+  remadaBaixa:{box:[36,30,182,140],back:()=>torre(160,34,140)+pilhaR(164,98,178,138)+roldanaR([150,100],4),
+    mid:()=>estofo([44,114],[106,114],7)+tubo([62,118],[62,139],3.4,"aco")+tubo([40,138.6],[166,138.6],2.6,"aco")+tubo([142,84],[142,138],3.4,"aco")+estofo([140,82],[140,100],4.6),
+    front:p=>cabo([150,100],p.ha)+tubo([p.ha[0],p.ha[1]-7.5],[p.ha[0],p.ha[1]+7.5],2.4,"metal")},
+  facePull:{box:[60,0,180,142],back:()=>torre(170,0,142)+pilhaR(162,104,178,140)+roldanaR([162,16],4.5),
+    front:p=>cabo([162,16],p.ha)+tubo([p.ha[0],p.ha[1]-6],[p.ha[0]+1,p.ha[1]+6],2.2,"tenis")},
+  rosca:{box:[66,0,138,142],kf:[{ha:V(114,33),ha2:V(103,77)},{ha:V(103,77),ha2:V(114,33)}],base:{hd:V(102,12),sh:V(101,26),hp:V(100,74),kn:V(101,107),an:V(100,140),to:V(112,141),el:V(102,52),el2:V(101,52)},
+    front:p=>discoR(p.ha,5.4),farEq:p=>discoR(p.ha2,5.4)},
+  prancha:{c:-1,box:[26,88,172,139],mid:()=>tubo([24,138.4],[176,138.4],2,"tecido")},
+  abdominal:{box:[24,86,166,137],mid:()=>tubo([22,136.4],[170,136.4],2,"tecido")},
+  bike:{box:[30,38,168,142],back:()=>pth(ell([132,106],15,15),sph(132,106,16,"aco")),
+    mid:()=>estofo([40,52],[80,108],7)+estofo([62,112],[98,112],7)+tubo([78,116],[74,141],4,"aco")+tubo([90,114],[132,106],4,"aco")+tubo([132,106],[122,141],4,"aco")+tubo([36,140.4],[154,140.4],3,"aco")+tubo([146,104],[156,56],3.4,"aco")+pth("M148 46L164 50L161 58L146 54Z",gr([146,0],[164,0],"preto"))+pega([74,100],[82,100]),
+    front:p=>tubo([132,106],p.an,2,"metal")+tubo([p.an[0]-3.5,p.an[1]],[p.an[0]+3.5,p.an[1]],2.4,"preto")+pth(ell([132,106],3,3),sph(132,106,3.5,"metal")),
+    farEq:p=>tubo([132,106],p.an2,2,"metal")+tubo([p.an2[0]-3.5,p.an2[1]],[p.an2[0]+3.5,p.an2[1]],2.4,"preto")},
+  passadeira:{box:[40,0,170,147],back:()=>tubo([160,143],[152,40],4,"aco")+pth("M138 32L160 36L157 46L136 42Z",gr([136,0],[160,0],"preto"))+tubo([152,44],[130,50],3,"metal"),
+    mid:()=>tubo([44,143.4],[166,143.4],7,"aco")+tubo([46,140.2],[162,140.2],2.6,"preto")+pth(ell([48,143.4],3.3,3.3),sph(48,143.4,4,"metal"))+pth(ell([160,143.4],3.3,3.3),sph(160,143.4,4,"metal"))}
+};
+function desenharGen(id,P,k,det){const R=REAL[id],G=GEN[id],M=MUSC_MAPA[id]||[[],[]],[x0,y0,x1,y1]=G.box;
+  const s=Math.min(272/(x1-x0),262/(y1-y0)),tx=150-s*(x0+x1)/2,ty=302-s*y1,kk=(R.forca===-1||R.an.loop)?1:k;
+  let o=fundoR()+`<g transform="translate(${F1(tx)} ${F1(ty)}) scale(${s.toFixed(3)})">`+sombraChao((x0+x1)/2,y1,(x1-x0)*.42)+(G.back?G.back(P):"");
+  o+=G.fr?figFrente(P,M,kk,G):figLado(P,M,kk,G.c||1,G);
+  o+=`</g>`;
+  if(det&&R.cues.length)o+=dicas(R);
+  return o;}
+Object.keys(GEN).forEach(id=>{const A=ANIM[id];if(!A||REAL[id])return;const G=GEN[id],an={...A,...(G.kf?{kf:G.kf,base:G.base}:{}),...(G.baseX?{base:{...A.base,...G.baseX}}:{})};
+  const cues=(A.cues||[]).map(c=>c[1]).slice(0,2).map((t,i)=>[t,i?-1:14,314]);
+  REAL[id]={gen:1,an,dur:A.dur,r:A.loop?.5:(A.r||.5),forca:A.forca,lado:1,fases:A.fases||[""],cues,draw:(P,k,det)=>desenharGen(id,P,k,det)};});
 function realPose(R,t){
+  if(R.an) return poseEm(R.an,t);
   const r=R.r||.5;let x,ph;if(t<r){x=t/r;ph=0;}else{x=1-(t-r)/(1-r);ph=1;}const f=x*x*(3-2*x);
   const A=R.kf[0],B=R.kf[1],P={};for(const k in A){const a=A[k],b=B[k];P[k]=Array.isArray(a)?V(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f):a+(b-a)*f;}
   P._f=f;P._ph=ph;return P;

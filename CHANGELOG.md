@@ -7,6 +7,25 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.14.0 — 19 Nov 2026
+O estilo realista (v3), aprovado pelo Bruno, passa para **todos os exercícios do ginásio e aquecimentos**: 21 ilustrações.
+- **Motor genérico:** um corpo realista de lado (ou de frente, na elevação lateral e na cadeira abdutora) é desenhado a partir das poses das animações. Inclui tronco, calções, pernas com sapatilhas, braços, cabeça de perfil e a perna e o braço mais afastados, mais escuros.
+- **Músculos certos em cada exercício**, a partir do mapa de músculos da ficha:
+  - vermelho forte para os principais, que brilham na fase de força;
+  - rosado para os que ajudam.
+  - Grupos incluídos: peito, ombros, deltoide posterior, trapézio, dorsais, lombar, abdominais, bíceps, tríceps, antebraço, glúteos, abdutores, quadríceps, posteriores da coxa e gémeos.
+- **Equipamento realista em cada exercício:**
+  - bancos e estofos com costuras;
+  - torres com pilha de pesos e roldanas;
+  - cabos, discos, halteres, rolos das cadeiras extensora e flexora;
+  - bicicleta reclinada com volante;
+  - passadeira com tapete.
+- **Supinos e Smith:** o disco desenhado é o do lado de lá da barra, para não tapar o peito e os ombros. Deste lado vê-se só a ponta da barra.
+- **Rosca alternada:** passa a ser vista de lado, com um braço a subir enquanto o outro desce.
+- **Cadeira abdutora:** as pegas ficam mais para fora, para se verem os músculos do lado da anca.
+- **Correcção:** as animações em ciclo (bicicleta, passadeira) podiam falhar no primeiro instante.
+- A caixa "Vista de lado" deixa de aparecer nos exercícios novos, porque o desenho principal já mostra o movimento.
+
 ## v1.13.0 — 19 Nov 2026
 Terceira versão das ilustrações detalhadas, agora em **dois exercícios** para comparar: **puxada pronada** (vista de trás) e **leg press 45°** (vista de lado, nova).
 - **Novo kit de desenho mais realista:** cada braço, perna e peça da máquina tem sombreado próprio conforme a direcção da luz (brilho, meio-tom, sombra e luz reflectida), com sombras suaves de contacto e reflexos.

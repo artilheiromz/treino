@@ -90,3 +90,22 @@ Nunca editar a partir de uma cópia local antiga: isso apagaria os registos feit
   - para criar uma animação nova, basta acrescentar uma entrada.
 - **`GINASIO`** tem os treinos A, B e C, com o dia da semana, o aquecimento, os exercícios e os alongamentos. `GIN_INI` é a data de início.
 - **Registo:** `ex` é um mapa `id → [kg por série]`; `reps` é opcional (10 por omissão). O volume é carga × repetições.
+
+
+## Ilustrações realistas (v3)
+- **Kit de desenho:** `gr`, `grN`, `cyl`, `sph`, `seg`, `membroD`, `liso`, `quadro`, `brilho`, `sombra`, `vinco`, `luz`, `fib`.
+  - Cada imagem cria os seus próprios gradientes, com ids únicos (`RG`, `realRender`).
+  - A luz vem de cima à esquerda.
+- **Desenhos feitos à mão:** `REAL.puxada` (de trás) e `REAL.legPress` (de lado).
+- **Restantes exercícios:** `GEN[id]` define:
+  - enquadramento `box:[x0,y0,x1,chão]` nas unidades das poses (200×150);
+  - `c` (-1 para quem está de barriga para baixo);
+  - `fr:1` para vista de frente;
+  - equipamento em `back` / `mid` / `front` / `farEq`;
+  - opcionalmente `kf` / `base` / `baseX` para outras poses.
+- **Poses:** vêm de `ANIM[id]` (com `META`). Os músculos vêm de `MUSC_MAPA[id]`.
+- **Exercício novo:**
+  1. Juntar a pose em `ANIM`.
+  2. Juntar os músculos em `MUSC_MAPA`.
+  3. Juntar uma entrada em `GEN`, que regista o exercício em `REAL` automaticamente.
+- **Para o futuro:** fica em aberto, para outro dia, fazer renders 3D no Blender.
