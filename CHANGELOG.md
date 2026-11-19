@@ -7,6 +7,19 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.13.0 — 19 Nov 2026
+Terceira versão das ilustrações detalhadas, agora em **dois exercícios** para comparar: **puxada pronada** (vista de trás) e **leg press 45°** (vista de lado, nova).
+- **Novo kit de desenho mais realista:** cada braço, perna e peça da máquina tem sombreado próprio conforme a direcção da luz (brilho, meio-tom, sombra e luz reflectida), com sombras suaves de contacto e reflexos.
+- **Músculos com volume:** gradiente próprio, fibras escuras e claras, e um brilho extra na fase em que fazem força.
+- **Máquinas mais reais:** metal cromado nas guias e calhas, estofos com costuras, e discos de 20 kg no leg press, que sobem com a plataforma.
+- **Leg press 45°:**
+  - Mostra quadríceps e glúteos (principais), e posteriores da coxa e gémeos (ajudam).
+  - O joelho dobra e estica de forma calculada, sem nunca trancar.
+  - A perna mais afastada aparece por trás, mais escura.
+- Os exercícios cuja ilustração principal já é de lado não repetem a caixa "Vista de lado".
+- As imagens de cada ficha usam ids próprios, para várias imagens na mesma página não se misturarem.
+- A animação foi limitada a cerca de 30 imagens por segundo, para poupar bateria.
+
 ## v1.12.0 — 19 Nov 2026
 Segunda versão da amostra da **puxada pronada**, mais realista (ainda só neste exercício, para aprovação).
 - **Máquina com mais pormenor:** roldana com raios, guias, pilha de placas numeradas com pino de selecção laranja, almofadas das coxas, pegas da barra e sombra no chão.
