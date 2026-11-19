@@ -7,6 +7,19 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.15.0 — 19 Nov 2026
+Correcções às ilustrações, a partir da revisão do Bruno:
+- **Supino reto, supino inclinado e stiff:** a barra vê-se agora em perspectiva, de um disco ao outro. O disco do lado de lá aparece inteiro; o do lado de cá aparece transparente, para não tapar os músculos.
+- **Desenvolvimento na Smith:** passa a mostrar as duas guias verticais da máquina, com a barra presa nos ganchos.
+- **Cadeira flexora e extensora:** uma seta laranja mostra para onde vai a perna em cada uma: na flexora dobra para trás, na extensora estica para a frente. O movimento passou a ser em arco.
+- **Setas de movimento:** aparecem em todos os exercícios novos e mostram o caminho da fase de força.
+- **Panturrilha no leg press:** desenho novo com a máquina detalhada do leg press. Os joelhos ficam quase esticados, só os tornozelos mexem, e os gémeos aparecem como músculo principal.
+- **Remadas:** um círculo no canto mostra a pega, triângulo (mãos juntas) ou barra (mãos afastadas). Na remada com barra, a barra vê-se em perspectiva.
+- **Face pull:** desenho novo visto de trás, como na puxada, com a corda, os cotovelos altos e o deltoide posterior e o trapézio destacados.
+- **Rosca alternada:** passa a ser vista de frente, com os halteres inteiros e o antebraço destacado.
+- **Animações mais leves:** a perna e o braço do lado de lá deixam de usar um filtro pesado. Ficam mais escuros através da própria cor, e as animações correm mais fluidas.
+- Todos os ossos mantêm o comprimento durante o movimento, sem braços nem pernas a encolher a meio.
+
 ## v1.14.1 — 19 Nov 2026
 - **Prancha:** os antebraços estavam virados para os pés. Agora apontam para a frente, para o lado da cabeça, com os cotovelos debaixo dos ombros, como na prancha real. Corrigido também na animação simples.
 
