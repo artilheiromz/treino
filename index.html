@@ -424,7 +424,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.14.0"; // ver CHANGELOG.md
+const VERSAO = "1.14.1"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -579,7 +579,7 @@ const ANIM={
     musc:[["sh","el",0,.55,12,1],["sh","hp",0,.25,16,2]],back:()=>chao(142)+eqL(V(170,0),V(170,142),6)+eqC(V(162,16),5),front:p=>eqL(V(162,16),p.ha,2)+eqL(V(p.ha[0],p.ha[1]-6),V(p.ha[0],p.ha[1]+6),4)},
   rosca:{view:"f",dur:2600,kf:[{elL:V(84,56),haL:V(88,36),elR:V(116,56),haR:V(118,80)},{elL:V(84,56),haL:V(82,80),elR:V(116,56),haR:V(112,36)}],base:FR,
     musc:[["shL","elL",.15,1,11,1],["shR","elR",.15,1,11,1]],back:()=>chao(142),front:p=>halter(p.haL)+halter(p.haR)},
-  prancha:{dur:3200,kf:[{hp:V(108,116)},{hp:V(108,118)}],base:{hd:V(42,104),sh:V(56,110),kn:V(130,124),an:V(152,130),to:V(155,138),el:V(56,136),ha:V(76,136)},
+  prancha:{dur:3200,kf:[{hp:V(108,116)},{hp:V(108,118)}],base:{hd:V(42,104),sh:V(56,110),kn:V(130,124),an:V(152,130),to:V(155,138),el:V(56,136),ha:V(36,136)},
     musc:[["sh","hp",.35,1,17,1]],back:()=>chao(139),front:()=>""},
   abdominal:{dur:2400,kf:[{hd:V(40,126),sh:V(54,128),el:V(48,114),ha:V(40,122)},{hd:V(50,104),sh:V(62,114),el:V(54,98),ha:V(48,106)}],
     base:{hp:V(100,130),kn:V(126,104),an:V(146,130),to:V(156,132)},musc:[["sh","hp",.15,.95,17,1]],back:()=>chao(137),front:()=>""},
@@ -1236,7 +1236,7 @@ const GEN={
     front:p=>cabo([162,16],p.ha)+tubo([p.ha[0],p.ha[1]-6],[p.ha[0]+1,p.ha[1]+6],2.2,"tenis")},
   rosca:{box:[66,0,138,142],kf:[{ha:V(114,33),ha2:V(103,77)},{ha:V(103,77),ha2:V(114,33)}],base:{hd:V(102,12),sh:V(101,26),hp:V(100,74),kn:V(101,107),an:V(100,140),to:V(112,141),el:V(102,52),el2:V(101,52)},
     front:p=>discoR(p.ha,5.4),farEq:p=>discoR(p.ha2,5.4)},
-  prancha:{c:-1,box:[26,88,172,139],mid:()=>tubo([24,138.4],[176,138.4],2,"tecido")},
+  prancha:{c:-1,box:[18,84,168,139],mid:()=>tubo([24,138.4],[176,138.4],2,"tecido")},
   abdominal:{box:[24,86,166,137],mid:()=>tubo([22,136.4],[170,136.4],2,"tecido")},
   bike:{box:[30,38,168,142],back:()=>pth(ell([132,106],15,15),sph(132,106,16,"aco")),
     mid:()=>estofo([40,52],[80,108],7)+estofo([62,112],[98,112],7)+tubo([78,116],[74,141],4,"aco")+tubo([90,114],[132,106],4,"aco")+tubo([132,106],[122,141],4,"aco")+tubo([36,140.4],[154,140.4],3,"aco")+tubo([146,104],[156,56],3.4,"aco")+pth("M148 46L164 50L161 58L146 54Z",gr([146,0],[164,0],"preto"))+pega([74,100],[82,100]),

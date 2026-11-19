@@ -7,6 +7,9 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.14.1 — 19 Nov 2026
+- **Prancha:** os antebraços estavam virados para os pés. Agora apontam para a frente, para o lado da cabeça, com os cotovelos debaixo dos ombros, como na prancha real. Corrigido também na animação simples.
+
 ## v1.14.0 — 19 Nov 2026
 O estilo realista (v3), aprovado pelo Bruno, passa para **todos os exercícios do ginásio e aquecimentos**: 21 ilustrações.
 - **Motor genérico:** um corpo realista de lado (ou de frente, na elevação lateral e na cadeira abdutora) é desenhado a partir das poses das animações. Inclui tronco, calções, pernas com sapatilhas, braços, cabeça de perfil e a perna e o braço mais afastados, mais escuros.
