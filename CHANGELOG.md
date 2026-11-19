@@ -7,6 +7,18 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.11.0 — 19 Nov 2026
+Amostra de ilustração detalhada, só na **puxada pronada**, para o Bruno aprovar antes de passar para os outros exercícios.
+- **Desenho mais realista**, em vez do boneco:
+  - corpo visto de trás com sombreado em tons de cinzento, ombros, braços e costas desenhados, e linhas anatómicas;
+  - fundo branco, como nas ilustrações de ginásio.
+- **Máquina completa:** torre, roldana, cabo, barra larga, banco, e a pilha de pesos, que sobe quando se puxa a barra.
+- **Músculos:** a grande dorsal (principal) a vermelho, que acende na fase de esforço. O trapézio, os rombóides e os ombros (que ajudam) a vermelho claro.
+- **Animação contínua e sequência de 3 imagens** (1 Início, 2 Meio, 3 Fim). A imagem da fase actual fica marcada enquanto a animação corre.
+- **Frase da fase e notas de técnica:** "Peito para cima" e "Cotovelos descem".
+- **Vista de lado:** a animação simples continua por baixo, numa caixa própria.
+- Os outros exercícios continuam com a figura da v1.10.0.
+
 ## v1.10.0 — 19 Nov 2026
 Animações dos exercícios muito melhoradas, a pedido do Bruno (as da v1.9.0 eram demasiado básicas).
 - **Figura com volume:** corpo desenhado com formas cheias e contorno, em vez de traços. O braço e a perna do lado de lá aparecem mais escuros, para dar profundidade.

@@ -378,6 +378,15 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 .mapa .ml{fill:rgba(255,255,255,.6);font-size:10px;text-anchor:middle}
 .mleg{display:flex;justify-content:center;gap:16px;font-size:13px;color:rgba(255,255,255,.8);margin-top:6px}.mleg span{display:inline-flex;align-items:center;gap:6px}
 .mleg i{width:12px;height:12px;border-radius:50%;display:inline-block}.mleg .lp{background:#ff5a2e}.mleg .ls{background:#ffb08a}
+.real{display:block}
+.real .rln{stroke:#6f6f6f;stroke-width:1.1;stroke-linejoin:round}
+.real .rdt{fill:none;stroke:#8a8a8a;stroke-width:1.1;stroke-linecap:round}
+.real .rtx{fill:#fff;font:600 10px -apple-system,system-ui,sans-serif;text-anchor:middle}
+.exfig .real{width:100%;max-width:340px;height:auto;border-radius:22px}
+.rstrip{display:flex;gap:8px;justify-content:center;margin:10px auto 0;max-width:360px}
+.rf{flex:1;text-align:center;font-size:12px;color:rgba(255,255,255,.7);border-radius:14px;padding:4px;border:2px solid transparent;display:flex;flex-direction:column;gap:4px;align-items:center}
+.rf.on{border-color:#ffd27a;color:#fff}.rf svg{width:100%;height:auto;border-radius:10px}
+.thumb .real{border-radius:10px}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -412,7 +421,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.10.0"; // ver CHANGELOG.md
+const VERSAO = "1.11.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -744,19 +753,25 @@ function desenharFig(an,p,det){
   const c=an.view==="f"?corpoFrente(p):corpoLado(p);
   return an.back(p)+(det?seta(an,p):"")+c.far+c.meio+musculos(an,p)+c.braco+an.front(p)+(det?notas(an,p):"");
 }
-function svgEx(id,px,anim){
+function svgEx(id,px,anim,lado){
+  if(REAL[id]&&!anim&&!lado) return svgReal(id,Math.round(px*.72),false);
   const ak=(EX[id]||{}).anim||id, an=ANIM[ak]; if(!an) return "";
   return `<svg class="fig${anim?" big":""}" ${anim?`data-anim="${ak}"`:""} viewBox="0 0 200 150" width="${px}" height="${Math.round(px*.75)}" aria-hidden="true"><g>${desenharFig(an,poseEm(an,anim?0:.5),anim)}</g></svg>`;
 }
 function animarFichas(root){
   cancelAnimationFrame(animRaf);
-  const els=[...root.querySelectorAll("svg[data-anim]")]; if(!els.length) return;
-  const fase=root.querySelector(".exfase");
+  const els=[...root.querySelectorAll("svg[data-anim],svg[data-real]")]; if(!els.length) return;
+  const fase=root.querySelector(".exfase"), strip=[...root.querySelectorAll(".rf")];
   const reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const t0=performance.now(); let ultF="";
-  const passo=now=>{els.forEach(svg=>{if(!svg.isConnected)return;const an=ANIM[svg.dataset.anim];const t=reduz?.5:((now-t0)%(an.dur*1.25))/(an.dur*1.25);const p=poseEm(an,t);
+  const passo=now=>{els.forEach(svg=>{if(!svg.isConnected)return;
+      if(svg.dataset.real){const R=REAL[svg.dataset.real],t=reduz?.42:((now-t0)%(R.dur*1.25))/(R.dur*1.25),P=realPose(R,t);
+        svg.lastChild.innerHTML=R.draw(P,P._ph===R.forca?1:.4,true);
+        if(fase){const tx=R.fases[P._ph];if(tx!==ultF){fase.textContent=tx;ultF=tx;}}
+        const ai=P._f<.33?0:P._f<.67?1:2;strip.forEach((e,i)=>e.classList.toggle("on",i===ai));return;}
+      const an=ANIM[svg.dataset.anim];const t=reduz?.5:((now-t0)%(an.dur*1.25))/(an.dur*1.25);const p=poseEm(an,t);
       svg.firstChild.innerHTML=desenharFig(an,p,true);
-      if(fase&&an.fases){const tx=an.fases[an.loop?0:p._ph]||an.fases[0];if(tx!==ultF){fase.textContent=tx;ultF=tx;}}});
+      if(fase&&an.fases&&!root.querySelector("svg[data-real]")){const tx=an.fases[an.loop?0:p._ph]||an.fases[0];if(tx!==ultF){fase.textContent=tx;ultF=tx;}}});
     if(!reduz&&els.some(e=>e.isConnected)) animRaf=requestAnimationFrame(passo);};
   animRaf=requestAnimationFrame(passo);
 }
@@ -778,6 +793,86 @@ function mapaMusc(id){
     <rect x="53" y="94" width="14" height="16" rx="5" class="${cl("lombar")}"/>${E(41,118,5,9,"abdutores",-10)}${E(79,118,5,9,"abdutores",10)}${E(51,126,10,10,"gluteos")}${E(69,126,10,10,"gluteos")}
     ${E(49,156,8,21,"posterior")}${E(71,156,8,21,"posterior")}${E(50,200,6,14,"gemeos")}${E(70,200,6,14,"gemeos")}</g>`;
   return `<svg class="mapa" viewBox="0 0 250 232" aria-hidden="true">${frente}${costas}<text x="60" y="230" class="ml">frente</text><text x="190" y="230" class="ml">costas</text></svg>`;
+}
+
+/* --- Ilustração detalhada (amostra v1.11.0): puxada pronada vista de trás, com máquina,
+   músculos com sombreado e animação contínua + sequência de 3 imagens (início, meio, fim) --- */
+const RDEFS=`<defs>
+  <linearGradient id="rsk" x1="0" x2="1"><stop offset="0" stop-color="#c9c9c9"/><stop offset=".45" stop-color="#f6f6f6"/><stop offset="1" stop-color="#b9b9b9"/></linearGradient>
+  <linearGradient id="rmu" x1="0" x2="1"><stop offset="0" stop-color="#b3301d"/><stop offset=".5" stop-color="#ff6a4d"/><stop offset="1" stop-color="#b3301d"/></linearGradient>
+  <linearGradient id="rmu2" x1="0" x2="1"><stop offset="0" stop-color="#d9826f"/><stop offset=".5" stop-color="#ffb5a3"/><stop offset="1" stop-color="#d9826f"/></linearGradient>
+  <linearGradient id="rmt" x1="0" x2="1"><stop offset="0" stop-color="#d4d4d4"/><stop offset=".5" stop-color="#f4f4f4"/><stop offset="1" stop-color="#bcbcbc"/></linearGradient>
+  <linearGradient id="rsh" x1="0" x2="1"><stop offset="0" stop-color="#2c2c2c"/><stop offset=".5" stop-color="#4a4a4a"/><stop offset="1" stop-color="#2c2c2c"/></linearGradient>
+</defs>`;
+function limbR(a,b,w1,wm,w2,fill){ // membro com "barriga" muscular (curvas suaves)
+  const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L,m=[a[0]+dx*.45,a[1]+dy*.45];
+  const P=(c,w,s)=>[c[0]+nx*w/2*s,c[1]+ny*w/2*s];
+  const a1=P(a,w1,1),a2=P(a,w1,-1),b1=P(b,w2,1),b2=P(b,w2,-1),m1=P(m,wm*1.18,1),m2=P(m,wm*1.18,-1);
+  return `<path d="M${F1(a1[0])} ${F1(a1[1])}Q${F1(m1[0])} ${F1(m1[1])} ${F1(b1[0])} ${F1(b1[1])}A${w2/2} ${w2/2} 0 0 0 ${F1(b2[0])} ${F1(b2[1])}Q${F1(m2[0])} ${F1(m2[1])} ${F1(a2[0])} ${F1(a2[1])}A${w1/2} ${w1/2} 0 0 0 ${F1(a1[0])} ${F1(a1[1])}Z" fill="${fill}" class="rln"/>`;
+}
+const MX=x=>300-x;
+const REAL={
+  puxada:{dur:2600,r:.42,forca:0,
+    kf:[{sL:V(112,146),sR:V(188,146),eL:V(90,96),eR:V(210,96),hL:V(70,44),hR:V(230,44),ap:158,lift:0},
+        {sL:V(113,153),sR:V(187,153),eL:V(100,198),eR:V(200,198),hL:V(98,140),hR:V(202,140),ap:177,lift:46}],
+    fases:["Puxa a barra até ao peito","Sobe devagar, sem largar"],
+    cues:[["Peito para cima",6,320],["Cotovelos descem",-1,320]],
+    draw:(P,k,det)=>{
+      const s=[];
+      s.push(`<rect x="0" y="0" width="300" height="330" rx="18" fill="#ffffff"/>`);
+      // máquina (atrás de tudo: está à frente da pessoa)
+      s.push(`<rect x="116" y="4" width="68" height="20" rx="5" fill="url(#rmt)" class="rln"/><circle cx="150" cy="16" r="7" fill="#9a9a9a" class="rln"/>`);
+      s.push(`<rect x="128" y="20" width="9" height="296" fill="url(#rmt)" class="rln"/><rect x="163" y="20" width="9" height="296" fill="url(#rmt)" class="rln"/>`);
+      s.push(`<line x1="143" y1="190" x2="143" y2="306" stroke="#8d8d8d" stroke-width="1.6"/><line x1="157" y1="190" x2="157" y2="306" stroke="#8d8d8d" stroke-width="1.6"/>`);
+      let pl="";for(let i=0;i<6;i++)pl+=`<rect x="138" y="${262+i*7.5}" width="24" height="6.5" rx="1.5" fill="url(#rsh)"/>`;
+      s.push(pl+`<rect x="138" y="${F1(232-P.lift)}" width="24" height="26" rx="2" fill="url(#rsh)"/><line x1="150" y1="16" x2="150" y2="${F1(232-P.lift)}" stroke="#555" stroke-width="1.4"/>`);
+      s.push(`<rect x="104" y="306" width="92" height="14" rx="4" fill="url(#rmt)" class="rln"/>`);
+      // cabo e barra (à frente da pessoa, por isso por trás do corpo neste ângulo)
+      const yb=(P.hL[1]+P.hR[1])/2;
+      s.push(`<line x1="150" y1="16" x2="150" y2="${F1(yb-3)}" stroke="#555" stroke-width="1.6"/>`);
+      s.push(`<path d="M${F1(P.hL[0]-16)} ${F1(P.hL[1]+9)}L${F1(P.hL[0])} ${F1(P.hL[1])}L${F1(P.hR[0])} ${F1(P.hR[1])}L${F1(P.hR[0]+16)} ${F1(P.hR[1]+9)}" fill="none" stroke="#3a3a3a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>`);
+      // banco
+      s.push(`<rect x="104" y="270" width="92" height="13" rx="6" fill="url(#rsh)"/><rect x="144" y="283" width="12" height="24" fill="url(#rmt)" class="rln"/>`);
+      // pernas (gémeos e sapatilhas)
+      const calf=m=>{const X=m?MX:x=>x;return `<path d="M${X(122)} 278C${X(111)} 290 ${X(111)} 302 ${X(118)} 312L${X(129)} 312C${X(131)} 300 ${X(134)} 290 ${X(134)} 278Z" fill="url(#rsk)" class="rln"/><ellipse cx="${X(123)}" cy="315" rx="11" ry="4.5" fill="#2a2a2a"/>`;};
+      s.push(calf(0)+calf(1));
+      // tronco
+      const L=P.sL,R=P.sR,ap=P.ap;
+      s.push(`<path d="M140 120L160 120L163 134L137 134Z" fill="url(#rsk)" class="rln"/>`);
+      s.push(`<path d="M${F1(L[0]-3)} ${F1(L[1]-3)}C${F1(L[0]-13)} ${F1(L[1]+22)} 99 ${F1(ap+22)} 106 210C110 232 115 244 116 258L184 258C185 244 190 232 194 210C201 ${F1(ap+22)} ${F1(R[0]+13)} ${F1(R[1]+22)} ${F1(R[0]+3)} ${F1(R[1]-3)}C176 ${F1(R[1]-14)} 165 133 159 129L141 129C135 133 124 ${F1(L[1]-14)} ${F1(L[0]-3)} ${F1(L[1]-3)}Z" fill="url(#rsk)" class="rln"/>`);
+      // grande dorsal (músculo principal) — acende na fase de esforço
+      const lat=m=>{const X=m?MX:x=>x;const sx=m?R[0]:L[0];const X2=m?(x=>x):(x=>x);
+        return `<path d="M${F1(m?sx-2:sx+2)} ${F1(ap)}C${X(103)} ${F1(ap+18)} ${X(103)} 206 ${X(116)} 238C${X(126)} 247 ${X(140)} 241 ${X(147)} 233C${X(146)} 214 ${X(140)} 198 ${X(132)} ${F1(ap+10)}C${X(126)} ${F1(ap+2)} ${X(118)} ${F1(ap-4)} ${F1(m?sx-2:sx+2)} ${F1(ap)}Z" fill="url(#rmu)" opacity="${(.55+.45*k).toFixed(2)}" class="rln"/>`;};
+      s.push(lat(0)+lat(1));
+      // trapézio e rombóides (ajudam)
+      s.push(`<path d="M142 130L158 130C170 137 ${F1(R[0]-8)} ${F1(R[1]-6)} ${F1(R[0]-6)} ${F1(R[1]+2)}L150 202L${F1(L[0]+6)} ${F1(L[1]+2)}C${F1(L[0]+8)} ${F1(L[1]-6)} 130 137 142 130Z" fill="url(#rmu2)" opacity="${(.45+.3*k).toFixed(2)}" class="rln"/>`);
+      // linhas anatómicas
+      s.push(`<path d="M150 132V252M128 160Q121 182 136 197M172 160Q179 182 164 197M144 212Q142 236 144 252M156 212Q158 236 156 252" class="rdt"/>`);
+      // calções
+      s.push(`<path d="M114 250L186 250C193 262 195 272 193 282L107 282C105 272 107 262 114 250Z" fill="url(#rsh)"/><path d="M150 252V282" stroke="#1d1d1d" stroke-width="1.2"/>`);
+      // cabeça (careca, de trás)
+      s.push(`<ellipse cx="133" cy="108" rx="3.6" ry="6.5" fill="url(#rsk)" class="rln"/><ellipse cx="167" cy="108" rx="3.6" ry="6.5" fill="url(#rsk)" class="rln"/><ellipse cx="150" cy="104" rx="17" ry="21" fill="url(#rsk)" class="rln"/>`);
+      // braços
+      const arm=m=>{const S=m?P.sR:P.sL,E=m?P.eR:P.eL,H=m?P.hR:P.hL;
+        const d=[E[0]-S[0],E[1]-S[1]],ang=Math.atan2(d[1],d[0])*180/Math.PI,dc=[S[0]+d[0]*.18,S[1]+d[1]*.18];
+        return limbR(S,E,22,24,15,"url(#rsk)")+limbR(E,H,15,17,10,"url(#rsk)")+
+          `<path d="M${F1(S[0]+d[0]*.3)} ${F1(S[1]+d[1]*.3)}Q${F1(S[0]+d[0]*.62+(m?-4:4))} ${F1(S[1]+d[1]*.62)} ${F1(S[0]+d[0]*.85)} ${F1(S[1]+d[1]*.85)}" class="rdt"/>`+
+          `<g transform="translate(${F1(dc[0])} ${F1(dc[1])}) rotate(${F1(ang)})"><ellipse rx="14" ry="12" fill="url(#rsk)" class="rln"/><ellipse rx="12" ry="9.5" fill="url(#rmu2)" opacity="${(.4+.35*k).toFixed(2)}"/></g>`+
+          `<circle cx="${F1(H[0])}" cy="${F1(H[1])}" r="7.5" fill="url(#rsk)" class="rln"/><path d="M${F1(H[0]-5)} ${F1(H[1]-2)}h10M${F1(H[0]-5)} ${F1(H[1]+1.5)}h10" class="rdt"/>`;};
+      s.push(arm(0)+arm(1));
+      if(det) s.push(REAL.puxada.cues.map(([t,x,y])=>{const w=t.length*5.6+14;if(x<0)x=300-w-6;return `<rect x="${x}" y="${y-9}" width="${F1(w)}" height="18" rx="9" fill="#0a1c2e" opacity=".85"/><text x="${F1(x+w/2)}" y="${y+4}" class="rtx">${t}</text>`;}).join(""));
+      return s.join("");
+    }}
+};
+function realPose(R,t){
+  const r=R.r||.5;let x,ph;if(t<r){x=t/r;ph=0;}else{x=1-(t-r)/(1-r);ph=1;}const f=x*x*(3-2*x);
+  const A=R.kf[0],B=R.kf[1],P={};for(const k in A){const a=A[k],b=B[k];P[k]=Array.isArray(a)?V(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f):a+(b-a)*f;}
+  P._f=f;P._ph=ph;return P;
+}
+function svgReal(id,px,anim,fixo){
+  const R=REAL[id];if(!R)return"";const P=fixo!==undefined?realPose(R,fixo):realPose(R,anim?0:.42);
+  const k=P._ph===R.forca?1:.4;
+  return `<svg class="real${anim?" big":""}" ${anim?`data-real="${id}"`:""} viewBox="0 0 300 330" width="${px}" height="${Math.round(px*1.1)}" aria-hidden="true">${RDEFS}<g>${R.draw(P,k,anim)}</g></svg>`;
 }
 
 const ginDia=d=>{if(d<GIN_INI)return null;const w=pd(d).getDay();return Object.values(GINASIO).find(g=>g.dia===w)||null;};
@@ -845,12 +940,16 @@ function abrirEx(id,lista,g){
   const serie=g?((g.ex.find(x=>x[0]===id)||[])[1]||"8–10 min"):"";
   ov.classList.add("medov","exov");
   ov.innerHTML=`<button class="navbtn" id="fecharCartao" aria-label="Fechar" style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px">✕</button>
-    <div class="exfig">${svgEx(id,340,true)}</div>
+    ${REAL[id]?`<div class="exfig">${svgReal(id,340,true)}</div>
     <div class="exfase" aria-live="off"></div>
+    <div class="rstrip">${[0,.5,1].map((f,i)=>`<div class="rf" data-i="${i}">${svgReal(id,110,false,f===1?REAL[id].r:f===.5?REAL[id].r/2:0)}<span>${i+1} · ${["Início","Meio","Fim"][i]}</span></div>`).join("")}</div>`
+    :`<div class="exfig">${svgEx(id,340,true)}</div>
+    <div class="exfase" aria-live="off"></div>`}
     <div class="eyebrow" style="text-align:center;margin-top:8px">${g?`Treino ${g.id} · ${i<1?"aquecimento":"exercício "+i+" de "+(lista.length-1)}`:"Exercício"}</div>
     <div class="ct" style="text-align:center">${esc(e.nome)}</div>
     <div class="mchips"><span class="mchip m">${esc(e.musc)}</span>${e.sec?`<span class="mchip">${esc(e.sec)}</span>`:""}</div>
     ${serie?`<div class="exset"><b>${esc(serie)}</b>${e.tempo||e.cardio?"":"<span>descanso 60–90 s entre séries</span>"}</div>`:""}
+    ${REAL[id]?`<div class="exbox"><h3>Vista de lado</h3><div class="exfig">${svgEx(id,300,true,true)}</div></div>`:""}
     <div class="exbox"><h3>Músculos trabalhados</h3><div style="display:flex;justify-content:center">${mapaMusc(id)}</div>
       <div class="mleg"><span><i class="lp"></i>principal</span><span><i class="ls"></i>ajuda</span></div></div>
     <div class="exbox"><h3>Como fazer</h3><ol>${e.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol></div>
