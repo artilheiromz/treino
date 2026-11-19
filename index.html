@@ -362,6 +362,22 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 .exbox h3{margin:0 0 8px;font-size:15px}.exbox ol,.exbox ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.4}
 .exbox.warn{border-color:rgba(255,210,122,.4)}
 .exnav{max-width:420px;margin:18px auto 0;display:flex;justify-content:space-between}
+.fig .ol{fill:#0a1c2e;stroke:#0a1c2e;stroke-width:4;stroke-linejoin:round}
+.fig .bd{fill:#eef3f6}.fig .bf{fill:#93a5b2}
+.fig .mu{fill:#ff5a2e}.fig .mu2{fill:#ffb08a;opacity:.85}
+.fig .trk{stroke:rgba(255,255,255,.35);stroke-width:1.5;stroke-dasharray:3 4;fill:none}
+.fig .arw{fill:#ffd27a}
+.fig .cl{stroke:rgba(255,255,255,.55);stroke-width:.8}
+.fig .cb{fill:rgba(10,28,46,.88);stroke:rgba(255,255,255,.5);stroke-width:.7}
+.fig .ct2{fill:#fff;font:600 7.4px -apple-system,system-ui,sans-serif;text-anchor:middle}
+.fig .eq{stroke:#9fd8f0}.fig .eqf{fill:#9fd8f0;stroke:#9fd8f0}
+.exfase{text-align:center;margin-top:10px;font-weight:700;font-size:17px;color:#ffd27a;min-height:24px}
+.mapa{width:100%;max-width:300px;height:auto}
+.mapa .mb{fill:rgba(255,255,255,.1);stroke:rgba(255,255,255,.22);stroke-width:1}
+.mapa .mn{fill:rgba(255,255,255,.16)}.mapa .mp{fill:#ff5a2e}.mapa .ms{fill:#ffb08a;opacity:.85}
+.mapa .ml{fill:rgba(255,255,255,.6);font-size:10px;text-anchor:middle}
+.mleg{display:flex;justify-content:center;gap:16px;font-size:13px;color:rgba(255,255,255,.8);margin-top:6px}.mleg span{display:inline-flex;align-items:center;gap:6px}
+.mleg i{width:12px;height:12px;border-radius:50%;display:inline-block}.mleg .lp{background:#ff5a2e}.mleg .ls{background:#ffb08a}
 @media (prefers-reduced-motion:no-preference){.blk,.chk,.mcard{transition:opacity .2s,background .2s}}
 </style>
 </head>
@@ -396,7 +412,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.9.0"; // ver CHANGELOG.md
+const VERSAO = "1.10.0"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -568,48 +584,7 @@ const ANIM={
 };
 function ikJoelho(h,a,L1=36,L2=34){const dx=a[0]-h[0],dy=a[1]-h[1],d=Math.min(Math.hypot(dx,dy),L1+L2-0.1);
   const t=Math.acos((L1*L1+d*d-L2*L2)/(2*L1*d)),b=Math.atan2(dy,dx)-t;return V(h[0]+L1*Math.cos(b),h[1]+L1*Math.sin(b));}
-function poseEm(an,t){ // t em [0,1]: ida e volta (ou ciclo) pelas poses-chave
-  const k=an.kf, n=k.length; let i,f;
-  if(an.loop){const x=t*n;i=Math.floor(x)%n;f=x-Math.floor(x);}else{const x=t<.5?t*2:2-t*2;const e=x*x*(3-2*x);i=0;f=e;}
-  const A=k[i],B=an.loop?k[(i+1)%n]:k[1]||k[0],p={...an.base};
-  for(const key of new Set([...Object.keys(A),...Object.keys(B)])){const a=A[key]||B[key],b=B[key]||A[key];p[key]=V(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f);}
-  if(an.ik){p.kn=ikJoelho(p.hp,p.an);p.kn2=ikJoelho(p.hp,p.an2);p.to=V(p.an[0]+10,p.an[1]-4);p.to2=V(p.an2[0]+10,p.an2[1]-4);}
-  return p;
-}
-function desenharFig(an,p){
-  const L=(a,b,w,c)=>a&&b?`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" class="${c}" stroke-width="${w}"/>`:"";
-  const seg=(m)=>{const a=p[m[0]],b=p[m[1]];if(!a||!b)return"";const q=t=>V(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t);return L(q(m[2]),q(m[3]),m[4],m[5]===1?"m":"m2");};
-  let s=an.back(p);
-  if(an.view==="f"){
-    s+=L(p.hpL,p.knL,12,"b")+L(p.knL,p.anL,10,"b")+L(p.hpR,p.knR,12,"b")+L(p.knR,p.anR,10,"b");
-    s+=`<path d="M${p.shL} L${p.shR} L${p.hpR} L${p.hpL}Z" class="tr"/>`;
-    s+=L(p.shL,p.elL,9,"b")+L(p.elL,p.haL,8,"b")+L(p.shR,p.elR,9,"b")+L(p.elR,p.haR,8,"b");
-    s+=`<circle cx="${p.hd[0]}" cy="${p.hd[1]}" r="9" class="hd"/>`;
-  } else {
-    s+=L(p.sh,p.el2,8,"f")+L(p.el2,p.ha2,7,"f")+L(p.hp,p.kn2,11,"f")+L(p.kn2,p.an2,9,"f")+L(p.an2,p.to2,6,"f");
-    s+=L(p.hp,p.kn,13,"b")+L(p.kn,p.an,11,"b")+L(p.an,p.to,7,"b")+L(p.sh,p.hp,17,"b")+L(p.sh,p.hd,7,"b");
-    s+=`<circle cx="${p.hd[0].toFixed(1)}" cy="${p.hd[1].toFixed(1)}" r="9" class="hd"/>`;
-    s+=L(p.sh,p.el,10,"b")+L(p.el,p.ha,9,"b");
-  }
-  s+=an.musc.map(seg).join("");
-  s+=an.front(p);
-  return s;
-}
-function svgEx(id,px,anim){
-  const an=ANIM[(EX[id]||{}).anim||id]; if(!an) return "";
-  return `<svg class="fig" ${anim?`data-anim="${(EX[id]||{}).anim||id}"`:""} viewBox="0 0 200 150" width="${px}" height="${Math.round(px*.75)}" aria-hidden="true"><g>${desenharFig(an,poseEm(an,anim?0:.5))}</g></svg>`;
-}
 let animRaf=0;
-function animarFichas(root){
-  cancelAnimationFrame(animRaf);
-  const els=[...root.querySelectorAll("svg[data-anim]")]; if(!els.length) return;
-  const reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const t0=performance.now();
-  const passo=now=>{els.forEach(svg=>{if(!svg.isConnected)return;const an=ANIM[svg.dataset.anim];const t=reduz?.5:((now-t0)%an.dur)/an.dur;svg.firstChild.innerHTML=desenharFig(an,poseEm(an,t));});
-    if(!reduz&&els.some(e=>e.isConnected)) animRaf=requestAnimationFrame(passo);};
-  animRaf=requestAnimationFrame(passo);
-}
-
 /* --- Biblioteca de exercícios --- */
 const EX={
   supino:{nome:"Supino reto com barra",musc:"Peito",sec:"Tríceps e ombros (frente)",equip:"Banco reto e barra",
@@ -682,6 +657,129 @@ const GINASIO={
   C:{id:"C",dia:6,nome:"Costas, bíceps e abdominais",aquec:"passadeira",ex:[["puxada","3 × 10"],["remadaTri","3 × 10"],["remadaBaixa","3 × 10"],["facePull","3 × 10"],["rosca","3 × 10"],["prancha","3 × 20–30 s"],["abdominal","3 × 12"]],
     along:["Costas: braços esticados à frente, arredondar — 30 s","Dorsal: agarrar um poste e levar a anca para trás — 30 s cada lado","Bíceps: palma na parede, braço esticado — 30 s cada lado","Peito na parede ou na porta — 30 s cada lado"]}
 };
+/* --- Animações v2 (v1.10.0): corpo com volume, músculo que acende quando trabalha,
+   seta do movimento, frase da fase (ida/volta) e notas de técnica por cima da figura --- */
+const META={
+  supino:{r:.6,forca:1,track:"ha",fases:["Desce devagar até ao peito","Empurra até esticar os braços"],cues:[["hp","Rabo no banco",-8,22],["ha","Barra ao meio do peito",14,-30]]},
+  supinoInc:{r:.6,forca:1,track:"ha",fases:["Desce até à parte de cima do peito","Empurra até esticar"],cues:[["hp","Costas encostadas",-4,24]]},
+  supinoMaq:{r:.4,forca:0,track:"ha",fases:["Empurra para a frente","Volta devagar"],cues:[["sh","Costas encostadas",-60,-18]]},
+  desenvSmith:{r:.4,forca:0,track:"ha",fases:["Empurra para cima","Desce até ao queixo"],cues:[["hp","Costas encostadas",-74,-26]]},
+  elevLat:{r:.4,forca:0,track:"haR",fases:["Sobe até à altura dos ombros","Desce devagar"],cues:[["hpR","Sem balançar o corpo",14,6]]},
+  tricepsPolia:{r:.4,forca:0,track:"ha",fases:["Empurra para baixo","Volta devagar"],cues:[["el","Cotovelo parado",-70,4]]},
+  abdutora:{r:.4,forca:0,track:"knR",fases:["Abre as pernas","Fecha devagar"],cues:[["hd","Costas encostadas",14,-4]]},
+  flexora:{r:.4,forca:0,track:"an",fases:["Dobra os joelhos","Volta devagar"],cues:[["hp","Anca no banco",-56,20]]},
+  stiff:{r:.6,forca:1,track:"ha",fases:["Anca para trás, costas direitas","Sobe a empurrar a anca"],cues:[["sh","Costas direitas",6,-22],["kn","Joelhos quase fixos",12,8]]},
+  extensora:{r:.4,forca:0,track:"an",fases:["Estica as pernas","Desce devagar"],cues:[["hp","Costas encostadas",-60,-34]]},
+  legPress:{r:.4,forca:0,track:"an",fases:["Empurra a plataforma","Desce até cerca de 90°"],cues:[["kn","Não trancar os joelhos",8,30],["hp","Rabo no banco",-10,22]]},
+  panturrilha:{r:.4,forca:0,track:"to",fases:["Empurra com as pontas dos pés","Calcanhares descem devagar"],cues:[["kn","Joelhos parados",4,30]]},
+  puxada:{r:.4,forca:0,track:"ha",fases:["Puxa a barra até ao peito","Sobe devagar"],cues:[["sh","Peito para cima",-66,0]]},
+  remadaTri:{r:.4,forca:0,track:"ha",fases:["Puxa até à barriga","Volta devagar"],cues:[["sh","Tronco direito",-60,-20]]},
+  remadaBaixa:{r:.4,forca:0,track:"ha",fases:["Puxa até baixo do peito","Volta devagar"],cues:[["sh","Tronco direito",-60,-20]]},
+  facePull:{r:.4,forca:0,track:"ha",fases:["Puxa para a cara, cotovelos altos","Volta devagar"],cues:[["hp","Corpo direito",-62,0]]},
+  rosca:{r:.5,forca:-1,fases:["Sobe um braço, desce o outro","Sobe um braço, desce o outro"],cues:[["hpL","Cotovelos parados",-62,-20]]},
+  prancha:{r:.5,forca:-1,fases:["Aguenta: corpo em linha recta","Aguenta: corpo em linha recta"],cues:[["hp","Anca alinhada",-12,-30]]},
+  abdominal:{r:.4,forca:0,track:"hd",fases:["Sobe os ombros","Desce devagar"],cues:[["kn","Pés no chão",6,-10]]},
+  bike:{fases:["Ritmo leve e constante"],cues:[]},
+  passadeira:{fases:["Ritmo em que consegues falar"],cues:[]}
+};
+Object.keys(META).forEach(k=>Object.assign(ANIM[k],META[k]));
+const MUSC_MAPA={supino:[["peito"],["triceps","ombro"]],supinoInc:[["peito"],["ombro","triceps"]],supinoMaq:[["peito"],["triceps","ombro"]],
+  desenvSmith:[["ombro"],["triceps","trapezio"]],elevLat:[["ombro"],["trapezio"]],tricepsPolia:[["triceps"],[]],abdutora:[["abdutores"],["gluteos"]],
+  flexora:[["posterior"],["gemeos"]],stiff:[["posterior","gluteos"],["lombar"]],extensora:[["quadriceps"],[]],legPress:[["quadriceps","gluteos"],["posterior","gemeos"]],
+  panturrilha:[["gemeos"],[]],puxada:[["dorsais"],["biceps","ombroP"]],remadaTri:[["dorsais"],["biceps","trapezio"]],remadaBaixa:[["dorsais","trapezio"],["ombroP","biceps"]],
+  facePull:[["ombroP"],["trapezio"]],rosca:[["biceps"],["antebraco"]],prancha:[["abdominais"],["ombro","gluteos"]],abdominal:[["abdominais"],[]],
+  bike:[["quadriceps"],["gemeos","gluteos"]],passadeira:[["quadriceps","gemeos"],["gluteos","posterior"]]};
+
+function poseEm(an,t){
+  const k=an.kf,n=k.length;let i,f,ph=0;
+  if(an.loop){const x=t*n;i=Math.floor(x)%n;f=x-Math.floor(x);}
+  else{const r=an.r||.5;let x;if(t<r){x=t/r;ph=0;}else{x=1-(t-r)/(1-r);ph=1;}f=x*x*(3-2*x);i=0;}
+  const A=k[i],B=an.loop?k[(i+1)%n]:k[1]||k[0],p={...an.base};
+  for(const key of new Set([...Object.keys(A),...Object.keys(B)])){const a=A[key]||B[key],b=B[key]||A[key];p[key]=V(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f);}
+  if(an.ik){p.kn=ikJoelho(p.hp,p.an);p.kn2=ikJoelho(p.hp,p.an2);p.to=V(p.an[0]+10,p.an[1]-4);p.to2=V(p.an2[0]+10,p.an2[1]-4);}
+  p._f=an.loop?.5:f;p._ph=ph;return p;
+}
+const F1=n=>n.toFixed(1);
+function cap(a,b,w1,w2){ // segmento cónico com pontas redondas
+  if(!a||!b)return"";const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L,r1=w1/2,r2=w2/2;
+  return `M${F1(a[0]+nx*r1)} ${F1(a[1]+ny*r1)}L${F1(b[0]+nx*r2)} ${F1(b[1]+ny*r2)}A${r2} ${r2} 0 0 0 ${F1(b[0]-nx*r2)} ${F1(b[1]-ny*r2)}L${F1(a[0]-nx*r1)} ${F1(a[1]-ny*r1)}A${r1} ${r1} 0 0 0 ${F1(a[0]+nx*r1)} ${F1(a[1]+ny*r1)}Z`;
+}
+const circ=(c,r)=>c?`M${F1(c[0]-r)} ${F1(c[1])}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0Z`:"";
+const grupo=(ds,cls)=>{ds=ds.filter(Boolean);return ds.map(d=>`<path d="${d}" class="ol"/>`).join("")+ds.map(d=>`<path d="${d}" class="${cls}"/>`).join("");};
+function corpoLado(p){
+  const far=[cap(p.sh,p.el2,11,9),cap(p.el2,p.ha2,9,7),circ(p.ha2,4.5),cap(p.hp,p.kn2,18,13),cap(p.kn2,p.an2,13,8),cap(p.an2,p.to2,7,5)];
+  const meio=[cap(p.hp,p.sh,30,25),cap(p.sh,p.hd,11,11),circ(p.hd,10.5),cap(p.hp,p.kn,19,13),cap(p.kn,p.an,13,8),cap(p.an,p.to,7.5,5)];
+  const braco=[cap(p.sh,p.el,13,10),cap(p.el,p.ha,10,8),circ(p.ha,5)];
+  return {far:grupo(far,"bf"),meio:grupo(meio,"bd"),braco:grupo(braco,"bd")};
+}
+function corpoFrente(p){
+  const tronco=`M${F1(p.shL[0]-3)} ${F1(p.shL[1]-2)}L${F1(p.shR[0]+3)} ${F1(p.shR[1]-2)}L${F1(p.hpR[0]+4)} ${F1(p.hpR[1]+4)}L${F1(p.hpL[0]-4)} ${F1(p.hpL[1]+4)}Z`;
+  const pernas=[cap(p.hpL,p.knL,17,13),cap(p.knL,p.anL,12,8),cap(p.hpR,p.knR,17,13),cap(p.knR,p.anR,12,8)];
+  const cab=[cap([p.hd[0],p.hd[1]],[(p.shL[0]+p.shR[0])/2,p.shL[1]],10,10),circ(p.hd,10.5)];
+  const bracos=[cap(p.shL,p.elL,12,10),cap(p.elL,p.haL,10,8),circ(p.haL,4.5),cap(p.shR,p.elR,12,10),cap(p.elR,p.haR,10,8),circ(p.haR,4.5)];
+  return {far:"",meio:grupo([...pernas,tronco,...cab],"bd"),braco:grupo(bracos,"bd")};
+}
+function musculos(an,p){
+  const k=an.forca===-1?.8:an.forca===undefined?.75:(p._ph===an.forca?1:.5);
+  return an.musc.map(m=>{const a=p[m[0]],b=p[m[1]];if(!a||!b)return"";
+    const q=t=>V(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t),c1=q(m[2]),c2=q(m[3]);
+    const cx=(c1[0]+c2[0])/2,cy=(c1[1]+c2[1])/2,rx=Math.max(4,Math.hypot(c2[0]-c1[0],c2[1]-c1[1])/2),ry=m[4]*.5,ang=Math.atan2(c2[1]-c1[1],c2[0]-c1[0])*180/Math.PI;
+    const op=m[5]===1?k:k*.55;
+    return `<g transform="translate(${F1(cx)} ${F1(cy)}) rotate(${F1(ang)})" opacity="${op.toFixed(2)}"><ellipse rx="${F1(rx)}" ry="${F1(ry)}" class="mu"/><ellipse rx="${F1(rx*.55)}" ry="${F1(ry*.45)}" class="mu2"/></g>`;}).join("");
+}
+function seta(an,p){
+  if(an.loop||!an.track||!an.kf[0][an.track]||!an.kf[1][an.track])return"";
+  const a=an.kf[0][an.track],b=an.kf[1][an.track],cur=p[an.track],dst=p._ph===0?b:a;
+  const dx=dst[0]-cur[0],dy=dst[1]-cur[1],L=Math.hypot(dx,dy);
+  let h=`<line x1="${F1(a[0])}" y1="${F1(a[1])}" x2="${F1(b[0])}" y2="${F1(b[1])}" class="trk"/>`;
+  if(L>3){const ux=dx/L,uy=dy/L,tx=cur[0]+ux*14,ty=cur[1]+uy*14;
+    h+=`<path d="M${F1(tx)} ${F1(ty)}L${F1(tx-ux*9-uy*6)} ${F1(ty-uy*9+ux*6)}L${F1(tx-ux*9+uy*6)} ${F1(ty-uy*9-ux*6)}Z" class="arw"/>`;}
+  return h;
+}
+function notas(an,p){
+  return (an.cues||[]).map(([pt,txt,dx,dy])=>{const c=p[pt]||an.base[pt];if(!c)return"";const w=txt.length*4.3+10,x=Math.max(2,Math.min(198-w,c[0]+dx)),y=Math.max(9,Math.min(141,c[1]+dy));
+    return `<line x1="${F1(c[0])}" y1="${F1(c[1])}" x2="${F1(x+w/2)}" y2="${F1(y)}" class="cl"/><rect x="${F1(x)}" y="${F1(y-7)}" width="${F1(w)}" height="14" rx="7" class="cb"/><text x="${F1(x+w/2)}" y="${F1(y+3.2)}" class="ct2">${esc(txt)}</text>`;}).join("");
+}
+function desenharFig(an,p,det){
+  const c=an.view==="f"?corpoFrente(p):corpoLado(p);
+  return an.back(p)+(det?seta(an,p):"")+c.far+c.meio+musculos(an,p)+c.braco+an.front(p)+(det?notas(an,p):"");
+}
+function svgEx(id,px,anim){
+  const ak=(EX[id]||{}).anim||id, an=ANIM[ak]; if(!an) return "";
+  return `<svg class="fig${anim?" big":""}" ${anim?`data-anim="${ak}"`:""} viewBox="0 0 200 150" width="${px}" height="${Math.round(px*.75)}" aria-hidden="true"><g>${desenharFig(an,poseEm(an,anim?0:.5),anim)}</g></svg>`;
+}
+function animarFichas(root){
+  cancelAnimationFrame(animRaf);
+  const els=[...root.querySelectorAll("svg[data-anim]")]; if(!els.length) return;
+  const fase=root.querySelector(".exfase");
+  const reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const t0=performance.now(); let ultF="";
+  const passo=now=>{els.forEach(svg=>{if(!svg.isConnected)return;const an=ANIM[svg.dataset.anim];const t=reduz?.5:((now-t0)%(an.dur*1.25))/(an.dur*1.25);const p=poseEm(an,t);
+      svg.firstChild.innerHTML=desenharFig(an,p,true);
+      if(fase&&an.fases){const tx=an.fases[an.loop?0:p._ph]||an.fases[0];if(tx!==ultF){fase.textContent=tx;ultF=tx;}}});
+    if(!reduz&&els.some(e=>e.isConnected)) animRaf=requestAnimationFrame(passo);};
+  animRaf=requestAnimationFrame(passo);
+}
+/* Mapa dos músculos (frente e costas), desenho próprio */
+function mapaMusc(id){
+  const [pri,sec]=MUSC_MAPA[id]||[[],[]];
+  const cl=k=>pri.includes(k)?"mp":sec.includes(k)?"ms":"mn";
+  const E=(x,y,rx,ry,k,rot)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" ${rot?`transform="rotate(${rot} ${x} ${y})"`:""} class="${k?cl(k):"mn"}"/>`;
+  const base=ox=>`<g transform="translate(${ox} 0)"><circle cx="60" cy="16" r="11" class="mb"/><rect x="54" y="25" width="12" height="8" rx="3" class="mb"/>
+    <path d="M34 36 Q60 30 86 36 L84 112 Q60 120 36 112Z" class="mb"/>
+    ${E(29,74,6,20,"",-8)}${E(91,74,6,20,"",8)}${E(25,108,5,15,"",-6)}${E(95,108,5,15,"",6)}
+    ${E(49,156,10,30,"")}${E(71,156,10,30,"")}${E(50,205,7,20,"")}${E(70,205,7,20,"")}</g>`;
+  const frente=`${base(0)}<g>${E(37,46,9,10,"ombro")}${E(83,46,9,10,"ombro")}${E(49,58,11,9,"peito")}${E(71,58,11,9,"peito")}
+    ${E(30,72,5.5,11,"biceps",-8)}${E(90,72,5.5,11,"biceps",8)}${E(25,104,4.5,12,"antebraco",-6)}${E(95,104,4.5,12,"antebraco",6)}
+    <rect x="51" y="70" width="18" height="38" rx="7" class="${cl("abdominais")}"/>${E(41,120,5,10,"abdutores",-10)}${E(79,120,5,10,"abdutores",10)}
+    ${E(49,152,8.5,23,"quadriceps")}${E(71,152,8.5,23,"quadriceps")}${E(57,140,3,10,"adutores")}${E(63,140,3,10,"adutores")}</g>`;
+  const costas=`${base(130)}<g transform="translate(130 0)"><path d="M60 30 L76 42 L60 66 L44 42Z" class="${cl("trapezio")}"/>${E(37,46,9,10,"ombroP")}${E(83,46,9,10,"ombroP")}
+    ${E(30,72,5.5,11,"triceps",-8)}${E(90,72,5.5,11,"triceps",8)}${E(48,80,9,17,"dorsais",8)}${E(72,80,9,17,"dorsais",-8)}
+    <rect x="53" y="94" width="14" height="16" rx="5" class="${cl("lombar")}"/>${E(41,118,5,9,"abdutores",-10)}${E(79,118,5,9,"abdutores",10)}${E(51,126,10,10,"gluteos")}${E(69,126,10,10,"gluteos")}
+    ${E(49,156,8,21,"posterior")}${E(71,156,8,21,"posterior")}${E(50,200,6,14,"gemeos")}${E(70,200,6,14,"gemeos")}</g>`;
+  return `<svg class="mapa" viewBox="0 0 250 232" aria-hidden="true">${frente}${costas}<text x="60" y="230" class="ml">frente</text><text x="190" y="230" class="ml">costas</text></svg>`;
+}
+
 const ginDia=d=>{if(d<GIN_INI)return null;const w=pd(d).getDay();return Object.values(GINASIO).find(g=>g.dia===w)||null;};
 const ginFeito=d=>ACT().find(a=>a.tipo==="musculacao"&&a.data===d);
 function historicoEx(id){ // [{data,max}] por ordem
@@ -747,11 +845,14 @@ function abrirEx(id,lista,g){
   const serie=g?((g.ex.find(x=>x[0]===id)||[])[1]||"8–10 min"):"";
   ov.classList.add("medov","exov");
   ov.innerHTML=`<button class="navbtn" id="fecharCartao" aria-label="Fechar" style="position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px">✕</button>
-    <div class="exfig">${svgEx(id,300,true)}</div>
+    <div class="exfig">${svgEx(id,340,true)}</div>
+    <div class="exfase" aria-live="off"></div>
     <div class="eyebrow" style="text-align:center;margin-top:8px">${g?`Treino ${g.id} · ${i<1?"aquecimento":"exercício "+i+" de "+(lista.length-1)}`:"Exercício"}</div>
     <div class="ct" style="text-align:center">${esc(e.nome)}</div>
     <div class="mchips"><span class="mchip m">${esc(e.musc)}</span>${e.sec?`<span class="mchip">${esc(e.sec)}</span>`:""}</div>
     ${serie?`<div class="exset"><b>${esc(serie)}</b>${e.tempo||e.cardio?"":"<span>descanso 60–90 s entre séries</span>"}</div>`:""}
+    <div class="exbox"><h3>Músculos trabalhados</h3><div style="display:flex;justify-content:center">${mapaMusc(id)}</div>
+      <div class="mleg"><span><i class="lp"></i>principal</span><span><i class="ls"></i>ajuda</span></div></div>
     <div class="exbox"><h3>Como fazer</h3><ol>${e.passos.map(p=>`<li>${esc(p)}</li>`).join("")}</ol></div>
     <div class="exbox warn"><h3>Atenção</h3><ul>${e.cuidado.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>
     <div class="exbox"><h3>Equipamento</h3><div class="ink2">${esc(e.equip)}</div>

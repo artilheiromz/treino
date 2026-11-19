@@ -7,6 +7,17 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.10.0 — 19 Nov 2026
+Animações dos exercícios muito melhoradas, a pedido do Bruno (as da v1.9.0 eram demasiado básicas).
+- **Figura com volume:** corpo desenhado com formas cheias e contorno, em vez de traços. O braço e a perna do lado de lá aparecem mais escuros, para dar profundidade.
+- **O músculo acende quando trabalha:** o músculo principal fica laranja forte na fase de esforço e mais suave na volta.
+- **Ritmo correcto:** a fase de esforço é mais rápida (cerca de 1 s) e a volta mais lenta (2 a 3 s), como deve ser feito.
+- **Frase da fase por baixo da animação**, que muda em tempo real. Por exemplo: "Empurra a plataforma" e "Desce até cerca de 90°".
+- **Seta e linha tracejada** com o caminho e o sentido do movimento.
+- **Notas de técnica em cima da figura**, por exemplo "Rabo no banco", "Não trancar os joelhos", "Costas direitas" e "Cotovelo parado".
+- **Novo quadro "Músculos trabalhados"** em cada ficha: um mapa do corpo (frente e costas) com o músculo principal a laranja forte e os músculos que ajudam a laranja claro.
+- **Não foram usadas fotos de terceiros.** Uma biblioteca "livre" de fotos foi analisada, mas não indica a origem das imagens, por isso ficou de fora: todas as ilustrações são desenho próprio.
+
 ## v1.9.0 — 18 Nov 2026
 **Musculação** entra na app como novo tipo de exercício (cor laranja), com os treinos da academia do Bruno.
 - **Plano de ginásio a partir de 1 Dez:** terça, quinta e sábado. Natação continua à segunda, quarta e sexta.
