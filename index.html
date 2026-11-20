@@ -425,7 +425,7 @@ table.cmp .now{background:rgba(255,255,255,.14)}table.cmp thead .now{border-radi
 
 <script>
 /* ===== DADOS — encriptados em dados.enc.json; actualizados pelo Claude a partir dos prints ===== */
-const VERSAO = "1.15.0"; // ver CHANGELOG.md
+const VERSAO = "1.15.1"; // ver CHANGELOG.md
 let DADOS = null; // carregado de dados.enc.json depois do código de acesso
 
 /* ===== PLANO ===== */
@@ -2409,7 +2409,16 @@ async function abrir(pin){
   let pt; try{ pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(e.iv)},key,b64(e.ct)); }catch(x){ throw new Error("codigo"); }
   return JSON.parse(new TextDecoder().decode(pt));
 }
-function iniciar(d){
+/* Ao voltar à app (o iPhone mantém-na aberta em segundo plano), vai buscar os dados mais recentes, para mostrar logo o que o Claude actualizou. */
+let PIN_ACT=null,ULT_LEITURA=0;
+document.addEventListener("visibilitychange",async()=>{
+  if(document.visibilityState!=="visible"||!DADOS||!PIN_ACT||Date.now()-ULT_LEITURA<30000) return;
+  ULT_LEITURA=Date.now();
+  try{ const d=await abrir(PIN_ACT); if(JSON.stringify(d)===JSON.stringify(DADOS)) return;
+    DADOS=d; if(document.getElementById("cartao").hidden) show(location.hash.slice(1)||"inicio"); }catch(e){}
+});
+function iniciar(d,pin){
+  if(pin){PIN_ACT=pin;ULT_LEITURA=Date.now();}
   DADOS=d; DIA_MIN=DADOS.perfil.inicio;
   diaSel=HOJE<DIA_MIN?DIA_MIN:HOJE>DIA_MAX?DIA_MAX:HOJE;
   document.getElementById("lock").hidden=true;
@@ -2420,12 +2429,12 @@ function bloquear(){ try{localStorage.removeItem("treino-pin");}catch(e){} locat
 (async()=>{
   const f=document.getElementById("lockf"), inp=document.getElementById("pin"), msg=document.getElementById("lockmsg"), btn=document.getElementById("lockbtn"), lem=document.getElementById("lembrar");
   let guardado=null; try{guardado=localStorage.getItem("treino-pin");}catch(e){}
-  if(guardado){ msg.textContent="A abrir…"; try{ iniciar(await abrir(guardado)); return; }catch(e){ msg.textContent=e.message==="rede"?"Sem ligação à internet. Tenta outra vez.":""; try{localStorage.removeItem("treino-pin");}catch(x){} } }
+  if(guardado){ msg.textContent="A abrir…"; try{ iniciar(await abrir(guardado),guardado); return; }catch(e){ msg.textContent=e.message==="rede"?"Sem ligação à internet. Tenta outra vez.":""; try{localStorage.removeItem("treino-pin");}catch(x){} } }
   inp.focus();
   f.addEventListener("submit",async ev=>{
     ev.preventDefault(); const pin=inp.value.trim(); if(!pin) return;
     btn.disabled=true; msg.textContent="A abrir…";
-    try{ const d=await abrir(pin); if(lem.checked){ try{localStorage.setItem("treino-pin",pin);}catch(e){} } iniciar(d); }
+    try{ const d=await abrir(pin); if(lem.checked){ try{localStorage.setItem("treino-pin",pin);}catch(e){} } iniciar(d,pin); }
     catch(e){ msg.textContent=e.message==="codigo"?"Código errado. Tenta outra vez.":"Sem ligação à internet. Tenta outra vez."; inp.value=""; inp.focus(); }
     btn.disabled=false;
   });

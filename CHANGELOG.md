@@ -7,6 +7,9 @@ As tags e os Releases são criados automaticamente pelo GitHub (`.github/workflo
 
 Numeração: **X** = mudança grande na app · **Y** = funcionalidade nova · **Z** = correcção ou ajuste pequeno.
 
+## v1.15.1 — 20 Nov 2026
+- **Dados sempre actualizados:** quando se volta à app (que o iPhone mantém aberta em segundo plano), ela vai buscar de novo os dados. Se o Claude tiver actualizado alguma coisa, como um treino, uma pesagem ou um recorde, o ecrã mostra logo a versão nova. Antes era preciso fechar a app de vez e voltar a abri-la.
+
 ## v1.15.0 — 19 Nov 2026
 Correcções às ilustrações, a partir da revisão do Bruno:
 - **Supino reto, supino inclinado e stiff:** a barra vê-se agora em perspectiva, de um disco ao outro. O disco do lado de lá aparece inteiro; o do lado de cá aparece transparente, para não tapar os músculos.
